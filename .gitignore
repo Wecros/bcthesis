@@ -1,1 +1,11 @@
-old
+*.dvi
+*.log
+*.blg
+*.bbl
+*.toc
+*.aux
+*.out
+*.lof
+*.ptc
+*.nav
+*.snm

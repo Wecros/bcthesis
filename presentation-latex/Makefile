@@ -1,4 +1,4 @@
-CO=prezentace
+CO=xfilip46-thesis-presentation
 
 all: $(CO).pdf
 

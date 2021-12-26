@@ -4,8 +4,8 @@
 # E-mail: bidlom AT fit vutbr cz
 # Edited by: dytrych AT fit vutbr cz
 #===========================================
-# asi budete chtit prejmenovat / you will probably rename:
-CO=projekt
+# asi budete chtit prejmenovat / xfilip46-thesisu will probably rename:
+CO=xfilip46-thesis
 
 all: $(CO).pdf
 
@@ -36,16 +36,12 @@ pack:
 
 rename:
 	mv $(CO).tex $(NAME).tex
-	mv $(CO)-01-kapitoly-chapters.tex $(NAME)-01-kapitoly-chapters.tex
-	mv $(CO)-01-kapitoly-chapters-en.tex $(NAME)-01-kapitoly-chapters-en.tex
-	mv $(CO)-20-literatura-bibliography.bib $(NAME)-20-literatura-bibliography.bib
-	mv $(CO)-30-prilohy-appendices.tex $(NAME)-30-prilohy-appendices.tex
-	mv $(CO)-30-prilohy-appendices-en.tex $(NAME)-30-prilohy-appendices-en.tex
-	sed -i "s/$(CO)-01-kapitoly-chapters/$(NAME)-01-kapitoly-chapters/g" $(NAME).tex
-	sed -i "s/$(CO)-01-kapitoly-chapters-en/$(NAME)-01-kapitoly-chapters-en/g" $(NAME).tex
-	sed -i "s/$(CO)-20-literatura-bibliography/$(NAME)-20-literatura-bibliography/g" $(NAME).tex
-	sed -i "s/$(CO)-30-prilohy-appendices/$(NAME)-30-prilohy-appendices/g" $(NAME).tex
-	sed -i "s/$(CO)-30-prilohy-appendices-en/$(NAME)-30-prilohy-appendices-en/g" $(NAME).tex
+	mv $(CO)-01-chapters.tex $(NAME)-01-chapters.tex
+	mv $(CO)-20-bibliography.bib $(NAME)-20-bibliography.bib
+	mv $(CO)-30-appendices.tex $(NAME)-30-appendices.tex
+	sed -i "s/$(CO)-01-chapters/$(NAME)-01-chapters/g" $(NAME).tex
+	sed -i "s/$(CO)-20-bibliography/$(NAME)-20-bibliography/g" $(NAME).tex
+	sed -i "s/$(CO)-30-appendices/$(NAME)-30-appendices/g" $(NAME).tex
 	sed -i "s/$(CO)/$(NAME)/g" Makefile
 	
 # Pozor, vlna neresi vse (viz popis.txt) / Warning - vlna is not solving all problems (see description.txt)
