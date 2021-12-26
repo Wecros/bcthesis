@@ -5,7 +5,9 @@ PRESENTATION_FILE := xfilip46-thesis-presentation
 
 .PHONY: latex
 
-all: thesis presentation
+git: thesis presentation clean
+
+latex: thesis presentation
 
 thesis:
 	$(MAKE) -C $(THESIS_DIR)
