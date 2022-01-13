@@ -1,57 +1,151 @@
+% vim:spelllang=en_us:spell
 % Author: Marek Filip 2022
 
 \chapter{Introduction}
 
-When we look at cryptocurrency, there is a very lucrative market. That's why people have always found new ways to make money from trading cryptocurrencies. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That's why there is a need for adaptive strategies.
+When we look at cryptocurrencies, there is a very lucrative market. That is why people have always found new ways to make money from trading cryptocurrencies. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That is why there is a need for adaptive strategies that can prosper through both of them.
 
-I'll explore the idea of the adaptive trading strategies for cryptocurrencies in this thesis. Firstly we need to find a way how to predict if the market will go up or down. Then we need to apply sufficient trading strategies regarding the percentual probability of market going up or down.
+I will explore the idea of the adaptive trading strategies for cryptocurrencies in this thesis. Firstly we need to find a way how to predict if the market will go up or down. Then we need to apply sufficient trading strategies regarding the percentage probability of market going up or down. That is the basic idea.
+
+To get to this point I will explore the current trading strategies that are used for trading cryptocurrencies. Analyze current simulation tools available today and analyze the historic trading data to find some patterns. Looking at current state of adaptive strategies for cryptocurrencies is also necessary.
+
+\subsection*{Organization}
+
+The rest of this work is divided into several chapters. 
+
+Firstly, there is the chapter \ref{background}, which gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In the chapter \ref{trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In the chapter \ref{simulation-tools} several existing simulation tools are explored and compared. I also analyze the backlog of cryptocurrency trading data provided by the supervisor and summarize the important events.
 
 
-\chapter{What had to be studied (including assessment of the current state, 40\%)}
+\chapter{Background}
+\label{background}
 
-\section{Study existing trading strategies for cryptocurrencies and other instruments, including rebalance and HODL. Analyze achieved results of the studied strategies and their assumptions.}
+There are some prerequisites that the reader must be familiarized with in order to understand the thesis. The basic knowledge of what a cryptocurrency is must be explained. As well as clear understanding of some terms that are regularly used in the thesis. 
 
-\section{Study existing simulation tools suitable for testing trading strategies.}
+\subsection*{List of terms generally used in the thesis and among crypto investors}
+\begin{itemize}
+    \item Best strategy = A strategy that yields the most money -- has the best profit.
+    \item Bear market = A market in which prices are falling, encouraging selling. 
+    \item Bull market = A market in which prices are rising, encouraging buying.
+    \item FOMO = Fear of missing out.
+    \item FUD = Fear, uncertainty, doubt.
+    \item Fiat currency = Government-issued money.
+\end{itemize}
 
-\section{Analyze the backlog of cryptocurrency trading data provided by the supervisor and summarize observed events.}
+\section{What is a cryptocurrency?}
+\emph{Cryptocurrency} is a digital currency that is secured by cryptography \cite{investopedia-cryptocurrency}. There are algorithms in place that make it nearly impossible to counterfeit or double-spend the currency. Cryptocurrencies are based on a decentralized networks based on the blockchain (see \ref{blockchain}) technology. Because of this the cryptocurrencies are not issued by any central authority (unlike conventional currency). This makes them theoretically immune to government interference or manipulation.
+
+\subsection*{Types of Cryptocurrency}
+\emph{Bitcoin} is the original and to this day the most popular and valuable cryptocurrency. It was invented by an anonymous person called \emph{Satoshi Nakamoto} in 2008 via a white paper \cite{satoshi}. As of 12th January 2022, there are over 18.9 million bitcoins in circulation with a total market capitalization of around \$810 million \cite{coinmarketcap}, making it roughly 40\% of the total cryptocurrency market.
+
+Each new cryptocurrency claims to have different function and specification. New cryptocurrencies are created daily. Most are not lucrative to investors at all while others surprise the market with their new innovations. For example, Ethereum's \emph{ether} markets itself as a gas for their underlying smart contract\footnote{https://www.investopedia.com/terms/s/smart-contracts.asp} platform. Another example is Ripple's \emph{XRP} which aims to facilitate international bank transfers. New cryptocurrencies started to rise due to bitcoin's many unsuitable aspects.
+
+\label{stablecoins-ref}
+A \emph{stablecoin} is another important type of cryptocurrency. It aims to offer price stability and is backed by a reverse asset\footnote{https://www.investopedia.com/terms/r/reserve-assets.asp} like the US dollar. They attempt to offer the best of both worlds---the instant processing and security of privacy payments of cryptocurrencies, and the non-volatile character of fiat currencies \cite{investopedia-stablecoin}.
+
+\subsection*{What is FIAT money?}
+﻿Fiat money or currency is money that is issued by the government and is not backed by any gold or other physical commodity. Its value is derived between the relationship of supply and demand and the stability of the government that issued it \cite{investopedia-fiat}. It represents today's currencies of the world. Many crypto enthusiasts believe that cryptocurrencies will replace fiat currencies in the future.
+
+\subsection*{Blockchain}
+\label{blockchain}
+Blockchain or a distributed ledger\footnote{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers \cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in figure \ref{blockchain-figure}.
+
+\begin{figure}[h!]
+    \label{blockchain-figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
+    \caption{Blockchain structure}
+\end{figure}
+
+\section{What are bear and bull markets?}
+While you may know that the bear and bull markets stand for falling and rising markets, there is more to these terms that must be explained. The origin of the terms themselves is believed to be tied to the way the two animals attack their opponents. A bull thrusts its horns up, while a bear swipes its pawns downwards \cite{investopedia-bull-market}.
+Herd behavior is important to consider when talking about the terms. 
+
+\subsection*{Bear Market}
+As growth prospects wane and expectations are unmet, prices decline \cite{investopedia-bear-market}. Bear markets are viewed as pessimistic with investors scared to open new positions. But to talk about bear or bull market we usually ascribe longer time periods than the usual and always present volatility of the crypto market. For example when China declared all of the cryptocurrency transactions illegal \cite{china-ban}, a fall of crypto markets quickly ensued. 
+
+A bearish investor or bear is then a type of investor that believes that a specific coin is likely to decline in the future \cite{investopedia-bull}.
+
+\subsection*{Bull Market}
+Bull markets are characterized by optimism, investor confidence and expectations in strong results that will continue for a long period of time \cite{investopedia-bull-market}. FOMO\footnote{Fear of missing out.} is present among investors. Both bull and bear markets are hard to define, bull market is usually specified to occur when prices rise by $20\%$ after a previous $20\%$ drop and before another $20\%$ drop---these values are defined for stock markets only, so the margins should be higher for the volatile cryptocurrency market.
+
+A bullish investor or bull is a type of investor that believes that a specific coin is likely to rise \cite{investopedia-bull}.
 
 \chapter{Trading Strategies for Cryptocurrencies}
+\label{trading-stategies}
 
 There are various trading strategies available regarding cryptocurrencies.
-In this chapter I'll go through those that are considered the most well-known and consider
+In this chapter we will go through those that are considered the most well-known and consider
 their ups and downs.
-
-ASSIGNMENT: Study existing trading strategies for cryptocurrencies and other instruments, including rebalance and HODL. Analyze achieved results of the studied strategies and their assumptions.
 
 \section{HODL}
 
-This is the strategy that is one of the most prominent in the cryptocurrency market.
-It is jokingly derived from mispelling of the word "hodl" \cite{investopedia-hodl}.
+This is the strategy that is one of the most prominent in the cryptocurrency market, especially by beginners to trading.
+It is jokingly derived from misspelling of the word "hold". The original post by the user GameKyuubi \cite{hodl-post} containing the misspelling was originally posted on 18th December 2013, from which it quickly spread on.
 
-\subsection*{What is HODLING?}
+HODL or "hodl on for dear life" has become a slogan among crypto enthusiasts, representing long-term approach to cryptocurrency trading. It implies that the novice traders are not successful in timing the market so they should simply hold the coin until the prices significantly rises.
 
+Cryptocurrency maximalists keep HODLing, because they believe that cryprocurrencies will eventually replace the government-issued fiat currencies as the basis of all economic structures \cite{investopedia-hodl}.
 
 \section{Rebalance}
+Rebalancing is the process of realigning the weightings of portfolio of assets---in our case cryptocurrencies. It involves periodically buying or selling the assets in portfolio so that the original level of asset allocation is maintained\cite{investopedia-rebalancing}.
+
+For example if we set portfolio allocation 50/50 to BTC and ETH coins. And the BTC coin rised by 20 \% so that the new ratio would be 70/30, we would sell the 20 \% of the BTC and for the value we got we would buy additional ETH coins, so that the ratio is again 50/50.
+
+Rebalancing gives investors the opportunity to sell high and buy low. It takes gains from high-performing investments and reinvests them in areas that have not yet grown that much.
+
+One study \cite{portfolio-rebalancing}, conducted by the Shrimpy Team, has found that rebalancing beats hodl by a median of $64\%$. The analysis was performed with 1-year period real trading data.
+
+There many types of rebalancing strategies. We will look at some of them now.
+
+\subsection*{Periodic Rebalancing}
+This is the simplest rebalancing to use. The rebalance happens after a fixed amount of time. For cryptocurrencies it makes sense to set shorter time due to rapid price fluctuations, something like 1 day.
+
+\subsection*{Threshold Rebalancing}
+A more interesting approach is threshold rebalancing where we set some threshold deviation. When an allocation deviates by that set threshold from the original allocation, a rebalance happens, setting all the allocations to their original values \cite{portfolio-rebalancing}.
+
+Let's say we once again have 50/50 BTC/ETH allocations. Let's set the threshold deviation to $20\%$. If the price of BTC or ETH reaches over 60\% or under 40\%, a rebalance takes place. 20\% out of 50\% is 10\%, that is why the rebalance happens at those points. When both coins grow or decline in the same rate, no rebalance happens.
+
+\subsection*{Assumptions}
+One study around rebalancing has been already mentioned, let's look into some of them in more detail now. The studies \cite{portfolio-diversity} and \cite{diversify-perform-better} conducted by the Shrimpy organization have found some interesting results. Both of the studies took into account only periodic rebalancing. They have found that the shorter the time period for rebalance, the better the results, maximizing them at 1 hour period. The other interesting discovery was that if the portfolio had more assets in it---was more diversified---the better were the results. The diversification really took advantage of the sell high buy low formula.
+
+Another study \cite{rebalancing-strategy} confirmed that a portfolio with a larger number of assets performs better. Some other interesting facts have been observed during the simulations that improve the performance of the portfolio:
+\begin{itemize}
+    \item Equal weightings of the allocated assets.
+    \item Assets that are uncorrelated or negatively correlated with each other. That means if one rises, the other should go down. 
+    \item Assets that have similar rates of return, though volatility also improves the performance.
+\end{itemize}
 
 \section{Dollar Cost Averaging}
 
-\section{Stablecoins}
+\section{Range Trading}
+
+\section{Scalping}
+
+\section{Day Trading}
+
+\section{Bot/Automated Trading}
+
+\section{Stablecoin Trading}
+
+When talking about different trading strategies, the focus is usual on the method of the trategy, not the asset themselves. But when it comes to specific thing like stable coints, there is an opportunity to handle them in such a way to generate profits for us.
+The term stablecoin has already been explained in \ref{stablecoins-ref}. It is a coin which has its value pegged to some external reference.
+
+For example it was found in \cite{make-money-stablecoins} that a de-pegging of stablecoins happens periodically often as a result of temporary shock to the crypto system. During those events profit can be made when trading pegged and de-pegged stablecoins between each other. The author chose DAI and USDC pair for their experiments. It was shown that between August 2019 and March 2020 the spread between DAI and USDC has been fluctuating between 2 to 3\%. Advantage could be taken of this fact---selling DAI for USDC when the price is high and buy it back for USDC when the price returns to the peg.
+
+One thing to remember is to only trade when the spread is sufficient so that the trading fees won't make the profit diminish.
 
 \chapter{Existing Simulation Tools for Testing Trading Strategies}
+\label{simulation-tools}
+
+In this chapter different simulation tools, their application, usefulness and differences, are discussed. We must distinguish few types of simulation tools when talking about them. When a novice investors first sets foot in the cryptocurrency market, they might be startled by the complexity of the market. They want to learn, but maybe they do not want to lose all their money in the process. That is the perfect opportunity for a manual simulated tool. Investors can invest fake virtual money while all of the market's trading data is accurate and up to date.
 
 \chapter{Trading Data Analyzation}
 \label{data-analyzation}
 
-\chapter{New ideas that this thesis explores (30\%)}
-\section{Propose several (adaptive) trading strategies assuming the backlog.}
+In this chapter the history data of cryptocurrency market will be analyzed. We will try to find trends and patterns that we can then use to our advantage when coming up with the adaptive trading strategy.
 
 \chapter{Adaptive Trading Strategy Proposals}
 \label{proposal}
-
-\chapter{Implementation and evaluation (30\%)}
-\section{Implement and evaluate proposed strategies vs. traditional approaches such as HODL and
-rebalance.}
-\section{Discuss further improvements and limitations of the practical deployment.}
 
 \chapter{Adaptive Strategy Implementation}
 \label{implementation}
@@ -60,4 +154,4 @@ rebalance.}
 \label{limitations}
 
 \chapter{Conclusion}
-\label{conclsion}
+\label{conclusion}

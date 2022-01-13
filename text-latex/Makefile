@@ -14,11 +14,17 @@ pdf: $(CO).pdf
 $(CO).ps: $(CO).dvi
 	dvips $(CO)
 
+#$(CO).pdf: clean
+	#pdflatex $(CO)
+	#-bibtex $(CO)
+	#pdflatex $(CO)
+	#pdflatex $(CO)
+
 $(CO).pdf: clean
-	pdflatex $(CO)
+	pdflatex -halt-on-error $(CO)
 	-bibtex $(CO)
-	pdflatex $(CO)
-	pdflatex $(CO)
+	pdflatex -halt-on-error $(CO)
+	pdflatex -halt-on-error $(CO)
 
 $(CO).dvi: $(CO).tex $(CO).bib
 	latex $(CO)

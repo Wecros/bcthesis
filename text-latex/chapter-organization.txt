@@ -1,0 +1,12 @@
+What had to be studied (including assessment of the current state, 40%)
+1. Study existing trading strategies for cryptocurrencies and other instruments, including rebalance and HODL. Analyze achieved results of the studied strategies and their assumptions.
+2. Study existing simulation tools suitable for testing trading strategies.
+3. Analyze the backlog of cryptocurrency trading data provided by the supervisor and summarize observed events.
+EXTRA: Current state of adaptive trading strategies
+
+New ideas that this thesis explores (30%)
+4. Propose several (adaptive) trading strategies assuming the backlog.
+
+Implementation and evaluation (30%)
+5. Implement and evaluate proposed strategies vs. traditional approaches such as HODL and rebalance.
+6. Discuss further improvements and limitations of the practical deployment.
