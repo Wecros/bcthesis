@@ -29,6 +29,8 @@ There are some prerequisites that the reader must be familiarized with in order 
     \item FOMO = Fear of missing out.
     \item FUD = Fear, uncertainty, doubt.
     \item Fiat currency = Government-issued money.
+    \item ROI = Return of investment.
+    \item spread = Difference between buy and sell value of an asset.
 \end{itemize}
 
 \section{What is a cryptocurrency?}
@@ -53,7 +55,7 @@ Blockchain or a distributed ledger\footnote{https://www.investopedia.com/terms/d
     \label{blockchain-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
-    \caption{Blockchain structure}
+    \caption{Blockchain structure, attribution: Wikimedia}
 \end{figure}
 
 \section{What are bear and bull markets?}
@@ -76,6 +78,8 @@ A bullish investor or bull is a type of investor that believes that a specific c
 There are various trading strategies available regarding cryptocurrencies.
 In this chapter we will go through those that are considered the most well-known and consider
 their ups and downs.
+
+\section*{What is a trading strategy?}
 
 \section{HODL}
 
@@ -122,13 +126,61 @@ Through studies \cite{DCA-study} it seems that the advantage of DCA lies more in
 
 Sometimes DCA is used as a mean to invest into trusted assets on weekly/monthly basis---when employees get money. It is also used in some employment plans\footnote{For example the American 401(k) plan} across the world.
 
+\section{Day Trading}
+Day trading are the investors that buy and sell the same asset over the span of one day. They might even buy and sell the assets multiple times. They mostly use technical analysis of the market to achieve this goal. It is not recommended for beginner investors to choose this type of trading as it is much more risky than strategies described before.
+
 \section{Range Trading}
+Asset move in certain ranges, as you can see in figure \ref{trading-range-figure}. Range trading assumes that and tries to take guesses where are the limits using candlestick charts and support and resistance levels. Investors want to buy when prices reach the support level and sell when they reach the resistance level \cite{5types-of-daytrading}. The support and resistance levels can be seen in figure \ref{sup-and-res-levels}/
+
+\begin{figure}[h!]
+    \label{trading-range-figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/trading-range.png}
+    \caption{Trading range visualization, attribution: Investopedia}
+\end{figure}
+
+\begin{figure}[h!]
+    \label{sup-and-res-levels}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/dotdash-final-trading-range.png}
+    \caption{Support and resistance levels, attribution: Investopedia}
+\end{figure}
 
 \section{Scalping}
+In scalping you try to profit from very small price movements over short periods, you might exit a trade seconds after entering it. It is best to use automated bots to increase the buying frequency. Scalpers take advantage of increased trading volume to profit. They want to exit before any news or short-term fluctuation changes the market's view of the coin \cite{best-crypto-daytrading}.
 
-\section{Day Trading}
+It is needed to have a large bankroll to use this strategy effectively. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees. 
 
-\section{Bot/Automated Trading}
+In figure \ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
+
+\begin{figure}[h!]
+    \label{scalping-figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/scalping.png}
+    \caption{Scalping visualization, attribution: Quora}
+\end{figure}
+
+\section{Automated Trading Systems or Bots}
+\label{bots}
+Automated trading systems---also referred as algorithmic trading---allow investors to set specific rules for enter and exit of a trade that can be automatically executed via computer program. Some platforms claim that 70\% to 80\% of trading done comes from the automated systems \cite{investopedia-bot-trading}.
+
+One of the advantages is that the automated trading systems take emotions out of the trading---they only work on a specific criteria. The automated trading systems need to use software or APIs available from the broker. The outcome made in this thesis is expected to be used by some automated trading system.
+
+Automated trading systems are one of the only options to use when considering strategies like scalping due to the ease of getting in and out of a trade in seconds without room for failure. The software also allows backtesting the chosen strategy on historical data from which it can be seen how well it does perform.
+
+\section{Arbitrage}
+Arbitrage involves buying cryptocurrency in one market and selling it for higher price in another one. Since the cryptocurrency market is usually unregulated, anyone can make an exchange. This can lead to major differences in the spread of the asset. 
+
+There are two types of arbitrage when it comes to cryptocurrencies. The first one focuses on finding prices mismatches across different trading pairs on a single exchange. The other is the one that was already described---locating significant price differences on multiple exchanges. Both types take advantage of an automated trading system that monitors the exchanges and looks for price differences. On figure \ref{arbitrage-figure} you can see how the first type can be profitable.
+
+Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{https://www.investopedia.com/terms/k/kimchi-premium.asp} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit \cite{hodlbot:day-trading-cryptocurrency}.
+
+\begin{figure}[h!]
+    \label{arbitrage-figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/arbitrage.png}
+    \caption{Arbitrage execution via multiple trading pairs, attribution: HodlBot}
+\end{figure}
 
 \section{Stablecoin Trading}
 
