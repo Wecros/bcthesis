@@ -196,6 +196,50 @@ One thing to remember is to only trade when the spread is sufficient so that the
 
 In this chapter different simulation tools, their application, usefulness and differences, are discussed. We must distinguish few types of simulation tools when talking about them. When a novice investors first sets foot in the cryptocurrency market, they might be startled by the complexity of the market. They want to learn, but maybe they do not want to lose all their money in the process. That is the perfect opportunity for a manual simulated tool. Investors can invest fake virtual money while all of the market's trading data is accurate and up to date.
 
+\section*{Types of cryptocurrency simulators}
+
+\begin{enumerate}
+    \item Cryptocurrency market games
+    \item Virtual trading simulators
+    \item Backtesting simulation tools
+\end{enumerate}
+
+\emph{Cryptocurrency market games} are games that have less emphasis on the trading skills and more on the entertainment of trading. They are mostly fun way to compete with your friends or strangers. The player that creates the strongest portfolio is considered the best. The winner is then the player with the best investments at the end of the specific game. \cite{top-stocks-crypto-trading-simulators}.
+
+\emph{Virtual trading simulators} are simulators where users can closely track the real market and actively trade cryptocurrencies for virtual profit \cite{top-stocks-crypto-trading-simulators}. The main goal is to use the simulated experience for building and improving the real life trading skills of the user. You can test-drive and backtest your strategy here.
+
+\emph{Backtesting simulation tools} are similar to the virtual trading simulators in a way, that it aims to make its users better at trading. While the conventional trading simulators only work in real time, there are simulation tools where its users can input chosen strategy and see it run across multiple years of historical data and see how it performed in seconds. This is the type of simulation tools that will be used in this thesis. It basically uses backtesting for the cryptocurrency strategy's validation.
+
+\section{What is Backtesting}
+Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange \cite{backtesting-crypto-trading-strategies}. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
+
+\subsection*{Discretionary Backtesting}
+The section was inspired by this source \cite{backtesting-crypto-trading-strategies}. 
+
+Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell order with each signal they receive. They trader may decide to conduct the testing using software such as TradingView\footnote{https://www.tradingview.com/}.
+
+The trader will set a strategy in place, then he will press the replay button (shown in figure \ref{tradingview-figure}) and select period of history to test on. The trader will then make discretionary decisions to buy or sell based on the signals.
+
+Manual testing is a great way to control trader's emotions since they may feel the same emotions as in live environment. The disadvantage is that it is quite time-consuming. Trader may run a test for hours only to find out it was not a good strategy (though this result is also valuable). Secondly the amount of data the trader can test the strategy on is limited.
+
+\begin{figure}[h!]
+    \label{tradingview-figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/tradingview-replay.png}
+    \caption{TradingView replay functionality, attribution: TradingView}
+\end{figure}
+
+\subsection*{System Backtesting}
+The section was inspired by this source \cite{backtesting-crypto-trading-strategies}. 
+
+System backtesting offers the trader the true power of technology. System traders will have a strategy coded and the program will test the strategy against the historical data while generated statistics of the achieved results in manner of seconds. This will show the trader useful statistics about the strategy and help him decide if it is robust and well-performing enough to use in a live environment.
+
+The challange of system backtesting is to have sufficeint technical knowledge on how to create such algorithmic strategies. And also the analytical knowledge to determine if the strategy performed well or not.
+
+\subsection*{Automated Backtesting}
+
+\section{Data requirements for backtesting}
+
 \chapter{Trading Data Analyzation}
 \label{data-analyzation}
 
