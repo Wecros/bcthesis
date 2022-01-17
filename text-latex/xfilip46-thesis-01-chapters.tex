@@ -51,7 +51,7 @@ A \emph{stablecoin} is another important type of cryptocurrency. It aims to offe
 \label{blockchain}
 Blockchain or a distributed ledger\footnote{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers \cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in figure \ref{blockchain-figure}.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{blockchain-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
@@ -132,14 +132,14 @@ Day trading are the investors that buy and sell the same asset over the span of 
 \section{Range Trading}
 Asset move in certain ranges, as you can see in figure \ref{trading-range-figure}. Range trading assumes that and tries to take guesses where are the limits using candlestick charts and support and resistance levels. Investors want to buy when prices reach the support level and sell when they reach the resistance level \cite{5types-of-daytrading}. The support and resistance levels can be seen in figure \ref{sup-and-res-levels}/
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{trading-range-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/trading-range.png}
     \caption{Trading range visualization, attribution: Investopedia}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{sup-and-res-levels}
     \centering
     \includegraphics[width=\columnwidth]{figures/dotdash-final-trading-range.png}
@@ -153,7 +153,7 @@ It is needed to have a large bankroll to use this strategy effectively. Since th
 
 In figure \ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{scalping-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/scalping.png}
@@ -175,7 +175,7 @@ There are two types of arbitrage when it comes to cryptocurrencies. The first on
 
 Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{https://www.investopedia.com/terms/k/kimchi-premium.asp} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit \cite{hodlbot:day-trading-cryptocurrency}.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{arbitrage-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/arbitrage.png}
@@ -210,35 +210,140 @@ In this chapter different simulation tools, their application, usefulness and di
 
 \emph{Backtesting simulation tools} are similar to the virtual trading simulators in a way, that it aims to make its users better at trading. While the conventional trading simulators only work in real time, there are simulation tools where its users can input chosen strategy and see it run across multiple years of historical data and see how it performed in seconds. This is the type of simulation tools that will be used in this thesis. It basically uses backtesting for the cryptocurrency strategy's validation.
 
-\section{What is Backtesting}
-Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange \cite{backtesting-crypto-trading-strategies}. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
-
-\subsection*{Discretionary Backtesting}
+\section{What is Backtesting?}
 The section was inspired by this source \cite{backtesting-crypto-trading-strategies}. 
 
+Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
+
+\subsection*{Discretionary Backtesting}
 Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell order with each signal they receive. They trader may decide to conduct the testing using software such as TradingView\footnote{https://www.tradingview.com/}.
 
 The trader will set a strategy in place, then he will press the replay button (shown in figure \ref{tradingview-figure}) and select period of history to test on. The trader will then make discretionary decisions to buy or sell based on the signals.
 
 Manual testing is a great way to control trader's emotions since they may feel the same emotions as in live environment. The disadvantage is that it is quite time-consuming. Trader may run a test for hours only to find out it was not a good strategy (though this result is also valuable). Secondly the amount of data the trader can test the strategy on is limited.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \label{tradingview-figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/tradingview-replay.png}
     \caption{TradingView replay functionality, attribution: TradingView}
 \end{figure}
 
-\subsection*{System Backtesting}
-The section was inspired by this source \cite{backtesting-crypto-trading-strategies}. 
+\subsection*{Systems Backtesting}
+Systems backtesting offers the trader the true power of technology. Systems traders will have a strategy coded and the program will test the strategy against the historical data while generated statistics of the achieved results in manner of seconds. This will show the trader useful statistics about the strategy and help him decide if it is robust and well-performing enough to use in a live environment.
 
-System backtesting offers the trader the true power of technology. System traders will have a strategy coded and the program will test the strategy against the historical data while generated statistics of the achieved results in manner of seconds. This will show the trader useful statistics about the strategy and help him decide if it is robust and well-performing enough to use in a live environment.
-
-The challange of system backtesting is to have sufficeint technical knowledge on how to create such algorithmic strategies. And also the analytical knowledge to determine if the strategy performed well or not.
+The challenge of systems backtesting is to have sufficient technical knowledge on how to create such algorithmic strategies. And also the analytical knowledge to determine if the strategy performed well or not.
 
 \subsection*{Automated Backtesting}
+Automated or \emph{algorithmic} trading refers to traders who use a computer program to execute a trade, as explained in \ref{bots}. Backtesting of strategies can also be automated this way and is usually just another name for systems backtesting. We automate the results to arrive at helpful statistic to help us determine effective strategies. It is conducted using a programming language.
+
+\subsection*{Simulated Backtesting}
+Simulated backtesting simply means running a test over a historical data that simulates the real market environment. In this example the system is market environment and the model is the simulated environment.
+
 
 \section{Data requirements for backtesting}
+Systems traders will want to simulate the real-world data as closely as possible. Trading costs such as commissions, exchange spreads and slippages can chew away the expected returns. This costs can throw off the backtest results if ignored.
+
+Both \emph{candlestick} and \emph{order book data} are used in backtests, though order book data is usually more reliable.
+
+\subsection*{OHLCV Candlestick Data}
+OHLCV stands for Open-High-Low-Close-Volume, you can see how they can be represented in figure \ref{OHLCV-figure}. The candlestick data itself is visualized in figure \ref{candlestick-figure}. It is essentially a spreadsheet of price data of the chart time frame. If you pull the candlestick data for the daily chart of Bitcoin, you will receive each day's open, high, low and close price data. If you request 1-minute data, the spreadsheet will include each minute's open, high, low and close price for Bitcoin on that particular day.
+
+OHLCV abbreviations explained \cite{kaiko-ohlcv}:
+\begin{itemize}
+    \item Open: Price at which the asset started at the time interval.
+    \item High: Highest price reached during the time interval.
+    \item Low: Lowest price reached during the time interval.
+    \item Close: Price at which the asset ended after the time interval.
+    \item Volume: Quantity of asset bought or sold, displayed in base currency.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/OHLCV-data.png}
+        \caption{How can OHLCV data look like, attribution: Kaiko}
+        \label{OHLCV-figure}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/candlestick-data.png}
+        \caption{Candlestick explained, attribution: Investopedia}
+        \label{candlestick-figure}
+    \end{subfigure}
+    \caption{OHLCV Candlestick Data}
+\end{figure}
+
+There are several imperfection to the OHLCV candlestick data. Firstly, there is no information which prices have been traded for which volume. Additionally, if a trader has a large account, there might not be enough cryptocurrency available to trade without moving the market price---negatively impacting the backtest results. Traders typically use candlestick data because it is easiest to acquire.
+
+\subsection*{Order Book Data}
+An order book is one of the best data sources and resolves some challenges of the candlestick data. It includes snapshots of the market, including the market's price, volume and depth. With this type of data traders have a better representation of what orders are available at any given time.
+
+It allows testers to simulate bid-ask spread, slippage and liquidity when testing a particular strategy. All of these unavailable to testers using candlestick data. The challenge with order book data is that it is hard to come by. There is tremendous amount of data with order book snapshots so the exchanges choose not to hold the data, as it would be too expensive to store. Therefore usually the developers needs to collect and store the data from the exchange themselves or access the snapshots through a third-party service.
+
+\section{Performance Analysis}
+\label{performance-analysis}
+This section was again inspired by the \cite{backtesting-crypto-trading-strategies} source.
+
+Performance of the given trading system or strategy is commonly gauged against parameters such as profit and loss (P\&L), success ratio, and Sharpe ratio. 
+
+\subsection*{Profit and Loss -- P\&L}
+Once the desired strategy has been created and backtest executed, the big number traders will be interested in is the profit. The backtest should spit out P\&L analysis by trade and day. That way an equity curve can be created, showing what the balance would have been if it were traded live. Equity curve is just a time series chart showing what the value of the account would have been after each passed day.
+
+P\&L analysis also generates the size of the average winning and the size of the average losing trade. Taking the ratio of those two averages you get a useful average risk-to-reward ratio. For example if the average winning trade is \$100 and the average losing trade is \$50 you get a $1:2$ risk-to-reward ratio.
+
+\subsection{Success Ratio}
+The success ratio is the win ratio of the strategy. Let's say a strategy makes 100 trades. If 72 of those trades are profitable, it has 72\% success (or win) ratio. By itself the ratio does not tell much and might be misleading. It is best coupled with the average winner and the average losing trade ratios mentioned in P\&L.
+
+For example, a success ratio of 58\% and 1:2 risk-to-reward ratio indicates a very good strategy.
+
+\subsection{Sharpe Ratio}
+This subsection was sourced from \cite{Investopedia:sharpe-ratio}
+
+The Sharpe ratio, developed by \emph{William F. Sharpe}, is used to understand the return of an investment (ROI) compared to its risk. The ratio is the average return earned in excess of the risk-free rate per unit of volatility or total risk.
+
+$$Sharpe\ ratio = \frac{R_p - R_f}{\sigma _p}$$
+where:
+\begin{itemize}
+    \item $R_p$ = return of portfolio
+    \item $R_p$ = risk-free rate
+    \item $R_p$ = standard deviation of the portfolio's excess return
+\end{itemize}
+
+Generally, the greater the value of the Sharpe ratio, the more attractive the risk-adjusted return. The yield for the US Treasury bound is often used as the risk-free ratio. One of the limitation of the Sharpe ratio is that it assumes that the returns are normally distributed, which is simply not true.
+
+\section{Popular simulation tools}
+Some popular and easily available simulation tools are Holderlab, Zenbot, Gekko, Altrady, and Binance's Python backtesting.
+
+\section{What type of cryptocurrency simulation tool should we use?}
+When looking at the explored simulation tools it is clear that an automated backtesting program will be used to test the proposed adaptive trading strategy. I will use the OHLCV candlestick data provided by the supervisor and look for order book data if needed. When evaluating the strategy I will not only look at P\&L ratio, but also the average winner and losing trades, risk-to-reward ratio and more complex tools like Sharpe ratio.
+
+\subsection*{Programming language}
+When looking at possible languages to use I consider available libraries and frameworks. I decided to use Python for its many available trading and backtesting frameworks and because of my personal experience with it for data collection.
+
+\subsection*{Backtesting frameworks}
+Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy}\footnote{https://numpy.org/}, \emph{pandas}\footnote{https://pandas.pydata.org/} and \emph{matplotlib}\footnote{https://matplotlib.org/} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by \cite{python-backtesting-frameworks} source.
+
+When reviewing backtesting frameworks it's always good to ask what asset classes you are trading, what data frequency and detail is required and what order type should be supported by the chosen framework. Some frameworks go beyond backtesting and include live trading capabilities that make it easier for potential deployment. 
+
+The framework should have a way to consume trading data in a convenient way. It should calculate a broad range of risk and performance metrics as explained in \ref{performance-analysis}, including the max drawdown and Sharpe and Sortino ratios.
+
+Computer resources may be a problem sometimes. Traders can opt for frameworks with distributed or parallel processing in those scenarios. When it comes to strategy optimization, program may attempt to find the optimal parameters for each technical indicator, testing various combinations. In portfolio context, the program may try to find the best weighting of every asset in the portfolio for the ideal rebalance.
+
+We will now look at a few backtesting frameworks for Python and lightly compare them. The common capabilities of the frameworks is that they are event driven, with flexible licenses, having decent number of pre-defined technical indicators and standard performance metric calculation, visualization and reporting capabilities.
+
+\emph{PyAlgoTrade}\footnote{https://github.com/gbeced/pyalgotrade} is a fully documented framework with paper and live trading capabilities. Its data support includes Yahoo! Finance, Google Finance, NinjaTrader and any type of CSV-based time series.
+
+\emph{bt}\footnote{https://pmorissette.github.io/bt/} is used to test quantitative trading strategies. It allows traders to easily create strategies that mix and match different algorithms. It aims to save developers time re-inventing the wheel and instead focus on the strategy development.
+
+\emph{backtrader}\footnote{https://www.backtrader.com/} is a feature-rich backtesting framework. It allows you to focus on writing reusable trading strategies, indicators and analyzers rather than on building the infrastructure itself.
+
+\emph{Blueshift}\footnote{https://blueshift.quantinsti.com/docs/} is a platform to research and test systematic investment stategies. It is asset-class and instruments agnostics. It is not meant for HFT---high frequency trading.
+
+\emph{Zipline}\footnote{https://github.com/quantopian/zipline} is a event-driven system for backtesting. It is accessible through the browser-based IPython Notebook interface, which makes it available to developers who do not prefer the command line.
+
 
 \chapter{Trading Data Analyzation}
 \label{data-analyzation}

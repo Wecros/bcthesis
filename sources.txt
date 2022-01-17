@@ -1,1 +1,8 @@
 Interesting sources not yet considered/included:
+https://medium.com/coinmonks/cryptocurrencies-the-sharpe-ratio-8b662aa42af9
+https://academy.binance.com/en/articles/how-to-backtest-a-trading-strategy
+https://www.altrady.com/blog/best-cryptocurrency-backtesting-platforms
+https://www.quantstart.com/articles/backtesting-systematic-trading-strategies-in-python-considerations-and-open-source-frameworks/
+https://tradewithpython.com/list-of-most-extensive-backtesting-frameworks-available-in-python
+https://thanabhat.medium.com/simple-backtesting-portfolio-by-python-d6e9ca9bc1ee
+https://medium.com/swlh/build-a-trading-simulator-in-python-ebe046949dd9
