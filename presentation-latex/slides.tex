@@ -1,3 +1,6 @@
+% vim:spelllang=en_us:spell
+% Author: Marek Filip 2022
+
 %%%%%%%%                       01 - Motivation                      %%%%%%%%
 %---------------------------------------------------------------------------
 % When presenting, the beginning is what matters most. 
@@ -18,18 +21,22 @@
 % "We live in an age of mobile computing where everyone has a mobile phone in their pocket" - is an empty and stupid statement, don't say anything like that, nobody cares.
 
 \begin{frame}
-  \frametitle{Motivation}
+  \frametitle{Objective of the Thesis}
   \begin{columns}
     \column{0.4\textwidth}
     \begin{itemize}
-        \item \emph{Inputs} or state \emph{before}
-        \item What should be the~\emph{outputs}
-        \item \emph{No} or \emph{brief} bullets!
-        \item Desirable: A scheme with inputs and outputs
+        \item Bear \& bull markets
+        \item Adaptive trading strategy
+        \item Stablecoins
     \end{itemize}
      
     \column{0.6\textwidth}
-    \includegraphics[width=\textwidth]{img/template-Teaser.pdf}
+    %\includegraphics[width=\textwidth]{img/template-Teaser.pdf}
+
+    \begin{figure}
+        \includegraphics[width=\textwidth]{img/bitcoin.jpg}
+        %\caption{attribution: Wikimedia}
+    \end{figure}
   \end{columns}
 \end{frame}
 
@@ -54,21 +61,21 @@
 % It is useless to make generic and general statements "The solution should be fast, reliable and robust" - these are general requirements for anything, and the informational value of the message is ZERO - it is just a waste of time and intellect.
 % Be specific: What specific features should your solution have, what "robust" means specifically, what "reliable" means precisely?
 
-\begin{frame}
-  \frametitle{Objectives of the Thesis}
-  \begin{columns}
-    \column{0.4\textwidth}
-    \begin{itemize}
-        \item \emph{Input}
-        \item \emph{Output}
-        \item Desirable \emph{properties}
-        \item Uses \& applications
-    \end{itemize}
+%\begin{frame}
+  %\frametitle{Objectives of the Thesis}
+  %\begin{columns}
+    %\column{0.4\textwidth}
+    %\begin{itemize}
+        %\item \emph{Input}
+        %\item \emph{Output}
+        %\item Desirable \emph{properties}
+        %\item Uses \& applications
+    %\end{itemize}
      
-    \column{0.6\textwidth}
-        \includegraphics[width=\textwidth]{img/template-Goal.pdf}
-  \end{columns}
-\end{frame}
+    %\column{0.6\textwidth}
+        %\includegraphics[width=\textwidth]{img/template-Goal.pdf}
+  %\end{columns}
+%\end{frame}
 
 
 %%%%%%%%                      03 - Information                      %%%%%%%%
@@ -89,21 +96,23 @@
 % - The title of the slide, "Essential Information About the Solution", is very generic. In your actual slides, it would be much better to use a specific title on each of the slides, for example, "Neural Network Scheme for Big Nose Detection", "Design of an Infinite Automata", "Collected Dataset", etc.
 
 \begin{frame}
-  \frametitle{Essential Information About the Solution}
-  \centering\includegraphics[width=0.8\textwidth]{img/template-Schema.pdf}
-  \begin{equation}
-      \mathbf{a}_t = \sum_{i=1}^{L}\alpha_{t,i}\mathbf{f}_{t,i}^{*}
-  \end{equation}
-  where $\alpha_{t,i}$ computes the \emph{softmax}:
-  \begin{align}
-      \alpha_{t,i} &= \frac{\exp(r_{t,i})}{\sum_{k=1}{L}\exp(r_{t,k})} 
-      \\
-      r_{t,i} &= W^a \tanh\left( W^h \mathbf{h}_{t-1} + W^f\mathbf{f}_{t,i}^{*} + b \right)
-  \end{align}
-\end{frame}
-
-\begin{frame}\frametitle{Essential Information About the Solution}
-  \makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/template-Screenshot.png}}
+  \frametitle{How is it accomplished?}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \begin{itemize}
+        \item Neural network
+        \item Heurestics \& metrics
+        \item Backtesting
+        \item Validation
+    \end{itemize}
+     
+    \column{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/neuron.jpg}
+        
+        \bigskip
+        \includegraphics[width=0.8\textwidth]{img/risk.png}
+  \end{columns}
 \end{frame}
 
 
@@ -116,23 +125,45 @@
 % If the evaluation consisted of two or three parts, splitting the content into two or three slides may be appropriate. When presenting, however, care should be taken to ensure that the time devoted to each slide is adequately short and that there is no time overrun.
 
 \begin{frame}
-  \frametitle{Experimental Results}
+  \frametitle{Current State}
   \begin{columns}
   \column{0.4\textwidth}
+    Done:
     \begin{itemize}
-      \item What has been \emph{done}
-      \item Created dataset: \emph{105\,thousand} records
-      \item Success Rate: \emph{103\,\%}
+      \item Existing trading strategies
+      \item Existing simulation tools
+    \end{itemize}
+    \bigskip
+    To do:
+    \begin{itemize}
+      \item Adaptive strategy proposals
+      \item Implementation \& evaluation
     \end{itemize}
     
   \column{0.6\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth]{img/template-ResultsTable.pdf}
+    \includegraphics[width=0.9\textwidth]{img/python.png}
     
     \bigskip
-    \includegraphics[width=\textwidth]{img/template-ResultsPlot.pdf}
+    \includegraphics[width=\textwidth]{img/overleaf.png}
     
   \end{columns}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Next Work Plan}
+  \begin{itemize}
+    \item 31. 1.: Current State. Data Analyzation.
+    \item 14. 2.: Adaptive strategy inspirations.
+    \item 28. 1.: Proposal of several adaptive strategies.
+    \item 14. 3.: Backtesting implementation.
+    \item 28. 3.: First testing of adaptive strategies results.
+    \item 11. 4.: Further backtesting results.
+    \item 25. 4.: Further Improvements and practical deployment limitations -- discussion.
+    \item 1. 5.: Final State meeting.
+    \item 11. 5.: Thesis Submission.
+  \end{itemize}
 \end{frame}
 
 
@@ -154,11 +185,11 @@
   \makebox[\textwidth]{
     \begin{tikzpicture}
       \node (screenshot) 
-         {\includegraphics[width=0.6\paperwidth]{img/template-Screenshot.png}};
+         {\includegraphics[width=0.50\paperwidth]{img/bitcoin.jpg}};
       \node (schema) at (screenshot.south east) [xshift=5em] [yshift=2.5ex]
-         {\includegraphics[width=0.45\paperwidth]{img/template-Schema.pdf}};
+         {\includegraphics[width=0.45\paperwidth]{img/neuron.jpg}};
       \node (goal) at (screenshot.north east) [xshift=4em] [yshift=2ex]
-         {\includegraphics[width=0.5\paperwidth]{img/template-Goal.pdf}};
+         {\includegraphics[width=0.45\paperwidth]{img/risk.png}};
     \end{tikzpicture}
   }
 \end{frame}
@@ -184,14 +215,14 @@
 % If no visual information is needed for the questions, it is helpful to have them as bullets on a single slide.
 % If there is more than one question and there are figures or graphs, it is advisable to have one slide for each question - the text of the question at the top, the visual material below.
 
-\appendix{}
-\begin{frame}
-  \frametitle{Opponent's Questions}
-  \begin{itemize}
-    \item If there are multiple questions, more slides can be made.
-    \item This slide should be an attachment that does not count towards the total number of slides.
-    \item It is a good idea to transcribe the question here \emph{verbatim}, so that there is no doubt that there is no inaccurate paraphrasing.
-  \end{itemize}
-  \bigskip
-  \includegraphics[width=\textwidth]{img/template-ResultsPlot.pdf}
-\end{frame}
+%\appendix{}
+%\begin{frame}
+  %\frametitle{Opponent's Questions}
+  %\begin{itemize}
+    %\item If there are multiple questions, more slides can be made.
+    %\item This slide should be an attachment that does not count towards the total number of slides.
+    %\item It is a good idea to transcribe the question here \emph{verbatim}, so that there is no doubt that there is no inaccurate paraphrasing.
+  %\end{itemize}
+  %\bigskip
+  %\includegraphics[width=\textwidth]{img/template-ResultsPlot.pdf}
+%\end{frame}

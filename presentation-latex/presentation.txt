@@ -1,0 +1,86 @@
+BP: Obhajoba trvá 10 minut (5 minut prezentace, 4 minuty diskuze). 
+
+Slajdy
+4-7 slajdů ve formátu PDF v českém, slovenské nebo anglickém jazyce. 
+
+Obsah prezentace
+1. cíl práce - co máte řešit
+2. návrh řešení - jak to hodláte udělat
+3. informace o stavu řešení - co již máte, co vám chybí, kde vidíte největší problém. Pokud máte nějaký obrázek, graf, atd., bude jen výhodou
+4. plán další práce - plán na dalších 14 týdnů rozepsaných do 7 schůzek.
+
+Co ano
+Mluvit o SVÉ práci, lidem, kteří jsou odborně celkem zdatní.
+
+Co ne
+Obecné úvody, přednášky o technologiích, vysvětlování něčeho, co není vaše. 
+
+Diskuse
+Vaši vedoucí, ostatní studenti (tj. Vy). 
+
+Zkušenost
+V minulých prezentacích 80% studentů špatně vysvětlilo, co dělají a proč, a celá prezentace pak byla nepochopitelná - pozor na to!
+
+===============================================================================
+Obsah prezentace
+
+1. cíl práce - co máte řešit
+- Cílem práce je vytvořit adaptivní obchodní strategii, která dokáže bojovat s klesajícím a stoupajícím trhem - bear & bull markety.
+- Jako motivace nám slouží existující efektivní obchodní strategie, které se však neumí pořádně vypořádat s klesajícím trhem a vždy v něm hlásí ztráty.
+
+- Cilem je vytvorit algoritmus, ktery rekne, s jakou pravdepodobnosti bude trh klesat ci stoupat. Dle toho se pak aplikuji ruzne obchodni strategie, jak pracovat s portfoliem kryptomen.
+- Jako podcíl je stanoveny pak obchodování se stable coiny takovým způsobem, který využívá rozptylu jednotlivých stablecoinu při výkyvech trhu.
+
+2. návrh řešení - jak to hodláte udělat
+- Možnosti:
+  - Využití neuronových sítí pro předpovídání bear a bull marketu.
+  - Využití heurestik jako je metrika risku celkove trzni kapitalizace jako ukazatele pravdepodobnosti s jakou je trh stabilni.
+- Backtesting: Hledání optimálních adaptivních strategií za použití kombinace již existujích strategií.
+- Validace: Úspěšnost na historickych datech kryptoměn vzhledem k USD a BTC.
+
+- Zjistena pravdepodobnost nam poslouzi k aplikovani rozdilnych obchodnich strategii.
+- Pri klesajicim trhu ocekavam vyuziti vice agresivni strategii z kategorie day trading. Presunuti coinu do stablecoinu a nasledne obchodovani s nemi, nebo staking coinu s proof of stake konceptem.
+- Pri stoupajicim trhu mohu vyuzit z vice strategii, vydelavani penez je zde mnohem lehci.
+
+3. informace o stavu řešení - co již máte, co vám chybí, kde vidíte největší problém. Pokud máte nějaký obrázek, graf, atd., bude jen výhodou
+- Z časových důvodů mám pouze napsanou teoretickou cast. Z ni jsem splnil prvni dva body zadani plne a z casti i 3. bod zadani od vedouciho pana Homoliaka. 
+- V prvnim bodu se jedna se studium obchodnich strategii jako je HODL, Rebalance, Scalping, Range Trading, Arbitrage, Dollar Cost Avaraging a dalsi. 
+- V druhem bodu jsem studoval simulacni nastroje na testovani kryptomen. Zde jsem dosel k nazoru, ze nejvhodnejsi jazyk na implementaci bude pro me Python za pouziti jednoho z frameworku pro backtesting. 
+- Automatizovany backtesting je pro me nejvhodnejsi zpusob, ktery muze testovat moji obchodni strategii.
+- V 3. bodu mam za ukol zanalyzovat data od vedouciho prace a shrnout zjistene udalosti.
+
+- Chybi mi bod 4.-6. zadani, tedy navrh obchodni strategie, jeji implementace, zhodnoceni a limitace.
+- Navrh obchodni strategie jsem jiz dnes lehce naznacil, je to ale dalsi krok, kteremu se chci venovat.
+- Po prodiskutovanych navrzich ruznych strategii se pustim do implementace.
+- Implementaci a zhodnoceni uspesnosti strategie chci venovat nejvic casu, jelikoz zde muze byt nejvetsi zisk z celkove prace.
+
+4. plán další práce - plán na dalších 14 týdnů rozepsaných do 7 schůzek.
+
+Zde jsem vybral nekolik temat, jake jsem uznal za vhodne.
+
+Vybral jsem pondeli a od pristiho tydne, ale jeste se s panem Homoliakem domluvim presneji.
+- 01/31/2022: Current State. Data Analyzation.
+- 02/14/2022: Adaptive strategy inspirations.
+- 02/28/2022: Proposal of several adaptive strategies.
+- 03/14/2022: Backtesting implementation.
+- 03/28/2022: First testing of adaptive strategies results.
+- 04/11/2022: Further backtesting results.
+- 04/25/2022: Further Improvements and Practical Deployment limitations -- discussion.
+- 05/01/2022: Final State meeting.
+- 05/11/2022: Thesis Submission.
+
+Questions:
+- Can I get grammarly licence for checking my grammar?
+- What should I include in my background INTRO section? What should the reader be familiar with?
+  -> I've so far included Cryptocurrencies/fiat money/shortly blockchain and bear&bull markets. Other trading concepts are explained when encountered, this could also be the case for other stuff. 
+  -> I'm thinking what about blockchain, technical & fundamental analysis.
+  -> List of abbreviations commonly used in the thesis. Where to put it? Or expalain when encountered?
+- Should I contact webpages for infographics when needed or should I strive to create my own? I've so far contacted Investopedia and Shrimpy Team and they've been okay with how it turned out.
+- We/I/passive-voice - what should I use? I think editorial we is impractical in disseratation. Shouldn't it be saved for actual (science) articles?
+
+Feedback:
+- rozlisovat minutova data a denni dats
+- analyza ruzne metriky
+- HODL BTC, Rebalance, Bull & Bear Market
+- Figure s velkym F, stranka 12 citace na zacatek radku?
+
