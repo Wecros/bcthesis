@@ -13,7 +13,7 @@ def main():
 
     # TODO: create all_coins in format [{'BTC': pathToTheBTCFile}, ...]
     all_coins = [file for file in data_dir.iterdir() if file.is_file]
-    print(all_coins)
+    # print(all_coins)
 
     btc_price = get_close_dataframe("../data/repaired/1000coins/BTC-bitcoin.csv")
     analyze_data("../data/repaired/1000coins/ETH-ethereum.csv", btc_price)
@@ -27,6 +27,7 @@ def get_close_dataframe(data_path: str):
 
 def analyze_data(data_path: str, btc_price):
     df = pd.read_csv(data_path)
+    print(df)
     df.head()
 
     df["date"] = pd.to_datetime(df["date"])
