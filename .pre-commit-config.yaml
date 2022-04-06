@@ -1,0 +1,26 @@
+fail_fast: false
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.4.0
+  hooks:
+    - id: check-merge-conflict
+    - id: check-yaml
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+
+- repo: local
+  hooks:
+  - id: format
+    name: python-format
+    entry: make format
+    pass_filenames: false
+    language: system
+    files: ^.*\.py$
+
+  - id: lint
+    name: python-lint
+    entry: make lint
+    pass_filenames: false
+    language: system
+    files: ^.*\.py$

@@ -2,6 +2,7 @@ THESIS_DIR := ./text-latex
 THESIS_FILE := xfilip46-thesis
 PRESENTATION_DIR := ./presentation-latex
 PRESENTATION_FILE := xfilip46-thesis-presentation
+SRC_DIR := src/
 
 .PHONY: latex
 
@@ -20,3 +21,14 @@ presentation:
 clean:
 	$(MAKE) clean -C $(THESIS_DIR)
 	$(MAKE) clean -C $(PRESENTATION_DIR)
+
+format:
+	fd '^.*\.py$$' | xargs black
+	fd '^.*\.py$$' | xargs autoflake --in-place --remove-unused-variables --imports=pandas,numpy,vectorbt,yaml,binance,decouple,$(shell fd '^.*\.py' --exec basename {} .py | tr '\n' ',')
+	fd '^.*\.py$$' | xargs isort
+
+lint:
+	fd '^.*\.py$$' | xargs black --check
+	fd '^.*\.py$$' | xargs isort --check
+	fd '^.*\.py$$' | xargs flake8
+	# fd '^.*\.py$$' | xargs pylint

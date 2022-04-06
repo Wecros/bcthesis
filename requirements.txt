@@ -1,0 +1,9 @@
+-r requirements-lint.txt
+
+pre-commit
+vectorbt
+pandas
+numpy
+python-binance
+python-decouple
+pyyaml

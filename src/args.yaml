@@ -1,0 +1,7 @@
+---
+pairs:
+- BTCUSDT
+- ETHUSDT
+start_date: '2022-01-30'
+end_date: '2022-04-04'
+interval: 1d
