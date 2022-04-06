@@ -11,7 +11,7 @@ To get to this point I will explore the current trading strategies that are used
 
 \subsection*{Organization}
 
-The rest of this work is divided into several chapters. 
+The rest of this work is divided into several chapters.
 
 Firstly, there is the chapter \ref{background}, which gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In the chapter \ref{trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In the chapter \ref{simulation-tools} several existing simulation tools are explored and compared. I also analyze the backlog of cryptocurrency trading data provided by the supervisor and summarize the important events.
 
@@ -19,12 +19,12 @@ Firstly, there is the chapter \ref{background}, which gives the reader a suffici
 \chapter{Background}
 \label{background}
 
-There are some prerequisites that the reader must be familiarized with in order to understand the thesis. The basic knowledge of what a cryptocurrency is must be explained. As well as clear understanding of some terms that are regularly used in the thesis. 
+There are some prerequisites that the reader must be familiarized with in order to understand the thesis. The basic knowledge of what a cryptocurrency is must be explained. As well as clear understanding of some terms that are regularly used in the thesis.
 
 \subsection*{List of terms generally used in the thesis and among crypto investors}
 \begin{itemize}
     \item Best strategy = A strategy that yields the most money -- has the best profit.
-    \item Bear market = A market in which prices are falling, encouraging selling. 
+    \item Bear market = A market in which prices are falling, encouraging selling.
     \item Bull market = A market in which prices are rising, encouraging buying.
     \item FOMO = Fear of missing out.
     \item FUD = Fear, uncertainty, doubt.
@@ -60,10 +60,10 @@ Blockchain or a distributed ledger\footnote{https://www.investopedia.com/terms/d
 
 \section{What are bear and bull markets?}
 While you may know that the bear and bull markets stand for falling and rising markets, there is more to these terms that must be explained. The origin of the terms themselves is believed to be tied to the way the two animals attack their opponents. A bull thrusts its horns up, while a bear swipes its pawns downwards \cite{investopedia-bull-market}.
-Herd behavior is important to consider when talking about the terms. 
+Herd behavior is important to consider when talking about the terms.
 
 \subsection*{Bear Market}
-As growth prospects wane and expectations are unmet, prices decline \cite{investopedia-bear-market}. Bear markets are viewed as pessimistic with investors scared to open new positions. But to talk about bear or bull market we usually ascribe longer time periods than the usual and always present volatility of the crypto market. For example when China declared all of the cryptocurrency transactions illegal \cite{china-ban}, a fall of crypto markets quickly ensued. 
+As growth prospects wane and expectations are unmet, prices decline \cite{investopedia-bear-market}. Bear markets are viewed as pessimistic with investors scared to open new positions. But to talk about bear or bull market we usually ascribe longer time periods than the usual and always present volatility of the crypto market. For example when China declared all of the cryptocurrency transactions illegal \cite{china-ban}, a fall of crypto markets quickly ensued.
 
 A bearish investor or bear is then a type of investor that believes that a specific coin is likely to decline in the future \cite{investopedia-bull}.
 
@@ -113,7 +113,7 @@ One study around rebalancing has been already mentioned, let's look into some of
 Another study \cite{rebalancing-strategy} confirmed that a portfolio with a larger number of assets performs better. Some other interesting facts have been observed during the simulations that improve the performance of the portfolio:
 \begin{itemize}
     \item Equal weightings of the allocated assets.
-    \item Assets that are uncorrelated or negatively correlated with each other. That means if one rises, the other should go down. 
+    \item Assets that are uncorrelated or negatively correlated with each other. That means if one rises, the other should go down.
     \item Assets that have similar rates of return, though volatility also improves the performance.
 \end{itemize}
 
@@ -147,7 +147,7 @@ Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure
 \section{Scalping}
 In scalping you try to profit from very small price movements over short periods, you might exit a trade seconds after entering it. It is best to use automated bots to increase the buying frequency. Scalpers take advantage of increased trading volume to profit. They want to exit before any news or short-term fluctuation changes the market's view of the coin \cite{best-crypto-daytrading}.
 
-It is needed to have a large bankroll to use this strategy effectively. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees. 
+It is needed to have a large bankroll to use this strategy effectively. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees.
 
 In Figure \ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
 
@@ -167,7 +167,7 @@ One of the advantages is that the automated trading systems take emotions out of
 Automated trading systems are one of the only options to use when considering strategies like scalping due to the ease of getting in and out of a trade in seconds without room for failure. The software also allows backtesting the chosen strategy on historical data from which it can be seen how well it does perform.
 
 \section{Arbitrage}
-Arbitrage involves buying cryptocurrency in one market and selling it for higher price in another one. Since the cryptocurrency market is usually unregulated, anyone can make an exchange. This can lead to major differences in the spread of the asset. 
+Arbitrage involves buying cryptocurrency in one market and selling it for higher price in another one. Since the cryptocurrency market is usually unregulated, anyone can make an exchange. This can lead to major differences in the spread of the asset.
 
 There are two types of arbitrage when it comes to cryptocurrencies. The first one focuses on finding prices mismatches across different trading pairs on a single exchange. The other is the one that was already described---locating significant price differences on multiple exchanges. Both types take advantage of an automated trading system that monitors the exchanges and looks for price differences. In Figure \ref{arbitrage-figure} you can see how the first type can be profitable.
 
@@ -209,7 +209,7 @@ In this chapter different simulation tools, their application, usefulness and di
 \emph{Backtesting simulation tools} are similar to the virtual trading simulators in a way, that it aims to make its users better at trading. While the conventional trading simulators only work in real time, there are simulation tools where its users can input chosen strategy and see it run across multiple years of historical data and see how it performed in seconds. This is the type of simulation tools that will be used in this thesis. It basically uses backtesting for the cryptocurrency strategy's validation.
 
 \section{What is Backtesting?}
-The section was inspired by this source \cite{backtesting-crypto-trading-strategies}. 
+The section was inspired by this source \cite{backtesting-crypto-trading-strategies}.
 
 Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
 
@@ -286,7 +286,7 @@ It allows testers to simulate bid-ask spread, slippage and liquidity when testin
 \label{performance-analysis}
 This section was again inspired by the \cite{backtesting-crypto-trading-strategies} source.
 
-Performance of the given trading system or strategy is commonly gauged against parameters such as profit and loss (P\&L), success ratio, and Sharpe ratio. 
+Performance of the given trading system or strategy is commonly gauged against parameters such as profit and loss (P\&L), success ratio, and Sharpe ratio.
 
 \subsection*{Profit and Loss -- P\&L}
 Once the desired strategy has been created and backtest executed, the big number traders will be interested in is the profit. The backtest should spit out P\&L analysis by trade and day. That way an equity curve can be created, showing what the balance would have been if it were traded live. Equity curve is just a time series chart showing what the value of the account would have been after each passed day.
@@ -325,7 +325,7 @@ When looking at possible languages to use I consider available libraries and fra
 \subsection*{Backtesting frameworks}
 Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy}\footnote{https://numpy.org/}, \emph{pandas}\footnote{https://pandas.pydata.org/} and \emph{matplotlib}\footnote{https://matplotlib.org/} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by \cite{python-backtesting-frameworks} source.
 
-When reviewing backtesting frameworks it's always good to ask what asset classes you are trading, what data frequency and detail is required and what order type should be supported by the chosen framework. Some frameworks go beyond backtesting and include live trading capabilities that make it easier for potential deployment. 
+When reviewing backtesting frameworks it's always good to ask what asset classes you are trading, what data frequency and detail is required and what order type should be supported by the chosen framework. Some frameworks go beyond backtesting and include live trading capabilities that make it easier for potential deployment.
 
 The framework should have a way to consume trading data in a convenient way. It should calculate a broad range of risk and performance metrics as explained in \ref{performance-analysis}, including the max drawdown and Sharpe and Sortino ratios.
 
@@ -399,8 +399,51 @@ Data is analyzed in several ways:
 \chapter{Adaptive Trading Strategy Proposals}
 \label{proposal}
 
+
+\section{Proposals}
+
+Adaptive Trading Strategy Proposals:
+\begin{enumerate}
+    \item Risk metric
+    \item Simple Moving Average crossover
+    \item Machine Learning Series prediction
+    \item {[BONUS]} Stablecoin shock peg/de-peg
+\end{enumerate}
+
+Variables to consider:
+\begin{enumerate}
+    \item strategies combinations
+    \item adaptive vs classic model behavior ratio
+    \item rebalance weights ratio and frequency
+    \item different time intervals
+    \item different size of coin portfolio
+
+\end{enumerate}
+
+Idea is to have e.g. 80\% of adaptive model behavior and 20\% of classic model behavior.
+
+\section{Bull Market Behaviour}
+During the possible Bull Market we hold coins, rebalance and buy more of them.
+
+\section{Bear Market Behaviour}
+During Bear Market we transfer our holding to stablecoins (in certain percentage) so that the market fall does not impede us.
+
 \chapter{Adaptive Strategy Implementation}
 \label{implementation}
+
+\section{Framework or no framework}
+During my search, I initially tinkered with several frameworks to test out their capabilities. The basic idea was that if a framework would prove satisfactory I would use it and tweak it to my needs so I do not reinvent the wheel again.
+
+Alas, during my tinker with Python frameworks as backtrader, vectorbt or zipline, the frameworks were either outdated or they did not my needs of adaptive strategies.
+
+\section{Trading data fetch}
+Trading data that was used during the simluations were got from the supervisor. The data were not given at first, so I created a little script that got the data from Binance exchange. It was through their API and Python script that I could get historical data with any interval Binance supplied. That is also why I used this data when testing out shorter intervals than 1 day like 1 or 5 minutes.
+
+\section{Testing out the Bitcoin Risk Metric}
+\begin{enumerate}
+    \item https://www.youtube.com/watch?v=ocQTqM4lL3k
+    \item https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
+\end{enumerate}
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{limitations}

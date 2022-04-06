@@ -23,7 +23,6 @@ def main():
         klines_data[pair] = get_data(args)
 
     data = TradingData(klines_data, trading_vars)
-    print(data)
     for ticker, df in data.data.items():
         run_simulation(df)
 
