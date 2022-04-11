@@ -1,32 +1,9 @@
 import argparse
-from dataclasses import dataclass
 
 import pandas as pd
 import yaml
 
-from utils import TIME_FORMAT
-
-
-@dataclass
-class TradingVariables:
-    """Dataclass holding the trading variables influencing the simulation"""
-
-    pairs: list
-    start_date: pd.Timestamp
-    end_date: pd.Timestamp
-    interval: pd.Timedelta
-
-    def get_interval_in_day_fraction(self):
-        """Get interval as a fraction of number of days."""
-        return self.interval.delta / pd.Timedelta(days=1).delta
-
-
-@dataclass
-class TradingData:
-    """Dataclass holding all information needed to run the simulation."""
-
-    data: dict  # {"BTCUSDT": pd.DataFrame, "ETHUSDT": ...}
-    variables: TradingVariables
+from utils import TIME_FORMAT, TradingVariables
 
 
 def convert_args_to_trading_variables(args):

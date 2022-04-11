@@ -3,24 +3,101 @@ import logging
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objs as go
 import vectorbt as vbt
 
-from utils import get_dates_from_index, get_symbols_from_index
+from utils import Portfolio, Simulation, get_dates_from_index, get_symbols_from_index
 
 
-def run_simulation(data):
+def simulate(data):
     logging.info("Running simulation")
-    run_simulation_vectorbt_hodl(data)
-    run_simulation_vectorbt_msa(data)
+
+    # plot_all_coins(data)
+
     run_simulation_riskmetric(data)
 
+
+def plot_all_coins(data):
     fig = px.line(data.reset_index(), x="open_time", y="close", color="pair", log_y=True)
     fig.show()
 
 
 def run_simulation_riskmetric(data):
-    riskmetric = get_risk_metric(data)
-    plot_riskmetric(riskmetric, data)
+    # riskmetric = get_risk_metric(data)
+    # plot_riskmetric(riskmetric, data)
+    run_simulation(data)
+
+
+def run_simulation(data: pd.DataFrame):
+    portfolio = Portfolio(usd=100, coins={k: 0 for k in get_symbols_from_index(data)})
+    sim = Simulation(portfolio=portfolio)
+    riskmetric = get_risk_metric(data)  # would be class instance variable
+
+    date_range = get_dates_from_index(data)
+    for date in date_range:
+        sim = do_simulation_step(sim, data, date, riskmetric)
+
+    print(sim.portfolio.usd)
+    print(sim.portfolio.coins)
+    print(sim.portfolio.coins["BTCUSDT"] * data.loc["BTCUSDT"].iloc[-1].close)
+
+    normalized_metric = riskmetric.avg * data.loc["BTCUSDT"]["open"]
+
+    df = pd.DataFrame()
+    df.index = get_dates_from_index(data)
+    df["BTC_price"] = data.loc["BTCUSDT"].close
+    df["risk_metric"] = normalized_metric
+    fig = px.line(df)
+
+    fig.add_trace(
+        go.Scatter(
+            x=sim.bought_dates,
+            y=data.loc[("BTCUSDT", sim.bought_dates), :].close,
+            mode="markers",
+            name="bought",
+            marker_symbol="triangle-up",
+            marker=dict(
+                color="green",
+                size=15,
+            ),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=sim.sold_dates,
+            y=data.loc[("BTCUSDT", sim.sold_dates), :].close,
+            mode="markers",
+            name="sold",
+            marker_symbol="triangle-down",
+            marker=dict(
+                color="red",
+                size=15,
+            ),
+        ),
+    )
+    fig.show()
+
+
+def do_simulation_step(
+    sim: Simulation, data: pd.DataFrame, date: pd.Timestamp, riskmetric
+):
+    """Risk metric simulation step."""
+    coin = "BTCUSDT"
+
+    if riskmetric.loc[date]["avg"] >= 0.7:
+        if not sim.sold_state:
+            sim.sell(date)
+            close = data.loc[(coin, date)]["close"]
+            sim.portfolio.usd = sim.portfolio.coins[coin] * close
+            sim.portfolio.coins[coin] = 0
+    elif riskmetric.loc[date]["avg"] < 0.7:
+        if not sim.bought_state:
+            sim.buy(date)
+            close = data.loc[(coin, date)]["close"]
+            sim.portfolio.coins[coin] = sim.portfolio.usd / close
+            sim.portfolio.usd = 0
+
+    return sim
 
 
 def get_risk_metric(data):

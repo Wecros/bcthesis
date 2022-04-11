@@ -6,7 +6,7 @@ import pandas as pd
 
 from argparser import convert_args_to_trading_variables, get_parsed_args
 from binance_api_downloader import get_data
-from simulator import run_simulation
+from simulator import simulate
 
 
 def main():
@@ -42,7 +42,7 @@ def main():
         pair_list.append(df)
 
     data = pd.concat(pair_list)
-    run_simulation(data)
+    simulate(data)
 
 
 def logging_setup():

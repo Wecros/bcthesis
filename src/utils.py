@@ -1,5 +1,6 @@
 """Utils file for defining helpful functions and constants."""
 
+from dataclasses import dataclass, field
 from datetime import timedelta
 
 import pandas as pd
@@ -10,6 +11,58 @@ BINANCE_PATH = "binance/"
 SEP = ":"
 TIME_FORMAT = "%Y-%m-%d"
 DEBUG = True
+
+
+@dataclass
+class TradingVariables:
+    """Dataclass holding the trading variables influencing the simulation"""
+
+    pairs: list
+    start_date: pd.Timestamp
+    end_date: pd.Timestamp
+    interval: pd.Timedelta
+
+    def get_interval_in_day_fraction(self):
+        """Get interval as a fraction of number of days."""
+        return self.interval.delta / pd.Timedelta(days=1).delta
+
+
+@dataclass
+class TradingData:
+    """Dataclass holding all information needed to run the simulation."""
+
+    data: dict  # {"BTCUSDT": pd.DataFrame, "ETHUSDT": ...}
+    variables: TradingVariables
+
+
+@dataclass
+class Portfolio:
+    """Dataclass holding all the information about current simulation portfolio."""
+
+    usd: int = 0
+    coins: dict = 0  # {'coin': percentage, 'coin': percantage}
+
+
+@dataclass
+class Simulation:
+    """Dataclass holding all the information about the currently running sumulation."""
+
+    portfolio: Portfolio
+    signal_triggered: bool = False
+    bought_state: bool = False
+    sold_state: bool = True
+    bought_dates: list[(pd.Timestamp, float)] = field(default_factory=list)
+    sold_dates: list[(pd.Timestamp, float)] = field(default_factory=list)
+
+    def buy(self, date):
+        self.bought_dates.append(date)
+        self.bought_state = True
+        self.sold_state = False
+
+    def sell(self, date):
+        self.sold_dates.append(date)
+        self.bought_state = False
+        self.sold_state = True
 
 
 def convert_csv_to_df(csv_file):
