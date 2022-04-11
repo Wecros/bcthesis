@@ -1,6 +1,11 @@
 ---
 pairs:
 - BTCUSDT
-start_date: '2022-01-30'
+- ETHUSDT
+- SOLUSDT
+- ADAUSDT
+- DOTUSDT
+- XRPUSDT
+start_date: '2000-01-01'
 end_date: '2022-04-04'
 interval: 1d

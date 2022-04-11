@@ -46,3 +46,11 @@ def get_timedelta_as_binance_interval(delta: pd.Timedelta):
         return str(hours) + "h"
     elif minutes:
         return str(minutes) + "m"
+
+
+def get_symbols_from_index(data):
+    return data.index.get_level_values(level="pair").unique()
+
+
+def get_dates_from_index(data):
+    return data.index.get_level_values(level="open_time").unique()

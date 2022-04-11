@@ -39,9 +39,12 @@ def get_data(args: dict) -> pd.DataFrame:
         args["end_date"].strftime(TIME_FORMAT),
     )
 
-    path_to_csv = f"{DATA_PATH}{BINANCE_PATH}/{args['ticker']}:"
-    f"{args['start_date'].strftime(TIME_FORMAT)}:{args['end_date'].strftime(TIME_FORMAT)}"
-    f":{args['interval']}.csv"
+    path_to_csv = (
+        f"{DATA_PATH}{BINANCE_PATH}/{args['ticker']}:"
+        + f"{args['start_date'].strftime(TIME_FORMAT)}:"
+        + f"{args['end_date'].strftime(TIME_FORMAT)}"
+        + f":{args['interval']}.csv"
+    )
 
     df = get_df_from_binance(klines)
     df.to_csv(path_to_csv, encoding="utf-8")
