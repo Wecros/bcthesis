@@ -428,6 +428,14 @@ During the possible Bull Market we hold coins, rebalance and buy more of them.
 \section{Bear Market Behaviour}
 During Bear Market we transfer our holding to stablecoins (in certain percentage) so that the market fall does not impede us.
 
+\section{Bitcoin Risk Metric}
+This term was coined and invented by Benjamin Cowen on his youtube channel \footnote{https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg}. It is an alogirthm that prescribes a certain risk value, between 0 and 1, to each day of bitcoin price. It takes into account the maximum value that has already occured so far in the history. This strategy is often favourable by DCA. Depending on the risk scale, you either invest more if the risk is lower and invest less (or not at all) if the risk is high.
+
+The metric oscillates between highs and lows. There have been 5 high points of the metric since the year 2015.
+
+\subsection*{DCA}
+
+
 \chapter{Adaptive Strategy Implementation}
 \label{implementation}
 
@@ -439,6 +447,8 @@ Alas, during my tinker with Python frameworks as backtrader, vectorbt or zipline
 \section{Trading data fetch}
 Trading data that was used during the simluations were got from the supervisor. The data were not given at first, so I created a little script that got the data from Binance exchange. It was through their API and Python script that I could get historical data with any interval Binance supplied. That is also why I used this data when testing out shorter intervals than 1 day like 1 or 5 minutes.
 
+The data by supervisor was not satisfactory so I decided to make my own script.
+
 \section{Testing out the Bitcoin Risk Metric}
 \begin{enumerate}
     \item https://www.youtube.com/watch?v=ocQTqM4lL3k
@@ -447,6 +457,8 @@ Trading data that was used during the simluations were got from the supervisor. 
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{limitations}
+
+\section{Comparison to existing solutions}
 
 \chapter{Conclusion}
 \label{conclusion}

@@ -1,8 +1,12 @@
 """Utils file for defining helpful functions and constants."""
 
+import logging
 from dataclasses import dataclass, field
 from datetime import timedelta
+from functools import reduce
 
+import numpy as np
+import numpy.typing as npt
 import pandas as pd
 
 DATA_PATH = "../data/"
@@ -32,6 +36,8 @@ class TradingData:
     """Dataclass holding all information needed to run the simulation."""
 
     data: dict  # {"BTCUSDT": pd.DataFrame, "ETHUSDT": ...}
+    coins: list[str]
+    dates: npt.NDArray[pd.Timestamp]
     variables: TradingVariables
 
 
@@ -51,8 +57,8 @@ class Simulation:
     signal_triggered: bool = False
     bought_state: bool = False
     sold_state: bool = True
-    bought_dates: list[(pd.Timestamp, float)] = field(default_factory=list)
-    sold_dates: list[(pd.Timestamp, float)] = field(default_factory=list)
+    bought_dates: list[pd.Timestamp] = field(default_factory=list)
+    sold_dates: list[pd.Timestamp] = field(default_factory=list)
 
     def buy(self, date):
         self.bought_dates.append(date)
@@ -107,3 +113,19 @@ def get_symbols_from_index(data):
 
 def get_dates_from_index(data):
     return data.index.get_level_values(level="open_time").unique()
+
+
+def remove_distinct_dates(data: pd.DataFrame):
+    coins = get_symbols_from_index(data)
+    for coin in coins:
+        logging.info(f"{coin}: {data.loc[coin].reset_index().iloc[0]['open_time']}")
+
+    dates = []
+    for coin in set(data.index.get_level_values(level="pair")):
+        dates.append(data.loc[coin].index.values)
+    dates = reduce(np.intersect1d, dates)
+
+    df = data.reset_index()
+    filtr = (df["open_time"] < dates[0]) | (df["open_time"] > dates[-1])
+    df = df.drop(df.index[filtr])
+    return df

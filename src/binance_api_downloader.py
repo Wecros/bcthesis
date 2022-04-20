@@ -40,7 +40,7 @@ def get_data(args: dict) -> pd.DataFrame:
     )
 
     path_to_csv = (
-        f"{DATA_PATH}{BINANCE_PATH}/{args['ticker']}:"
+        f"{DATA_PATH}{BINANCE_PATH}{args['ticker']}:"
         + f"{args['start_date'].strftime(TIME_FORMAT)}:"
         + f"{args['end_date'].strftime(TIME_FORMAT)}"
         + f":{args['interval']}.csv"

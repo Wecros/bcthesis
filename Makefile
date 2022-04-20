@@ -24,7 +24,7 @@ clean:
 
 format:
 	fd '^.*\.py$$' | xargs black
-	fd '^.*\.py$$' | xargs autoflake --in-place --remove-unused-variables --imports=pandas,numpy,vectorbt,yaml,binance,decouple,$(shell fd '^.*\.py' --exec basename {} .py | tr '\n' ',')
+	fd '^.*\.py$$' | xargs autoflake --in-place --remove-unused-variables --imports=pandas,numpy,vectorbt,yaml,binance,decouple,plotly,$(shell fd '^.*\.py' --exec basename {} .py | tr '\n' ',')
 	fd '^.*\.py$$' | xargs isort
 
 lint:

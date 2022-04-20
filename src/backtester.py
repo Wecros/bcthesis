@@ -7,6 +7,7 @@ import pandas as pd
 from argparser import convert_args_to_trading_variables, get_parsed_args
 from binance_api_downloader import get_data
 from simulator import simulate
+from utils import remove_distinct_dates
 
 
 def main():
@@ -39,9 +40,14 @@ def main():
             columns=["open", "high", "low", "close", "volume"],
             index=multinindex,
         )
+
         pair_list.append(df)
 
     data = pd.concat(pair_list)
+    data = remove_distinct_dates(data)
+    data = data.set_index(["pair", "open_time"]).sort_index()
+    # data = data.set_index(['open_time', 'open_time']).sort_index()
+
     simulate(data)
 
 
