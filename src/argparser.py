@@ -18,7 +18,7 @@ def convert_args_to_trading_variables(args):
 
 def get_parsed_args():
     """Parse the arguments either from file or the command line."""
-    parser = get_parser()
+    parser = get_argument_parser()
     args = parser.parse_args()
     if not args.file and not (args.interval and args.pairs and args.start_date and args.end_date):
         parser.error("Incomplete arguments or no argument file defined!")
@@ -33,7 +33,7 @@ def get_parsed_args():
     }
 
 
-def get_parser():
+def get_argument_parser():
     parser = argparse.ArgumentParser(description="Download CSV from Binance API.")
     parser.add_argument("-p", "--pairs", help="list of pairs seperated by a space character")
     parser.add_argument(

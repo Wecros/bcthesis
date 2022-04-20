@@ -9,7 +9,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
 from simulation import Simulation
-from utils import get_dates_from_index
+from utils import get_dates_from_index, map_values_to_specific_dates
 
 
 class RiskMetricStrategy(Simulation):
@@ -164,11 +164,12 @@ class RiskMetricStrategy(Simulation):
             )
         )
 
-        dates = get_dates_from_index(self.data)
-        indeces = map(lambda x: list(dates).index(x), self.bought_dates)
-        profits_bought = list(map(lambda x: self.profits_in_time[x], indeces))
-        print(profits_bought)
-
+        profits_bought = map_values_to_specific_dates(
+            self.steps, self.bought_dates, self.profits_in_time
+        )
+        profits_sold = map_values_to_specific_dates(
+            self.steps, self.sold_dates, self.profits_in_time
+        )
         fig.add_trace(
             go.Scatter(
                 x=np.array(self.bought_dates),
@@ -185,7 +186,7 @@ class RiskMetricStrategy(Simulation):
         fig.add_trace(
             go.Scatter(
                 x=np.array(self.sold_dates),
-                y=self.profits_in_time,
+                y=profits_sold,
                 mode="markers",
                 name="sold",
                 marker_symbol="triangle-down",

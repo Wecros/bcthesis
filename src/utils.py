@@ -50,6 +50,12 @@ class Portfolio:
 
 
 @dataclass
+class Strategy:
+    name: str
+    profits: npt.NDArray[float]
+
+
+@dataclass
 class Simulation:
     """Dataclass holding all the information about the currently running sumulation."""
 
@@ -115,6 +121,12 @@ def get_dates_from_index(data):
     return data.index.get_level_values(level="open_time").unique()
 
 
+def map_values_to_specific_dates(all_dates, specific_dates, values):
+    date_indices = map(lambda x: list(all_dates).index(x), specific_dates)
+    specific_values = list(map(lambda x: values[x], date_indices))
+    return specific_values
+
+
 def remove_distinct_dates(data: pd.DataFrame):
     coins = get_symbols_from_index(data)
     for coin in coins:
@@ -126,6 +138,11 @@ def remove_distinct_dates(data: pd.DataFrame):
     dates = reduce(np.intersect1d, dates)
 
     df = data.reset_index()
-    filtr = (df["open_time"] < dates[0]) | (df["open_time"] > dates[-1])
-    df = df.drop(df.index[filtr])
+    date_filter = (df["open_time"] < dates[0]) | (df["open_time"] > dates[-1])
+    df = df.drop(df.index[date_filter])
+    df = set_index_for_data(df)
     return df
+
+
+def set_index_for_data(data: pd.DataFrame):
+    return data.set_index(["pair", "open_time"]).sort_index()

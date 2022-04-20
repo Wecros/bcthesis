@@ -12,7 +12,7 @@ from decouple import config
 from utils import BINANCE_PATH, DATA_PATH, TIME_FORMAT, convert_csv_to_df
 
 
-def get_data(args: dict) -> pd.DataFrame:
+def get_data_from_binance(args: dict) -> pd.DataFrame:
     binance_dir = Path(DATA_PATH + BINANCE_PATH)
     for file in binance_dir.iterdir():
         if does_file_meet_criteria(file, args):
@@ -23,13 +23,6 @@ def get_data(args: dict) -> pd.DataFrame:
             except KeyError:
                 # Binance server saves days at 02:00, so this error can happen
                 return df[df.index[0] : args["end_date"]]
-
-    # TODO: Custom data validation (from supervisor)
-    # custom_dir = Path(DATA_PATH + CUSTOM_DATA_PATH)
-    # for file in custom_dir.iterdir():
-    # if does_file_meet_criteria(file, args):
-    # print(file)
-    # return file
 
     client = Client(config("BINANCE_API_KEY"), config("BINANCE_SECRET_KEY"))
     klines = client.get_historical_klines(

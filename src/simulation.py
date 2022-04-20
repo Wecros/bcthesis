@@ -71,7 +71,6 @@ class Simulation(ABC):
             self.portfolio.coins[coin] = 0
 
     def getCloseValue(self, coin):
-        # return self.data.loc[(self.current_step, coin), 'close']
         # return self.data.loc[[(self.current_step, coin)]].close[0]
         return self.data.loc[[(coin, self.current_step)]].close[0]
 
