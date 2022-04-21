@@ -3,19 +3,17 @@ File defining the risk metric strategy.
 """
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
 
-from simulation import Simulation
-from utils import get_dates_from_index, map_values_to_specific_dates
+from strategy import Strategy
+from utils import Portfolio, TradingData
 
 
-class RiskMetricStrategy(Simulation):
-    def __init__(self, data, cash: int = 1000):
-        super().__init__(data, cash)
-        self.riskmetric = get_risk_metric(data)
+class RiskMetricStrategy(Strategy):
+    def __init__(self, data: TradingData, portfolio: Portfolio = None):
+        super().__init__(data, portfolio)
+        self.riskmetric = get_risk_metric(self.steps)
         self.threshold = 0.7
         self.states = {
             "sell": False,
@@ -75,12 +73,6 @@ class RiskMetricStrategy(Simulation):
         self.sold_state = False
         return self.states
 
-    def buy(self):
-        super().buy()
-
-    def sell(self):
-        super().sell()
-
     def buy_percentage(self, percent):
         self.bought_dates.append(self.current_step)
         coins = self.portfolio.coins
@@ -98,7 +90,7 @@ class RiskMetricStrategy(Simulation):
         usd_to_buy_coins_with = self.portfolio.usd * percent
         usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
         for coin in coins:
-            close = self.getCloseValue(coin)
+            close = self.get_close_value(coin)
             self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
 
         self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
@@ -113,94 +105,15 @@ class RiskMetricStrategy(Simulation):
         coins = self.portfolio.coins
 
         for coin in coins:
-            close = self.getCloseValue(coin)
+            close = self.get_close_value(coin)
             coin_left = self.portfolio.coins[coin] * percent
             coin_to_buy_usd_with = self.portfolio.coins[coin] - coin_left
 
             self.portfolio.usd += coin_to_buy_usd_with * close
             self.portfolio.coins[coin] = coin_left
 
-    def plot(self):
-        self.riskmetric.avg * self.data.loc["BTCUSDT"]["open"]
-        self.portfolio.coins
 
-        # Create figure with secondary y-axis
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-        # Add figure title
-        fig.update_layout(title_text="Risk Metric Analysis")
-        fig.update_xaxes(title_text="1 day interval")
-        fig.update_yaxes(title_text="USD value", secondary_y=False)
-        fig.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
-
-        fig.add_trace(
-            go.Scatter(x=self.steps, y=self.riskmetric.avg, name="risk metric"),
-            secondary_y=True,
-        )
-        fig.add_hline(
-            y=self.threshold,
-            name="risk metric threhsold",
-            annotation_text="threshold",
-            secondary_y=True,
-        )
-
-        fig = px.scatter(
-            self.riskmetric,
-            x=self.riskmetric.index,
-            y="Value",
-            color="avg",
-            color_continuous_scale="turbo",
-        )
-        fig.update_yaxes(title="Price ($USD)", type="log", showgrid=False)
-        fig.update_layout(template="seaborn")
-
-        fig.add_trace(
-            go.Scatter(
-                x=self.steps,
-                y=self.profits_in_time,
-                mode="lines",
-                name="Profit in USD",
-                line=dict(color="rgba(46, 204, 113, 1.9)", width=4),
-            )
-        )
-
-        profits_bought = map_values_to_specific_dates(
-            self.steps, self.bought_dates, self.profits_in_time
-        )
-        profits_sold = map_values_to_specific_dates(
-            self.steps, self.sold_dates, self.profits_in_time
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=np.array(self.bought_dates),
-                y=profits_bought,
-                mode="markers",
-                name="bought",
-                marker_symbol="triangle-up",
-                marker=dict(
-                    color="green",
-                    size=15,
-                ),
-            ),
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=np.array(self.sold_dates),
-                y=profits_sold,
-                mode="markers",
-                name="sold",
-                marker_symbol="triangle-down",
-                marker=dict(
-                    color="red",
-                    size=15,
-                ),
-            ),
-        )
-
-        return fig
-
-
-def get_risk_metric(data):
+def get_risk_metric(data_dates: npt.NDArray[pd.Timestamp]):
     """Get risk metric relevant for the data's date range."""
     df = pd.read_csv("btc.csv", index_col=0)
     # Calculate the `Risk Metric`
@@ -217,6 +130,6 @@ def get_risk_metric(data):
     df = df.drop(columns=["Date"])
     df.index = df.index.map(pd.to_datetime)
 
-    date_index = get_dates_from_index(data)
+    date_index = data_dates
     useful_riskmetric = df[date_index[0] : date_index[-1]]
     return useful_riskmetric

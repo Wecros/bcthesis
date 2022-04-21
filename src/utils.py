@@ -15,6 +15,11 @@ BINANCE_PATH = "binance/"
 SEP = ":"
 TIME_FORMAT = "%Y-%m-%d"
 DEBUG = True
+BTC_SYMBOL = "BTCUSDT"
+
+
+def noop(*args, **kwargs):
+    pass
 
 
 @dataclass
@@ -25,6 +30,7 @@ class TradingVariables:
     start_date: pd.Timestamp
     end_date: pd.Timestamp
     interval: pd.Timedelta
+    interval_str: str
 
     def get_interval_in_day_fraction(self):
         """Get interval as a fraction of number of days."""
@@ -36,7 +42,7 @@ class TradingData:
     """Dataclass holding all information needed to run the simulation."""
 
     data: dict  # {"BTCUSDT": pd.DataFrame, "ETHUSDT": ...}
-    coins: list[str]
+    symbols: set[str]
     dates: npt.NDArray[pd.Timestamp]
     variables: TradingVariables
 
@@ -45,36 +51,24 @@ class TradingData:
 class Portfolio:
     """Dataclass holding all the information about current simulation portfolio."""
 
-    usd: int = 0
-    coins: dict = 0  # {'coin': percentage, 'coin': percantage}
+    usd: int = 1000
+    coins: dict = field(default_factory=dict)  # {'coin': percentage, 'coin': percantage}
 
 
 @dataclass
-class Strategy:
+class StrategyResult:
+    """Dataclass holding the strategie's result."""
+
     name: str
     profits: npt.NDArray[float]
+    bought_dates: list[pd.Timestamp]
+    sold_dates: list[pd.Timestamp]
 
 
-@dataclass
-class Simulation:
-    """Dataclass holding all the information about the currently running sumulation."""
-
-    portfolio: Portfolio
-    signal_triggered: bool = False
-    bought_state: bool = False
-    sold_state: bool = True
-    bought_dates: list[pd.Timestamp] = field(default_factory=list)
-    sold_dates: list[pd.Timestamp] = field(default_factory=list)
-
-    def buy(self, date):
-        self.bought_dates.append(date)
-        self.bought_state = True
-        self.sold_state = False
-
-    def sell(self, date):
-        self.sold_dates.append(date)
-        self.bought_state = False
-        self.sold_state = True
+def convert_data_to_trading_data(data: pd.DataFrame, trading_vars: TradingVariables):
+    symbols = get_symbols_from_index(data)
+    dates = get_dates_from_index(data)
+    return TradingData(data, symbols, dates, trading_vars)
 
 
 def convert_csv_to_df(csv_file):
@@ -113,8 +107,8 @@ def get_timedelta_as_binance_interval(delta: pd.Timedelta):
         return str(minutes) + "m"
 
 
-def get_symbols_from_index(data):
-    return data.index.get_level_values(level="pair").unique()
+def get_symbols_from_index(data) -> set:
+    return set(data.index.get_level_values(level="pair").unique())
 
 
 def get_dates_from_index(data):
@@ -146,3 +140,8 @@ def remove_distinct_dates(data: pd.DataFrame):
 
 def set_index_for_data(data: pd.DataFrame):
     return data.set_index(["pair", "open_time"]).sort_index()
+
+
+def create_portfolio_from_data(data: TradingData, cash: float = 1000):
+    """Create portfolio for usd and coins. Cash parameter is used to denote dollar capital."""
+    return Portfolio(usd=cash, coins={coin: 0 for coin in data.symbols})

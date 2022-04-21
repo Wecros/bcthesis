@@ -4,21 +4,21 @@ File that contains sample vectorbt strategies.
 
 import vectorbt as vbt
 
-from utils import get_symbols_from_index
+from utils import TradingData
 
 
-def run_simulation_vectorbt_hodl(data):
-    for symbol in get_symbols_from_index(data):
-        df = data.loc[symbol]
+def run_simulation_vectorbt_hodl(trading_data: TradingData):
+    for symbol in trading_data.symbols:
+        df = trading_data.data.loc[symbol]
         price = df.close
         pf = vbt.Portfolio.from_holding(price, init_cash=100)
         print(pf.total_profit())
         pf.plot().show()
 
 
-def run_simulation_vectorbt_msa(data):
-    for symbol in get_symbols_from_index(data):
-        df = data.loc[symbol]
+def run_simulation_vectorbt_msa(trading_data: TradingData):
+    for symbol in trading_data.symbols:
+        df = trading_data.data.loc[symbol]
         price = df.close
 
         fast_ma = vbt.MA.run(price, 10)

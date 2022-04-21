@@ -2,85 +2,48 @@
 File defining the risk metric strategy.
 """
 
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
 
-from simulation import Simulation
+from strategy import Strategy
+from utils import Portfolio, TradingData
 
 
-class RebalanceStrategy(Simulation):
-    def __init__(self, data, cash: int = 1000):
-        super().__init__(data, cash)
+class RebalanceStrategy(Strategy):
+    def __init__(self, data: TradingData, portfolio: Portfolio = None, **kwargs):
+        super().__init__(data, portfolio)
+        self.rebalance_interval = kwargs.get("rebalance_interval", 1)
         # self.rebalance_ratio = 'even'
         self.rebalance_ratio = 100 / len(self.portfolio.coins)
-        self.rebalance_interval = 1
         self.interval_until_next_rebalance = self.rebalance_interval
         self.buy()
+        self.name += f"{{interval: {self.rebalance_interval}}}"
 
     def execute_step(self):
         super().execute_step()
         self.interval_until_next_rebalance -= 1
         if self.interval_until_next_rebalance == 0:
-            self.rebalance()
+            self.rebalance_coins()
             self.interval_until_next_rebalance = self.rebalance_interval
 
-    def rebalance(self):
-        # self.print_rebalance_ratios()
-        self.sell()
-        self.buy()
+    def rebalance_coins(self):
+        usd_to_rebalance = self.get_coins_value_in_usd()
+        self.portfolio.coins = {coin: 0 for coin in self.portfolio.coins}
+        usd_per_coin = usd_to_rebalance / len(self.portfolio.coins)
+        for coin in self.portfolio.coins:
+            close = self.get_close_value(coin)
+            self.portfolio.coins[coin] = usd_per_coin / close
 
     def print_rebalance_ratios(self):
         coins = self.portfolio.coins
         coins_to_usd = {}
         for coin in coins:
-            close = self.getCloseValue(coin)
+            close = self.get_close_value(coin)
             coins_to_usd[coin] = close * coins[coin]
         total_usd = sum(coins_to_usd.values())
         coins_percentages = {}
         for coin in coins:
-            close = self.getCloseValue(coin)
+            close = self.get_close_value(coin)
             coins_percentages[coin] = coins_to_usd[coin] / total_usd
 
         print(total_usd)
         print(coins_to_usd)
         print(coins_percentages)
-
-    def buy(self):
-        super().buy()
-
-    def sell(self):
-        super().sell()
-
-    def plot(self):
-        coins = self.portfolio.coins
-
-        fig = make_subplots()
-        fig.update_layout(title_text="Rebalance Analysis")
-        fig.update_xaxes(title_text="1 day interval")
-        fig.update_yaxes(title_text="USD value")
-
-        for coin in coins:
-            # fig.add_trace(go.Scatter(x=self.steps, y=self.data.loc[coin].close, name=coin))
-            fig.add_trace(
-                go.Scatter(
-                    x=self.steps,
-                    y=self.data.reset_index()
-                    .set_index(["pair", "open_time"])
-                    .sort_index()
-                    .loc[coin]
-                    .close,
-                    name=coin,
-                )
-            )
-        fig.add_trace(
-            go.Scatter(
-                x=self.steps,
-                y=self.profits_in_time,
-                mode="lines",
-                name="Profit in USD",
-                line=dict(color="rgba(46, 204, 113, 1.9)", width=4),
-            )
-        )
-        fig.update_yaxes(type="log")
-
-        return fig

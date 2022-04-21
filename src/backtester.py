@@ -7,15 +7,16 @@ import pandas as pd
 from argparser import convert_args_to_trading_variables, get_parsed_args
 from binance_api_downloader import get_data_from_binance
 from simulator import simulate
-from utils import TradingVariables, remove_distinct_dates
+from utils import TradingVariables, convert_data_to_trading_data, remove_distinct_dates
 
 
 def main():
     logging_setup()
     args = get_parsed_args()
     trading_vars = convert_args_to_trading_variables(args)
-    data = get_data(args, trading_vars)
-    simulate(data)
+    data = get_data(trading_vars)
+    trading_data = convert_data_to_trading_data(data, trading_vars)
+    simulate(trading_data)
 
 
 def logging_setup():
@@ -27,22 +28,22 @@ def logging_setup():
     )
 
 
-def get_data(args: dict, trading_vars: TradingVariables):
+def get_data(trading_vars: TradingVariables):
     """Get data based on the information provided in the arguments."""
     pairs_dataframes = [
-        get_dataframe_for_trading_pair(args, trading_vars, pair) for pair in trading_vars.pairs
+        get_dataframe_for_trading_pair(trading_vars, pair) for pair in trading_vars.pairs
     ]
     data = pd.concat(pairs_dataframes)
     data = remove_distinct_dates(data)
     return data.sort_index()
 
 
-def get_dataframe_for_trading_pair(args, trading_vars: TradingVariables, pair: str):
+def get_dataframe_for_trading_pair(trading_vars: TradingVariables, pair: str):
     args = {
         "ticker": pair,
         "start_date": trading_vars.start_date,
         "end_date": trading_vars.end_date,
-        "interval": args["interval"],
+        "interval": trading_vars.interval_str,
     }
     data = get_data_from_binance(args)
 

@@ -13,6 +13,7 @@ def convert_args_to_trading_variables(args):
         pd.to_datetime, [args["start_date"], args["end_date"]]
     )
     variables["interval"] = pd.to_timedelta(args["interval"])
+    variables["interval_str"] = args["interval"]
     return TradingVariables(**variables)
 
 
