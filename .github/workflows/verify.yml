@@ -1,0 +1,19 @@
+name: Verification CI
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/setup
+    - name: Lint with linting tools
+      run: |
+        make lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/setup
+    - name: Test with pytest
+      run: |
+        make test

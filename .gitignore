@@ -5,7 +5,6 @@
 
 # Root folder files
 !./.flake8
-!./.github
 !./.gitignore
 !./.pre-commit-config.yaml
 !./docker-compose.yml
@@ -22,8 +21,16 @@
 !tests
 !backtester
 !presentation
+!.github
 
 # Files in sub folders
+!.github/workflows
+!.github/workflows/**
+!.github/actions
+!.github/actions/**
+!.github/actions/setup
+!.github/actions/setup/**
+
 !backtester/args.yaml
 !backtester/btc.csv
 

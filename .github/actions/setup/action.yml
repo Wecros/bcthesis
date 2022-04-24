@@ -1,0 +1,21 @@
+name: Setup Environment
+descrition: Composite action to set up Python environemnt for verification
+runs:
+  using: "composite"
+  steps:
+  - uses: actions/checkout@v3
+  - name: Set up Python 3.9
+    uses: actions/setup-python@v3
+    with:
+      python-version: 3.9
+  - name: Install fd-find
+    shell: bash
+    run: |
+      sudo apt install fd-find
+      mkdir -p ~/.local/bin
+      ln -s $(which fdfind) ~/.local/bin/fd
+  - name: Install dependencies
+    shell: bash
+    run: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
