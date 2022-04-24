@@ -1,0 +1,27 @@
+---
+pairs:
+- BTCUSDT
+#- ETHUSDT
+#- BNBUSDT
+#- XRPUSDT
+##- SOLUSDT  # 2020
+#- ADAUSDT
+##- LUNAUSDT  # 2020
+##- AVAXUSDT  # 2020
+#- DOGEUSDT  # goes highly up
+##- DOTUSDT  # 2020
+##- USTUSDT  # 2021
+#- MATICUSDT
+##- NEARUSDT  # 2020
+#- LTCUSDT
+#- ATOMUSDT
+#- BCHUSDT
+#- TRXUSDT
+#- XLMUSDT
+#- ALGOUSDT
+#- ETCUSDT
+##- SHIBUSDT
+
+start_date: '2016-01-01'
+end_date: '2022-04-18'
+interval: 1d

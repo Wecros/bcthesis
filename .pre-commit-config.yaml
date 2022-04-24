@@ -24,3 +24,17 @@ repos:
     pass_filenames: false
     language: system
     files: ^.*\.py$
+
+  - id: test
+    name: pytest
+    entry: make test
+    pass_filenames: false
+    language: system
+    files: ^.*\.py$
+
+  - id: clean-git
+    name: prepare-repo-for-git
+    entry: make git
+    pass_filenames: false
+    files: ^.*\.tex$
+    language: system

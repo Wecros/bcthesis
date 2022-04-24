@@ -8,3 +8,6 @@ numpy
 python-binance
 python-decouple
 pyyaml
+pytest
+kaleido
+schema
