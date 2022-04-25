@@ -5,10 +5,11 @@ File for orchestrating the various strategies in play.
 import logging
 from copy import deepcopy
 
+from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
-
-# from .riskmetric_strategy import RebalanceStrategy
 from .plotter import Plotter
+from .rebalance_strategy import RebalanceStrategy
+from .riskmetric_strategy import RiskMetricStrategy
 from .strategy import Strategy
 from .utils import (
     BTC_SYMBOL,
@@ -18,6 +19,12 @@ from .utils import (
     create_portfolio_from_data,
     noop,
 )
+
+# HACK: Imports will not be removed automatically by formatter.
+HodlStrategy
+RebalanceStrategy
+RiskMetricStrategy
+DCAStrategy
 
 
 def simulate(trading_data: TradingData):
@@ -58,13 +65,19 @@ def simulate(trading_data: TradingData):
     )
 
     plotter.plot_colorcoded_riskmetric()
-    # plotter.plot_riskmetric_on_second_scale()
+    plotter.plot_riskmetric_on_second_scale()
     # plotter.plot_horizontal_line(0.7, secondary_y=True)
 
+    # plotter.plot_historical_btc()
+    # plotter.plot_historical_btc_colorcoded_riskmetric()
+    # plotter.plot_historical_btc_riskmetric_on_second_scale()
+
     plotter.plot_specific_symbols(trading_data.symbols - {BTC_SYMBOL})
+    # plotter.plot_all_symbols()
 
     plotter.plot_strategies()
     plotter.plot_log_y_first_axis()
+
     plotter.show()
     # plotter.save('png')
 

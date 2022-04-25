@@ -3,8 +3,7 @@ File defining the DCA strategy.
 """
 
 
-from strategy import Strategy
-
+from .strategy import Strategy
 from .utils import Portfolio, TradingData
 
 

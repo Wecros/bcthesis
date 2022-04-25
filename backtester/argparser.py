@@ -10,13 +10,14 @@ import pandas as pd
 import yaml
 from schema import SchemaError
 
-from .binance_api_downloader import get_data_from_binance
+from .api_downloader import get_data, get_global_metrics, get_historical_btc
 from .utils import (
     TIME_FORMAT,
     YAML_FILE_SCHEMA,
     TradingVariables,
     convert_args_to_trading_variables,
     convert_data_to_trading_data,
+    get_dates_from_index,
     remove_distinct_dates,
 )
 
@@ -26,7 +27,17 @@ def get_trading_data_from_args():
     args = get_parsed_args()
     trading_vars = convert_args_to_trading_variables(args)
     data_df = get_data_dataframe(trading_vars)
-    trading_data = convert_data_to_trading_data(data_df, trading_vars)
+
+    # update trading variables start_date, end_date to match the data dataframe
+    dates = get_dates_from_index(data_df)
+    trading_vars.start_date = dates[0]
+    trading_vars.end_date = dates[-1]
+
+    global_metrics_df = get_global_metrics(trading_vars.start_date, trading_vars.end_date)
+    historical_btc_df = get_historical_btc(trading_vars.end_date)
+    trading_data = convert_data_to_trading_data(
+        data_df, global_metrics_df, historical_btc_df, trading_vars
+    )
     return trading_data
 
 
@@ -112,7 +123,7 @@ def get_dataframe_for_trading_pair(trading_vars: TradingVariables, pair: str):
         "end_date": trading_vars.end_date,
         "interval": trading_vars.interval_str,
     }
-    data = get_data_from_binance(args)
+    data = get_data(args)
 
     if args["interval"] == "1d":
         # normalize the datetime to midnight if interval is 1 day

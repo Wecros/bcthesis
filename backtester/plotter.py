@@ -9,13 +9,13 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
-from .riskmetric_strategy import get_risk_metric
 from .utils import (
     BTC_SYMBOL,
     OUTPUT_PATH,
     StrategyResult,
     TradingData,
     get_current_datetime_string,
+    get_risk_metric,
     map_values_to_specific_dates,
 )
 
@@ -29,17 +29,17 @@ class Plotter:
     def __init__(self, data: TradingData, strategy_results: list[StrategyResult], *args, **kwargs):
         self.figure = make_subplots(*args, **kwargs)
         self.data = data.data
+        self.historical_btc = data.btc_historical
         self.dates: npt.NDArray[pd.Timestamp] = data.dates
         self.symbols: set[str] = data.symbols
         self.strategies: list[StrategyResult] = strategy_results
-        self.riskmetric = get_risk_metric(self.dates)
+        self.riskmetric = get_risk_metric(data.btc_historical, data.dates[0], data.dates[-1])
 
     def plot_strategies_with_data(self):
-        self.figure = make_subplots(figure=self.figure)
-        self.plot_all_data()
+        self.plot_all_symbols()
         self.plot_strategies()
 
-    def plot_all_data(self):
+    def plot_all_symbols(self):
         for symbol in self.symbols:
             self._plot_symbol(symbol)
 
@@ -66,10 +66,34 @@ class Plotter:
         self.figure.add_trace(
             go.Scatter(
                 x=self.riskmetric.index,
-                y=self.riskmetric["Value"],
+                y=self.riskmetric["price"],
                 mode="markers",
                 marker=dict(
-                    color=self.riskmetric["avg"],
+                    color=self.riskmetric["riskmetric"],
+                    colorscale="turbo",
+                ),
+                name="Colordcoded Riskmetric (BTC)",
+            )
+        )
+
+    def plot_historical_btc(self):
+        self.figure.add_trace(
+            go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
+        )
+
+    def plot_historical_btc_colorcoded_riskmetric(self):
+        riskmetric = get_risk_metric(
+            self.historical_btc,
+            self.historical_btc.index.values[0],
+            self.historical_btc.index.values[-1],
+        )
+        self.figure.add_trace(
+            go.Scatter(
+                x=riskmetric.index,
+                y=riskmetric["price"],
+                mode="markers",
+                marker=dict(
+                    color=riskmetric["riskmetric"],
                     colorscale="turbo",
                 ),
                 name="Colordcoded Riskmetric (BTC)",
@@ -80,7 +104,23 @@ class Plotter:
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
         self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
         self.figure.add_trace(
-            go.Scatter(x=self.dates, y=self.riskmetric.avg, name="risk metric"), secondary_y=True
+            go.Scatter(
+                x=self.riskmetric.index, y=self.riskmetric["riskmetric"], name="risk metric"
+            ),
+            secondary_y=True,
+        )
+
+    def plot_historical_btc_riskmetric_on_second_scale(self):
+        riskmetric = get_risk_metric(
+            self.historical_btc,
+            self.historical_btc.index.values[0],
+            self.historical_btc.index.values[-1],
+        )
+        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
+        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
+        self.figure.add_trace(
+            go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name="risk metric"),
+            secondary_y=True,
         )
 
     def plot_horizontal_line(self, value, *args, **kwargs):

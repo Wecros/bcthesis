@@ -6,13 +6,22 @@ from .argparser import get_trading_data_from_args
 from .simulator import simulate
 from .utils import (
     BINANCE_DATA_PATH,
+    COINGECKO_DATA_PATH,
+    COINMARKETCAP_DATA_PATH,
     DATA_PATH,
     LOGS_PATH,
     OUTPUT_PATH,
     get_current_datetime_string,
 )
 
-for path in {LOGS_PATH, OUTPUT_PATH, DATA_PATH, BINANCE_DATA_PATH}:
+for path in {
+    LOGS_PATH,
+    OUTPUT_PATH,
+    DATA_PATH,
+    BINANCE_DATA_PATH,
+    COINMARKETCAP_DATA_PATH,
+    COINGECKO_DATA_PATH,
+}:
     path.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(

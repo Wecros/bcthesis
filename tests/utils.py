@@ -48,7 +48,7 @@ def get_data_from_dict(start_date: str, end_date: str, interval: str, symbols: s
         data_dict = _add_symbol_to_dict_data(data_dict, symbol, dates)
     df = pd.DataFrame.from_dict(data_dict)
     df = set_index_for_data(df)
-    data = convert_data_to_trading_data(df, trading_vars)
+    data = convert_data_to_trading_data(df, None, None, trading_vars)
     return data
 
 

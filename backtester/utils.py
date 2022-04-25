@@ -15,10 +15,16 @@ from schema import Schema
 ROOT_PATH = Path(sys.argv[0]).parents[1]
 DATA_PATH = ROOT_PATH / "data"
 BINANCE_DATA_PATH = DATA_PATH / "binance"
+COINMARKETCAP_DATA_PATH = DATA_PATH / "coinmarketcap"
+COINGECKO_DATA_PATH = DATA_PATH / "coingecko"
 LOGS_PATH = ROOT_PATH / "logs"
 OUTPUT_PATH = ROOT_PATH / "output"
 BACKTESTER_PATH = ROOT_PATH / "backtester"
 
+COINMARKETCAP_GLOBAL_METRICS_URL = (
+    "https://api.coinmarketcap.com/data-api/v3/global-metrics/quotes/historical"
+)
+COINMARKETCAP_LIMIT = 2000
 SEP = ":"
 TIME_FORMAT = "%Y-%m-%d"
 BTC_SYMBOL = "BTCUSDT"
@@ -56,7 +62,9 @@ class TradingVariables:
 class TradingData:
     """Dataclass holding all information needed to run the simulation."""
 
-    data: dict  # {"BTCUSDT": pd.DataFrame, "ETHUSDT": ...}
+    data: pd.DataFrame
+    global_metrics: pd.DataFrame
+    btc_historical: pd.DataFrame
     symbols: set[str]
     dates: npt.NDArray[pd.Timestamp]
     variables: TradingVariables
@@ -91,16 +99,21 @@ def convert_args_to_trading_variables(args):
     return TradingVariables(**variables)
 
 
-def convert_data_to_trading_data(data: pd.DataFrame, trading_vars: TradingVariables):
+def convert_data_to_trading_data(
+    data: pd.DataFrame,
+    global_metrics: pd.DataFrame,
+    btc_historical: pd.DataFrame,
+    trading_vars: TradingVariables,
+):
     symbols = get_symbols_from_index(data)
     dates = get_dates_from_index(data)
-    return TradingData(data, symbols, dates, trading_vars)
+    return TradingData(data, global_metrics, btc_historical, symbols, dates, trading_vars)
 
 
-def convert_csv_to_df(csv_file):
+def convert_csv_to_df(csv_file, time_index_str):
     df = pd.read_csv(csv_file)
-    df["open_time"] = pd.to_datetime(df["open_time"])
-    df = df.set_index("open_time")
+    df[time_index_str] = pd.to_datetime(df[time_index_str])
+    df = df.set_index(time_index_str)
     return df
 
 
@@ -175,3 +188,25 @@ def create_portfolio_from_data(data: TradingData, cash: float = 1000):
 
 def get_current_datetime_string():
     return f"{datetime.now().date()}:{datetime.now().time()}"
+
+
+def get_risk_metric(historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp):
+    """Get risk metric relevant for the data's date range."""
+    df = historical_btc.copy()
+
+    # Raven riskmetric, SEE: https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
+    # df["MA"] = df["price"].rolling(374, min_periods=1).mean().dropna()
+    # df["riskmetric_notnormalized"] = (np.log(df["price"]) - np.log(df["MA"])) * df.index**0.395
+
+    # General MA risk metric
+    df["MA_50days"] = df["price"].rolling(50, min_periods=1).mean().dropna()
+    df["MA_50weeks"] = df["price"].rolling(50 * 7, min_periods=1).mean().dropna()
+    df["risk"] = df["MA_50days"] / df["MA_50weeks"]
+
+    # Normalization to 0-1 range
+    df["riskmetric"] = (df["risk"] - df["risk"].cummin()) / (
+        df["risk"].cummax() - df["risk"].cummin()
+    )
+
+    riskmetric_df = df[["riskmetric", "price"]].dropna()
+    return riskmetric_df[start_date:end_date]

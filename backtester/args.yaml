@@ -1,8 +1,8 @@
 ---
 pairs:
 - BTCUSDT
-#- ETHUSDT
-#- BNBUSDT
+- ETHUSDT
+- BNBUSDT
 #- XRPUSDT
 ##- SOLUSDT  # 2020
 #- ADAUSDT
@@ -22,6 +22,6 @@ pairs:
 #- ETCUSDT
 ##- SHIBUSDT
 
-start_date: '2016-01-01'
+start_date: '2017-01-01'
 end_date: '2022-04-18'
 interval: 1d
