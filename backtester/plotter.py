@@ -16,6 +16,7 @@ from .utils import (
     TradingData,
     get_current_datetime_string,
     get_risk_metric,
+    get_risk_metric_based_on_total_marketcap,
     map_values_to_specific_dates,
 )
 
@@ -30,6 +31,7 @@ class Plotter:
         self.figure = make_subplots(*args, **kwargs)
         self.data = data.data
         self.historical_btc = data.btc_historical
+        self.global_metrics = data.global_metrics
         self.dates: npt.NDArray[pd.Timestamp] = data.dates
         self.symbols: set[str] = data.symbols
         self.strategies: list[StrategyResult] = strategy_results
@@ -176,6 +178,46 @@ class Plotter:
     def plot_specific_symbols(self, symbol_list):
         for symbol in symbol_list:
             self._plot_symbol(symbol)
+
+    def plot_total_martket_cap(self):
+        self.global_metrics["total_marketcap"]
+        self.figure.add_trace(
+            go.Scatter(
+                x=self.global_metrics.index,
+                y=self.global_metrics["total_marketcap"],
+                name="Total crypto market cap in $USD",
+            )
+        )
+
+    def plot_riskmetric_colorcoded_total_market_cap(self):
+        riskmetric = get_risk_metric_based_on_total_marketcap(
+            self.global_metrics, self.global_metrics.index.values[0], self.dates[-1]
+        )
+        self.figure.add_trace(
+            go.Scatter(
+                x=riskmetric.index,
+                y=riskmetric["price"],
+                mode="markers",
+                marker=dict(
+                    color=riskmetric["riskmetric"],
+                    colorscale="turbo",
+                ),
+                name="Colordcoded Riskmetric (BTC)",
+            )
+        )
+
+    def plot_riskmetric_second_scale_total_market_cap(self):
+        riskmetric = get_risk_metric_based_on_total_marketcap(
+            self.global_metrics, self.global_metrics.index.values[0], self.dates[-1]
+        )
+        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
+        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
+        self.figure.add_trace(
+            go.Scatter(
+                x=riskmetric.index, y=riskmetric["riskmetric"], name="total marketcap risk metric"
+            ),
+            secondary_y=True,
+        )
 
     def get_figure(self):
         return self.figure

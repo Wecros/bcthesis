@@ -18,10 +18,18 @@ from .utils import (
     SEP,
     TIME_FORMAT,
     convert_csv_to_df,
+    interpolate_missing_dates,
 )
 
 
 def get_global_metrics_from_coinmarketcap(start_date: pd.Timestamp, end_date: pd.Timestamp):
+    # Make start_date go historical because of riskmetric calculations
+    start_date = pd.Timestamp("2013-04-29")
+
+    # Adjust off by 1 got from API
+    start_date -= pd.Timedelta(days=1)
+    end_date += pd.Timedelta(days=1)
+
     # check if csv file does not already exist for previous data
     for file in COINMARKETCAP_DATA_PATH.iterdir():
         if does_global_metrics_file_meet_criteria(file, start_date, end_date):
@@ -31,6 +39,7 @@ def get_global_metrics_from_coinmarketcap(start_date: pd.Timestamp, end_date: pd
 
     response_json = get_response_dict_from_api(start_date, end_date)
     df = convert_global_metrics_json_to_dataframe(response_json)
+    df = interpolate_missing_dates(df)
 
     path_to_csv = (
         f"{COINMARKETCAP_DATA_PATH}/global-metrics{SEP}"
@@ -68,7 +77,7 @@ def get_response_dict_from_api(start_date, end_date):
         temp_start_date = start_date
         while days_between_dates > COINMARKETCAP_LIMIT:
             temp_end_date = temp_start_date + pd.Timedelta(days=COINMARKETCAP_LIMIT)
-            params_list.append(get_parameters(temp_end_date, end_date))
+            params_list.append(get_parameters(temp_start_date, temp_end_date))
             temp_start_date = temp_end_date + pd.Timedelta(days=1)
             days_between_dates = (end_date - temp_end_date).days
         start_date = temp_start_date
@@ -84,8 +93,8 @@ def get_response_dict_from_api(start_date, end_date):
 
     individual_global_metrics = [json.loads(response.text) for response in responses]
     global_metrics = individual_global_metrics[0]
-    for metrics in individual_global_metrics:
-        global_metrics |= metrics
+    for metrics in individual_global_metrics[1:]:
+        global_metrics["data"]["quotes"].extend(metrics["data"]["quotes"])
     return global_metrics
 
 

@@ -88,7 +88,7 @@ class Strategy(ABC):
     def get_close_value(self, coin: str):
         """Get close value of a coin relevant to the current step."""
         # return self.data.loc[[(self.current_step, coin)]].close[0]
-        return self.data.loc[[(coin, self.current_step)]].close[0]
+        return self.data.loc[[(coin, self.current_step)]]["close"][0]
 
     def get_profit_in_usd(self):
         """Gain total portfolio profit in USD relevant to the current step."""

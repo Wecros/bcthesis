@@ -17,7 +17,9 @@ from .utils import (
     StrategyResult,
     TradingData,
     create_portfolio_from_data,
+    get_dates_from_index,
     noop,
+    transform_historical_btc_to_trading_data,
 )
 
 # HACK: Imports will not be removed automatically by formatter.
@@ -30,12 +32,22 @@ DCAStrategy
 def simulate(trading_data: TradingData):
     logging.info("Running simulation")
 
+    # get historic BTC data if BTC is the only coin considered
+    if trading_data.symbols == {BTC_SYMBOL} and trading_data.variables.interval_str == "1d":
+        start_date = "2014-02-01"
+        trading_data.data = transform_historical_btc_to_trading_data(
+            trading_data.btc_historical, start_date
+        )
+        trading_data.dates = get_dates_from_index(trading_data.data)
+    # print(trading_data.data)
+
     strategy_list = [
         [HodlStrategy],
         # [RebalanceStrategy],
         # [RebalanceStrategy, {"rebalance_interval": 5}],
         # [RebalanceStrategy, {"rebalance_interval": 10}],
         # [RiskMetricStrategy],
+        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
         # [
         # StrategyMerger,
@@ -71,6 +83,10 @@ def simulate(trading_data: TradingData):
     # plotter.plot_historical_btc()
     # plotter.plot_historical_btc_colorcoded_riskmetric()
     # plotter.plot_historical_btc_riskmetric_on_second_scale()
+
+    # plotter.plot_total_martket_cap()
+    plotter.plot_riskmetric_colorcoded_total_market_cap()
+    plotter.plot_riskmetric_second_scale_total_market_cap()
 
     plotter.plot_specific_symbols(trading_data.symbols - {BTC_SYMBOL})
     # plotter.plot_all_symbols()

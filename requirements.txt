@@ -11,3 +11,5 @@ pyyaml
 pytest
 kaleido
 schema
+autots
+pycoingecko

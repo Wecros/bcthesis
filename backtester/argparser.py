@@ -17,6 +17,7 @@ from .utils import (
     TradingVariables,
     convert_args_to_trading_variables,
     convert_data_to_trading_data,
+    ensure_same_dates_between_dataframes,
     get_dates_from_index,
     remove_distinct_dates,
 )
@@ -35,6 +36,10 @@ def get_trading_data_from_args():
 
     global_metrics_df = get_global_metrics(trading_vars.start_date, trading_vars.end_date)
     historical_btc_df = get_historical_btc(trading_vars.end_date)
+    global_metrics_df, historical_btc_df = ensure_same_dates_between_dataframes(
+        global_metrics_df, historical_btc_df
+    )
+
     trading_data = convert_data_to_trading_data(
         data_df, global_metrics_df, historical_btc_df, trading_vars
     )

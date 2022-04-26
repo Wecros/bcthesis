@@ -190,10 +190,47 @@ def get_current_datetime_string():
     return f"{datetime.now().date()}:{datetime.now().time()}"
 
 
-def get_risk_metric(historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp):
-    """Get risk metric relevant for the data's date range."""
-    df = historical_btc.copy()
+def interpolate_missing_dates(df: pd.DataFrame):
+    """Interpolate missing dates - fill in the blanks with average information between
+    the previous date and the next known date.
+    """
+    df = df.resample("D").mean()
+    df = df.interpolate()
+    return df
 
+
+def ensure_same_dates_between_dataframes(df1, df2):
+    intersect_dates = df1.index.intersection(df2.index)
+    df1 = df1.loc[intersect_dates]
+    df2 = df2.loc[intersect_dates]
+    return df1, df2
+
+
+def transform_historical_btc_to_trading_data(historical_tc: pd.DataFrame, start_date):
+    df = historical_tc.drop(columns=["market_cap", "total_volume"]).reset_index()
+    df = df.rename(columns={"price": "close", "date": "open_time"})
+    df["pair"] = BTC_SYMBOL
+    df["high"] = 0
+    df["open"] = 0
+    df["low"] = 0
+    df["volume"] = 0
+    df = df[df["open_time"] >= start_date]
+    df = set_index_for_data(df)
+    df = df[["open", "high", "low", "close", "volume"]]
+    return df
+
+
+def get_risk_metric(historical_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp):
+    """Get risk metric relevant for the data's date range."""
+    df = historical_df.copy()
+    if "total_marketcap" in df:
+        df["price"] = df["total_marketcap"]
+    riskmetric_df = calculate_risk_metric(df)
+    return riskmetric_df[start_date:end_date]
+
+
+def calculate_risk_metric(df: pd.DataFrame):
+    """Get dataframe cointaing the calculated metric."""
     # Raven riskmetric, SEE: https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
     # df["MA"] = df["price"].rolling(374, min_periods=1).mean().dropna()
     # df["riskmetric_notnormalized"] = (np.log(df["price"]) - np.log(df["MA"])) * df.index**0.395
@@ -209,4 +246,37 @@ def get_risk_metric(historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_
     )
 
     riskmetric_df = df[["riskmetric", "price"]].dropna()
+    return riskmetric_df
+
+
+def get_risk_metric_based_on_bitcoin(
+    historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp
+):
+    df = historical_btc.copy()
+    riskmetric_df = calculate_risk_metric(df)
     return riskmetric_df[start_date:end_date]
+
+
+def get_risk_metric_based_on_total_marketcap(global_metrics: pd.DataFrame, start_date, end_date):
+    df = global_metrics.copy()
+    df["price"] = global_metrics["total_marketcap"]
+    riskmetric_df = calculate_risk_metric(df)
+    return riskmetric_df[start_date:end_date]
+
+
+def get_risk_metric_based_on_autots(historical_btc: pd.DataFrame, start_date, end_date):
+    from autots import AutoTS
+
+    df = historical_btc.copy()
+    df = df.reset_index()
+    print(df)
+
+    model = AutoTS(
+        forecast_length=10, frequency="infer", ensemble="simple", drop_data_older_than_periods=200
+    )
+    model = model.fit(df, date_col="date", value_col="price", id_col=None)
+
+    prediction = model.predict()
+    forecast = prediction.forecast
+
+    return forecast
