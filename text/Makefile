@@ -21,10 +21,10 @@ $(CO).ps: $(CO).dvi
 	#pdflatex $(CO)
 
 $(CO).pdf: clean
-	pdflatex -halt-on-error $(CO)
+	pdflatex -shell-escape -halt-on-error $(CO)
 	-bibtex $(CO)
-	pdflatex -halt-on-error $(CO)
-	pdflatex -halt-on-error $(CO)
+	pdflatex -shell-escape -halt-on-error $(CO)
+	pdflatex -shell-escape -halt-on-error $(CO)
 
 $(CO).dvi: $(CO).tex $(CO).bib
 	latex $(CO)

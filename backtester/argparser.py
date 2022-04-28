@@ -53,6 +53,7 @@ def get_parsed_args():
     """
     parser = get_argument_parser()
     args = parser.parse_args()
+    print(args)
     if not args.file and not (args.interval and args.pairs and args.start_date and args.end_date):
         parser.error("Incomplete arguments or no argument file defined!")
 
@@ -69,8 +70,12 @@ def get_parsed_args():
 
 
 def get_argument_parser():
-    parser = argparse.ArgumentParser(description="Download CSV from Binance API.")
-    parser.add_argument("-p", "--pairs", help="list of pairs seperated by a space character")
+    parser = argparse.ArgumentParser(
+        description="Backtest historical data against various strategies."
+    )
+    parser.add_argument(
+        "-p", "--pairs", nargs="+", help="list of pairs seperated by a space character"
+    )
     parser.add_argument(
         "-s",
         "--start-date",

@@ -13,11 +13,13 @@ To get to this point I will explore the current trading strategies that are used
 
 The rest of this work is divided into several chapters.
 
-Firstly, there is the chapter \ref{background}, which gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In the chapter \ref{trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In the chapter \ref{simulation-tools} several existing simulation tools are explored and compared. I also analyze the backlog of cryptocurrency trading data provided by the supervisor and summarize the important events.
+Firstly, there is the chapter \ref{chapter-background}, which gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In the chapter \ref{chapter-trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In the chapter \ref{chapter-simulation-tools} several existing simulation tools are explored and compared. During chapter \ref{chapter-data-analyzation} the backlog of cryptocurrency trading data provided by the supervisor is analyzed and the important events summarized.
+
+After these chapters the thesis becomes more oriented towards the project goal of the backtester itself. In chapter \ref{strategy-proposals}, several adaptive strategies are proposed. In chapter \ref{chapter-implementation} the design, development and implementation of the backtester itself is detailed. After that, in chapter \ref{chapter-experiments} the proposed adaptive trading strategies are tested out using the developed backtester and results are evaluated. Finally, limitations and further improvements of practical deployment are discussed in chapter \ref{chapter-limitations-and-improvements}
 
 
 \chapter{Background}
-\label{background}
+\label{chapter-background}
 
 There are some prerequisites that the reader must be familiarized with in order to understand the thesis. The basic knowledge of what a cryptocurrency is must be explained. As well as clear understanding of some terms that are regularly used in the thesis.
 
@@ -39,17 +41,17 @@ There are some prerequisites that the reader must be familiarized with in order 
 \subsection*{Types of Cryptocurrency}
 \emph{Bitcoin} is the original and to this day the most popular and valuable cryptocurrency. It was invented by an anonymous person called \emph{Satoshi Nakamoto} in 2008 via a white paper \cite{satoshi}. As of 12th January 2022, there are over 18.9 million bitcoins in circulation with a total market capitalization of around \$810 million \cite{coinmarketcap}, making it roughly 40\% of the total cryptocurrency market.
 
-Each new cryptocurrency claims to have different function and specification. New cryptocurrencies are created daily. Most are not lucrative to investors at all while others surprise the market with their new innovations. For example, Ethereum's \emph{ether} markets itself as a gas for their underlying smart contract\footnote{https://www.investopedia.com/terms/s/smart-contracts.asp} platform. Another example is Ripple's \emph{XRP} which aims to facilitate international bank transfers. New cryptocurrencies started to rise due to bitcoin's many unsuitable aspects.
+Each new cryptocurrency claims to have different function and specification. New cryptocurrencies are created daily. Most are not lucrative to investors at all while others surprise the market with their new innovations. For example, Ethereum's \emph{ether} markets itself as a gas for their underlying smart contract\footnote{\url{https://www.investopedia.com/terms/s/smart-contracts.asp}} platform. Another example is Ripple's \emph{XRP} which aims to facilitate international bank transfers. New cryptocurrencies started to rise due to bitcoin's many unsuitable aspects.
 
 \label{stablecoins-ref}
-A \emph{stablecoin} is another important type of cryptocurrency. It aims to offer price stability and is backed by a reverse asset\footnote{https://www.investopedia.com/terms/r/reserve-assets.asp} like the US dollar. They attempt to offer the best of both worlds---the instant processing and security of privacy payments of cryptocurrencies, and the non-volatile character of fiat currencies \cite{investopedia-stablecoin}.
+A \emph{stablecoin} is another important type of cryptocurrency. It aims to offer price stability and is backed by a reverse asset\footnote{\url{https://www.investopedia.com/terms/r/reserve-assets.asp}} like the US dollar. They attempt to offer the best of both worlds---the instant processing and security of privacy payments of cryptocurrencies, and the non-volatile character of fiat currencies \cite{investopedia-stablecoin}.
 
 \subsection*{What is FIAT money?}
 ﻿Fiat money or currency is money that is issued by the government and is not backed by any gold or other physical commodity. Its value is derived between the relationship of supply and demand and the stability of the government that issued it \cite{investopedia-fiat}. It represents today's currencies of the world. Many crypto enthusiasts believe that cryptocurrencies will replace fiat currencies in the future.
 
 \subsection*{Blockchain}
 \label{blockchain}
-Blockchain or a distributed ledger\footnote{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers \cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure \ref{blockchain-figure}.
+Blockchain or a distributed ledger\footnote{\url{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp}} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers \cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure \ref{blockchain-figure}.
 
 \begin{figure}[ht]
     \centering
@@ -72,8 +74,13 @@ Bull markets are characterized by optimism, investor confidence and expectations
 
 A bullish investor or bull is a type of investor that believes that a specific coin is likely to rise \cite{investopedia-bull}.
 
+\section{What is a trading strategy?}
+Trading strategy is traditionally defined as a systematic methodology that is used for buying and selling the selected assets in a market. It is based on predefined rules and criteria that are used to execute a trading decision. \cite{investopedia:trading-strategy}
+
+In this thesis, a trading strategy is considered a method which tells us whether to buy or sell on given day based on indicators, such as the current cryptocurrency price, or total market capitalization.
+
 \chapter{Trading Strategies for Cryptocurrencies}
-\label{trading-stategies}
+\label{chapter-trading-stategies}
 
 There are various trading strategies available regarding cryptocurrencies.
 In this chapter we will go through those that are considered the most well-known and consider
@@ -100,12 +107,28 @@ One study \cite{portfolio-rebalancing}, conducted by the Shrimpy Team, has found
 There many types of rebalancing strategies. We will look at some of them now.
 
 \subsection*{Periodic Rebalancing}
-This is the simplest rebalancing to use. The rebalance happens after a fixed amount of time. For cryptocurrencies it makes sense to set shorter time due to rapid price fluctuations, something like 1 day.
+This is the simplest rebalancing to use. The rebalance happens after a fixed amount of time. For cryptocurrencies it makes sense to set shorter time due to rapid price fluctuations, something like 1 day. An example of periodic rebalancing can be seen in Figure \ref{periodic-rebalance-figure}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/periodic-rebalance.png}
+    \caption{Periodic rebalance visualization, attribution: Shrimpy \cite{portfolio-rebalancing}}
+    \label{periodic-rebalance-figure}
+\end{figure}
 
 \subsection*{Threshold Rebalancing}
 A more interesting approach is threshold rebalancing where we set some threshold deviation. When an allocation deviates by that set threshold from the original allocation, a rebalance happens, setting all the allocations to their original values \cite{portfolio-rebalancing}.
 
 Let's say we once again have 50/50 BTC/ETH allocations. Let's set the threshold deviation to $20\%$. If the price of BTC or ETH reaches over 60\% or under 40\%, a rebalance takes place. 20\% out of 50\% is 10\%, that is why the rebalance happens at those points. When both coins grow or decline in the same rate, no rebalance happens.
+
+An example of threshold rebalancing can be seen in Figure \ref{threshold-rebalance-figure}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/threshold-rebalance.png}
+    \caption{Threshold rebalance visualization, attribution: Shrimpy \cite{portfolio-rebalancing}}
+    \label{threshold-rebalance-figure}
+\end{figure}
 
 \subsection*{Assumptions}
 One study around rebalancing has been already mentioned, let's look into some of them in more detail now. The studies \cite{portfolio-diversity} and \cite{diversify-perform-better} conducted by the Shrimpy organization have found some interesting results. Both of the studies took into account only periodic rebalancing. They have found that the shorter the time period for rebalance, the better the results, maximizing them at 1 hour period. The other interesting discovery was that if the portfolio had more assets in it---was more diversified---the better were the results. The diversification really took advantage of the sell high buy low formula.
@@ -171,7 +194,7 @@ Arbitrage involves buying cryptocurrency in one market and selling it for higher
 
 There are two types of arbitrage when it comes to cryptocurrencies. The first one focuses on finding prices mismatches across different trading pairs on a single exchange. The other is the one that was already described---locating significant price differences on multiple exchanges. Both types take advantage of an automated trading system that monitors the exchanges and looks for price differences. In Figure \ref{arbitrage-figure} you can see how the first type can be profitable.
 
-Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{https://www.investopedia.com/terms/k/kimchi-premium.asp} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit \cite{hodlbot:day-trading-cryptocurrency}.
+Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{\url{https://www.investopedia.com/terms/k/kimchi-premium.asp}} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit \cite{hodlbot:day-trading-cryptocurrency}.
 
 \begin{figure}[ht]
     \centering
@@ -214,7 +237,7 @@ The section was inspired by this source \cite{backtesting-crypto-trading-strateg
 Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
 
 \subsection*{Discretionary Backtesting}
-Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell order with each signal they receive. They trader may decide to conduct the testing using software such as TradingView\footnote{https://www.tradingview.com/}.
+Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell order with each signal they receive. They trader may decide to conduct the testing using software such as TradingView\footnote{\url{https://www.tradingview.com/}}.
 
 The trader will set a strategy in place, then he will press the replay button (shown in Figure \ref{tradingview-figure}) and select period of history to test on. The trader will then make discretionary decisions to buy or sell based on the signals.
 
@@ -239,7 +262,7 @@ Automated or \emph{algorithmic} trading refers to traders who use a computer pro
 Simulated backtesting simply means running a test over a historical data that simulates the real market environment. In this example the system is market environment and the model is the simulated environment.
 
 
-\section{Data requirements for backtesting}
+\section{Data Requirements for Backtesting}
 Systems traders will want to simulate the real-world data as closely as possible. Trading costs such as commissions, exchange spreads and slippages can chew away the expected returns. This costs can throw off the backtest results if ignored.
 
 Both \emph{candlestick} and \emph{order book data} are used in backtests, though order book data is usually more reliable.
@@ -293,12 +316,12 @@ Once the desired strategy has been created and backtest executed, the big number
 
 P\&L analysis also generates the size of the average winning and the size of the average losing trade. Taking the ratio of those two averages you get a useful average risk-to-reward ratio. For example if the average winning trade is \$100 and the average losing trade is \$50 you get a $1:2$ risk-to-reward ratio.
 
-\subsection{Success Ratio}
+\subsection*{Success Ratio}
 The success ratio is the win ratio of the strategy. Let's say a strategy makes 100 trades. If 72 of those trades are profitable, it has 72\% success (or win) ratio. By itself the ratio does not tell much and might be misleading. It is best coupled with the average winner and the average losing trade ratios mentioned in P\&L.
 
 For example, a success ratio of 58\% and 1:2 risk-to-reward ratio indicates a very good strategy.
 
-\subsection{Sharpe Ratio}
+\subsection*{Sharpe Ratio}
 This subsection was sourced from \cite{investopedia:sharpe-ratio}
 
 The Sharpe ratio, developed by \emph{William F. Sharpe}, is used to understand the return of an investment (ROI) compared to its risk. The ratio is the average return earned in excess of the risk-free rate per unit of volatility or total risk.
@@ -313,8 +336,8 @@ where:
 
 Generally, the greater the value of the Sharpe ratio, the more attractive the risk-adjusted return. The yield for the US Treasury bound is often used as the risk-free ratio. One of the limitation of the Sharpe ratio is that it assumes that the returns are normally distributed, which is simply not true.
 
-\section{Popular simulation tools}
-Some popular and easily available simulation tools are Holderlab\footnote{https://holderlab.io/}, Zenbot\footnote{https://github.com/DeviaVir/zenbot}, Gekko\footnote{https://gekko.wizb.it/}, Altrady\footnote{https://www.altrady.com/}, and Binance's Python backtesting\footnote{https://www.binance.com/}.
+\section{Popular Simulation Tools}
+Some popular and easily available simulation tools are Holderlab\footnote{\url{https://holderlab.io/}}, Zenbot\footnote{\url{https://github.com/DeviaVir/zenbot}}, Gekko\footnote{\url{https://gekko.wizb.it/}}, Altrady\footnote{\url{https://www.altrady.com/}}, and Binance's Python backtesting\footnote{\url{https://www.binance.com/}}.
 
 \section{What type of cryptocurrency simulation tool should we use?}
 When looking at the explored simulation tools it is clear that an automated backtesting program will be used to test the proposed adaptive trading strategy. I will use the OHLCV candlestick data provided by the supervisor and look for order book data if needed. When evaluating the strategy I will not only look at P\&L ratio, but also the average winner and losing trades, risk-to-reward ratio and more complex tools like Sharpe ratio.
@@ -323,7 +346,7 @@ When looking at the explored simulation tools it is clear that an automated back
 When looking at possible languages to use I consider available libraries and frameworks. I decided to use Python for its many available trading and backtesting frameworks and because of my personal experience with it for data collection.
 
 \subsection*{Backtesting frameworks}
-Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy}\footnote{https://numpy.org/}, \emph{pandas}\footnote{https://pandas.pydata.org/} and \emph{matplotlib}\footnote{https://matplotlib.org/} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by \cite{python-backtesting-frameworks} source.
+Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy}\footnote{\url{https://numpy.org/}}, \emph{pandas}\footnote{\url{https://pandas.pydata.org/}} and \emph{matplotlib}\footnote{\url{https://matplotlib.org/}} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by \cite{python-backtesting-frameworks} source.
 
 When reviewing backtesting frameworks it's always good to ask what asset classes you are trading, what data frequency and detail is required and what order type should be supported by the chosen framework. Some frameworks go beyond backtesting and include live trading capabilities that make it easier for potential deployment.
 
@@ -333,21 +356,21 @@ Computer resources may be a problem sometimes. Traders can opt for frameworks wi
 
 We will now look at a few backtesting frameworks for Python and lightly compare them. The common capabilities of the frameworks is that they are event driven, with flexible licenses, having decent number of pre-defined technical indicators and standard performance metric calculation, visualization and reporting capabilities.
 
-\emph{PyAlgoTrade}\footnote{https://github.com/gbeced/pyalgotrade} is a fully documented framework with paper and live trading capabilities. Its data support includes Yahoo! Finance, Google Finance, NinjaTrader and any type of CSV-based time series.
+\emph{PyAlgoTrade}\footnote{\url{https://github.com/gbeced/pyalgotrade}} is a fully documented framework with paper and live trading capabilities. Its data support includes Yahoo! Finance, Google Finance, NinjaTrader and any type of CSV-based time series.
 
-\emph{bt}\footnote{https://pmorissette.github.io/bt/} is used to test quantitative trading strategies. It allows traders to easily create strategies that mix and match different algorithms. It aims to save developers time re-inventing the wheel and instead focus on the strategy development.
+\emph{bt}\footnote{\url{https://pmorissette.github.io/bt/}} is used to test quantitative trading strategies. It allows traders to easily create strategies that mix and match different algorithms. It aims to save developers time re-inventing the wheel and instead focus on the strategy development.
 
-\emph{backtrader}\footnote{https://www.backtrader.com/} is a feature-rich backtesting framework. It allows you to focus on writing reusable trading strategies, indicators and analyzers rather than on building the infrastructure itself.
+\emph{backtrader}\footnote{\url{https://www.backtrader.com/}} is a feature-rich backtesting framework. It allows you to focus on writing reusable trading strategies, indicators and analyzers rather than on building the infrastructure itself.
 
-\emph{Blueshift}\footnote{https://blueshift.quantinsti.com/docs/} is a platform to research and test systematic investment stategies. It is asset-class and instruments agnostics. It is not meant for HFT---high frequency trading.
+\emph{Blueshift}\footnote{\url{https://blueshift.quantinsti.com/docs/}} is a platform to research and test systematic investment stategies. It is asset-class and instruments agnostics. It is not meant for HFT---high frequency trading.
 
-\emph{Zipline}\footnote{https://github.com/quantopian/zipline} is a event-driven system for backtesting. It is accessible through the browser-based IPython Notebook interface, which makes it available to developers who do not prefer the command line.
+\emph{Zipline}\footnote{\url{https://github.com/quantopian/zipline}} is a event-driven system for backtesting. It is accessible through the browser-based IPython Notebook interface, which makes it available to developers who do not prefer the command line.
 
 
 \chapter{Trading Data Analyzation}
-\label{data-analyzation}
+\label{chapter-data-analyzation}
 
-In this chapter the history data of cryptocurrency market will be analyzed. We will try to find trends and patterns that we can then use to our advantage when coming up with an adaptive trading strategy.
+In this chapter the history data of cryptocurrency market is analyzed. We try to find trends and patterns that we can then use to our advantage when coming up with an adaptive trading strategy.
 
 \section{Types of Analysis}
 This section was inspired by the \cite{binance:bitcoin-price-history} source.
@@ -386,6 +409,8 @@ While the linear graph shows us the actual price changes, the logarithmic graph 
 
 \section{Data Analysis Provided by Supervisor}
 
+TODO: Is this needed at all?
+
 The provided data were in the OHLCV \ref{ohlcv-candlestick-data} candlestick structure. A Python script converting these CSV data to a graph had to be created.
 
 Data is analyzed in several ways:
@@ -397,7 +422,7 @@ Data is analyzed in several ways:
 \end{enumerate}
 
 \chapter{Adaptive Trading Strategy Proposals}
-\label{proposal}
+\label{strategy-proposals}
 
 
 \section{Proposals}
@@ -417,7 +442,6 @@ Variables to consider:
     \item rebalance weights ratio and frequency
     \item different time intervals
     \item different size of coin portfolio
-
 \end{enumerate}
 
 Idea is to have e.g. 80\% of adaptive model behavior and 20\% of classic model behavior.
@@ -429,51 +453,167 @@ During the possible Bull Market we hold coins, rebalance and buy more of them.
 During Bear Market we transfer our holding to stablecoins (in certain percentage) so that the market fall does not impede us.
 
 \section{Bitcoin Risk Metric}
-This term was coined and invented by Benjamin Cowen on his youtube channel \footnote{https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg}. It is an alogirthm that prescribes a certain risk value, between 0 and 1, to each day of bitcoin price. It takes into account the maximum value that has already occured so far in the history. This strategy is often favourable by DCA. Depending on the risk scale, you either invest more if the risk is lower and invest less (or not at all) if the risk is high.
+This term was coined and invented by Benjamin Cowen on his youtube channel \footnote{\url{https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg}}. It is an alogirthm that prescribes a certain risk value, between 0 and 1, to each day of bitcoin price. It takes into account the maximum value that has already occured so far in the history. This strategy is often favourable by DCA. Depending on the risk scale, you either invest more if the risk is lower and invest less (or not at all) if the risk is high.
 
 The metric oscillates between highs and lows. There have been 5 high points of the metric since the year 2015.
 
+Raven
+
 \subsection*{DCA}
 
-\section{Finding the ideal metric}
-When looking for the ideal risk metric, I started at the Benjamin Cowen videos.
+\section{Adjusted Risk Metric}
 
-\chapter{Adaptive Strategy Implementation}
+\section{Other optimizations}
+
+\subsection*{24H volume---correlation}
+
+\subsection*{Number of larger drops in market}
+
+\subsection*{Machine Learning Time Series Optimizations}
+
+\section{Combinations}
+
+\chapter{Adaptive Strategy Design and Implementation}
 \label{implementation}
 
-\section{Framework or no framework}
+\section{Design}
 During my search, I initially tinkered with several frameworks to test out their capabilities. The basic idea was that if a framework would prove satisfactory I would use it and tweak it to my needs so I do not reinvent the wheel again.
 
-Alas, during my tinker with Python frameworks as backtrader, vectorbt or zipline, the frameworks were either outdated or they did not my needs of adaptive strategies.
+Alas, during my tinker with Python frameworks as \emph{PyAlgoTrade}, \emph{backtrader} or \emph{zipline}, the frameworks were either outdated or they did not meet my needs of adaptive strategies.
 
-\section{Trading data fetch}
-Trading data that was used during the simluations were got from the supervisor. The data were not given at first, so I created a little script that got the data from Binance exchange. It was through their API and Python script that I could get historical data with any interval Binance supplied. That is also why I used this data when testing out shorter intervals than 1 day like 1 or 5 minutes.
+\subsection*{vectorbt}
+One of the more promising frameworks was the \emph{vectorbt} library. I did a few basic graphs and strategies with it like HODL and MA (moving average) crossover, the examples can be seen in the code. Unfortunately, the library also proved to be insufficient, or more well put, overly complicated, when it came to my needs. Rather than spending days trying to understand a few functions from the library I decided it would be faster to create my own backtesting framework that would serve the strategies perfectly while still understanding the inner working of the framework completely. This point was also supported by the thesis supervisor and discussions I found on the internet\footnote{\url{https://www.reddit.com/r/algotrading/comments/i2wo3u/why_everyone_is_building_custom_backtesting/}}.
 
-The data by supervisor was not satisfactory so I decided to make my own script.
+\subsection*{General Design}
+The general idea is to build a backtesting command line interface application. It takes input arguments from the CLI or a configuration file and passes it to the argument parser. The parser parses the arguments, it then gets all the requested data either via API calls, or if the data already exists, fetch them from the local filesystem. All of the arguments, data range and data itself is then converted to a trading data data structure and passed to the simulator. The simulator calls several strategies and aggregates the results into a strategy result data structure. That is then passed to the Plotter class. Plotter plots the results and optionally prints out the strategies stats. The visualization can be seen in Figure \ref{structure-diagram}.
 
-\section{Structure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/structure-diagram.png}
+    \caption{General design structure of the backtester}
+    \label{structure-diagram}
+\end{figure}
 
-\section{API Downloaders / Input}
+\subsection*{Strategy Class}
+All strategies are derived from the base strategy abstract class. The class provides the common functions, constants and data initialization. The inherited classes usually overwrite the \texttt{execute\_step} method which does a singular step of the strategy (1 day if the data is days apart).
 
-\subsection*{API Downloaders}
+One interesting strategy in particular is the StrategyMerger class that allows merging the behaviour of several strategies. It basically combines the \texttt{execute\_step} of the strategies in the order they are defined.
 
-\subsection*{Data structures}
+Strategy classes with their most important attributes are shown in Figure \ref{figure-strategy-class-diagram}
 
-\section{Strategy Simulator}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/strategy-class-diagram.png}
+    \caption{Class diagram of strategies of the backtester}
+    \label{figure-strategy-class-diagram}
+\end{figure}
 
-\section{Plotter}
 
-\section{Other helpful things}
+\section{Fetch of trading data}
+Initial trading data that was used for the experiments were initially provided by the supervisor. Due to their incompletness and due to them being out-of-date, a need for more complete data was created.
+
+I designed the data fetch into a few categories. I then researched each category and chose the best suited API provider for the thesis.
+
+\subsection*{OHLCV data}
+I needed OHLCV 5 minute and 1 hour data to test various strategies this way. After going through some recommendations I settled with Binance API\footnote{\url{https://www.binance.com/en/support/faq/c-6}} for OHLCV data since I already had an account with them. All that is needed are public and secret API keys to make the requests.
+
+\subsection*{Historical BTC}
+One of the disadvantages of Binance API is that it only goes as far back as it started. That is to the July 2018. When calculating things like bitcoin risk metric it is advantegous to have earlier data available. To this end I used the free and public CoinGecko API\footnote{\url{https://www.coingecko.com/en/api/documentation}}. The \texttt{coins/market\_chart} endpoint was ideal for this use case.
+
+Historical data have daily interval and include only the price and volume of each day, so it is not the standard OHLCV data. The data dates to the year 2013.
+
+\subsection*{Global Metrics}
+Another need due to the alternative risk metric was created for the total crypto market capitalization. This data is not present in Binance nor CoinGekco API. The perfect information was found at CoinMarketCap website\footnote{\url{https://coinmarketcap.com/charts/}}. After a bit of web scraping I got to the original API call\footnote{\url{https://api.coinmarketcap.com/data-api/v3/global-metrics/quotes/historical?interval=1d}}.
+
+The data includes several useful metrics. The most important one is the total market capitalization of each day dating to year 2013. Other useful ones are 24 hour volume and bth/eth dominance for each day.
+
+\subsection*{Implementing the fetch}
+Ideally, we would get all of our data from single API provider. Unfortunately, I have found no single provider that provides the needed data in the requested format.
+
+\texttt{python-binance}\footnote{\url{https://pypi.org/project/python-binance/}} 3rd party module is used to ease the getting the data from Binance API. \texttt{pycoingecko}\footnote{\url{https://pypi.org/project/pycoingecko/}} does the same thing for the CoinGecko API. Data got from CoinMarketCap are fetched via the interface of the 3rd party module \texttt{requests}\footnote{\url{https://pypi.org/project/requests/}}
+
+The only API that needs public and private keys is the Binance API. The keys are hidden in the \texttt{.env} file and got from the configuration library called \texttt{python-decouple}\footnote{\url{https://pypi.org/project/python-decouple/}}
+
+\section{Usage}
+Usage is defined in the standard environment of bash command line interface. All needed commands are provided by the Makefile and can be listed by running \texttt{make}.
+
+Install dependencies:
+\begin{minted}{bash}
+make installdeps
+\end{minted}
+
+Run the project:
+\begin{minted}{bash}
+# using Makefile
+make run
+
+# using the module itself + argument file
+python -m backtester -f args.yaml
+
+# using the module itself + CLI arguments
+python -m backtester -s 2020-01-01 -e 2022-01-01 -i 1d -p BTCUSDT ETHUSDT
+\end{minted}
+
+\section{Data Input}
+There are a few different program arguments that are needed to be specified.
+
+Pairs are used to select the cryptocurrency pairs we want to trade. Since Binance requires both of the assets to be cryptocurrencies we cannot select \$USD. Closest asset to it is the token that is pegged against \$USD, USDT. So if you want to choose trading pair where the price of bitcoin and \$USD is compared, choose BTCUSDT.
+
+Starting and ending date do exactly as the name suggests, they define the data range in which the data is fetched. The interval argument defines the OHLCV interval between each data, it uses Binance abbreviations and there are several possible values. The values I mostly used were 5m and 1h interval, that means that the OHLCV data fetched will be either 5 minute or 1 hour apart.
+
+Due to a possbile long list of argument values, the arguments can be saved into a file in the YAML\footnote{\url{https://yaml.org/}} format. Its schema is then validated and arguments dictionary got via the \texttt{schema}\footnote{\url{https://pypi.org/project/schema/}} and \texttt{PyYAML}\footnote{\url{https://pypi.org/project/PyYAML/}} Python libraries respectively.
+
+Among optional arguments belongs the logging level. It defines the logging level used for logging that informs the users of filesystem manipulations, simulation progress and results, or errors and debug information. Defaultly it is set to level INFO.
+
+\subsection*{Data Structures}
+Several data structures are defined to ease the work with data transformations. They are explained in the thesis so the reader is aware of the inner workings of the project, should he try to develop it.
+
+TODO: Define if it is really needed.
+
+\section{Other helpful structures}
+
+\subsection*{Plotter}
+\texttt{plotly}\footnote{https://pypi.org/project/plotly/} is used for plotting the final graphs. It works natively with the dataframe data used in \texttt{pandas}.
 
 \section{Testing}
+Simple testing was set up using the pytest framework\footnote{\url{https://docs.pytest.org/}}. The test files can be found in the \texttt{tests} folder. The tests serve to verify the basic functionality of the implemented trading strategies.
 
 \section{Deployment and Development}
+During the development of the project, code standards were enforced via various programming tools, such as linters, formatters, pre-commit and CI checks. All the selected technologies can be viewed in the repository of the project.
 
-\subsection*{Containerization---Docker}
+\subsection*{Containerization--Docker}
+For ease of development and deployment, the project has been packaged into a container that can be run via the docker command. This way anyone can easily try out the program or develop it having only the required docker command installed.
+
+Other containerization benefits include:
+\begin{itemize}
+    \item Runtime Environment Agnosticism
+    \item Isolation from other processes
+    \item Portability
+    \item Ease of delivery
+    \item Scalability
+\end{itemize}
 
 \subsection*{Virtual Environment}
+Other option on how to develop the project is to use the Python virtual environment. \texttt{virtulenv}\footnote{\url{https://pypi.org/project/virtualenv/}} is used in the project, but other tools like \texttt{venv}\footnote{\url{https://docs.python.org/3/library/venv.html}} and \texttt{conda}\footnote{\url{https://docs.conda.io/en/latest/}} could be used.
+
+After activating the environment and installing the required packages via \texttt{pip}. The project is ready to be run and developed. Of course the project can be developed without ever activating the virtual environment. Conflicting Python packages and versions may cause a dependency problem though. This way the whole project is seperated from the local installation of the opearting system.
 
 \subsection{Makefile}
+Makefile is used to put a common interface for all the other commands and tools. It is recommended to use the targets from Makefile for running and developing the project. All lint, format, containerization, testing, latex translation targets are located there.
+
+\chapter{Adaptive Strategy Experiments}
+
+Before we can dive into the individual adaptive strategy experiments we need some traditional strategies that we can compare the adaptive results against. HODL and Rebalance will serve as such strategies. Both are very simple to implement and highly used. That makes them the perfect candidate for this purpose.
+
+Let us dive into it.
+
+\section{Basic evaluation strategy}
+Before we get to the individual experiments, the main process for evaluating the experiments must be described. There are 2 caveats to this process. Firstly we need to define the strategy that tells the probability of market going up or down, let us call it the risk metric. And secondly we need to find the optimal strategy that works with this metric---that means an algorithm that decides what to do when the metric is at such level and what to do if it is in a different level---finite state machine.
+
+Basically, the thesis can be split into a function and a finite state machine. The function's inputs is the today date and some kind of other data used for calculating the metric (e.g. historical price of Bitcoin). Function then calculates the risk for the current day and passes the value to the finite state machine. The automata then decides on what to do, taking the previous step into the account.
+
+\subsection*{Finite state machine behaviour}
+The most basic idea is to transfer the coins to stablecoins.
 
 \section{Testing out the Bitcoin Risk Metric}
 \begin{enumerate}
@@ -481,10 +621,27 @@ The data by supervisor was not satisfactory so I decided to make my own script.
     \item https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
 \end{enumerate}
 
-\chapter{Limitations and Further Improvements of Practical Deployment}
-\label{limitations}
+Unfortunately, Benjamin Cowen does not have his risk metric calculation formula publicly available. In a past video TODO: link, he hinted that one piece used are the moving averages. Specifically when you take 50 day MA and you divide it by 50 week MA. That is the first value used.
 
-\section{Comparison to existing solutions}
+\subsection*{Optimizing for diminishing returns}
+
+\chapter{Limitations and Further Improvements of Practical Deployment}
+\label{limitations-and-improvements}
+
+So far we have only discussed the backtesting framework developed. For practical use, actual API calls to cryptomarket exchanges such as Binance\footnote{\url{https://www.binance.com/}} or Coinbase\footnote{\url{https://www.coinbase.com/}} would be needed.
+
+This would require either heavily changing the existing framework or creating a new project entirely. I would design in such a way, that the working backtesting framework would be solely for experimenting with new strategies or validating the chosen strategies for the current day. The projects could work in conjecture this way. The practical deployment would send the new daily data to the backtesting framework which would then send a signal to the deployment on what to do---buy, sell, rebalance, etc.
+
+This would also require working with always up-to-date data, not just historical. Some different API endpoints may be used.
+
+\section{Further Ideas}
+The API endpoint from CoinGecko for the top 7 trending coins searched by their users could be used to expects pumps of the selected coins.
+
+\section{TODO: Comparison to existing solutions}
+\begin{enumerate}
+    \item 3Commas
+    \item Cowen Risk Metric
+\end{enumerate}
 
 \chapter{Conclusion}
 \label{conclusion}
