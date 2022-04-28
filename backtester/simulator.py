@@ -43,11 +43,11 @@ def simulate(trading_data: TradingData):
 
     strategy_list = [
         [HodlStrategy],
-        # [RebalanceStrategy],
+        [RebalanceStrategy],
         # [RebalanceStrategy, {"rebalance_interval": 5}],
-        # [RebalanceStrategy, {"rebalance_interval": 10}],
-        # [RiskMetricStrategy],
-        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
+        [RebalanceStrategy, {"rebalance_interval": 10}],
+        [RiskMetricStrategy],
+        [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
         # [
         # StrategyMerger,

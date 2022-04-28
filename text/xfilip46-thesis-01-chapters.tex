@@ -460,6 +460,7 @@ The metric oscillates between highs and lows. There have been 5 high points of t
 Raven
 
 \subsection*{DCA}
+\label{DCA}
 
 \section{Adjusted Risk Metric}
 
@@ -535,6 +536,8 @@ Ideally, we would get all of our data from single API provider. Unfortunately, I
 The only API that needs public and private keys is the Binance API. The keys are hidden in the \texttt{.env} file and got from the configuration library called \texttt{python-decouple}\footnote{\url{https://pypi.org/project/python-decouple/}}
 
 \section{Usage}
+FIXME: Move this section to appendices---manual?
+
 Usage is defined in the standard environment of bash command line interface. All needed commands are provided by the Makefile and can be listed by running \texttt{make}.
 
 Install dependencies:
@@ -610,20 +613,59 @@ Let us dive into it.
 \section{Basic evaluation strategy}
 Before we get to the individual experiments, the main process for evaluating the experiments must be described. There are 2 caveats to this process. Firstly we need to define the strategy that tells the probability of market going up or down, let us call it the risk metric. And secondly we need to find the optimal strategy that works with this metric---that means an algorithm that decides what to do when the metric is at such level and what to do if it is in a different level---finite state machine.
 
-Basically, the thesis can be split into a function and a finite state machine. The function's inputs is the today date and some kind of other data used for calculating the metric (e.g. historical price of Bitcoin). Function then calculates the risk for the current day and passes the value to the finite state machine. The automata then decides on what to do, taking the previous step into the account.
+Basically, the thesis can be split into a function and a finite state machine. The function's inputs is the today date and some kind of other data used for calculating the metric (e.g. historical price of Bitcoin). Function then calculates the risk (limited between <0,1>) for the current day and passes the value to the finite state machine. The automata then decides on what to do, taking its previous steps into the account.
 
 \subsection*{Finite state machine behaviour}
-The most basic idea is to transfer the coins to stablecoins.
+The most basic idea is to transfer the coins to stablecoins when the risk is near the high boundary and transfer back to coins when it is again nearing the lower boundary. Alternatively, when using the DCA strategy \ref{DCA}, we do not invest when the risk is high and invest more money the lower the risk is.
+
+Some DCA portfolio can look like this:
+\begin{itemize}
+    \item $Risk \ge  0.7$: Do not invest.
+    \item $0.6 \le Risk < 0.7$: Invest sum x1.
+    \item $0.5 \le Risk < 0.6$: Invest sum x2.
+    \item $0.4 \le Risk < 0.5$: Invest sum x3.
+    \item $0.3 \le Risk < 0.4$: Invest sum x4.
+    \item $0.2 \le Risk < 0.3$: Invest sum x5.
+    \item $0.1 \le Risk < 0.2$: Invest sum x6.
+    \item $Risk < 0.1$: Invest sum x7.
+\end{itemize}
+
+For the evaluationa, a coin to stablecoin transfer has been chosen for the profit evaluation. In the following chapters the metric calculation is discussed. The profit evaluation is detailed when needed.
+
 
 \section{Testing out the Bitcoin Risk Metric}
-\begin{enumerate}
+\begin{itemize}
     \item https://www.youtube.com/watch?v=ocQTqM4lL3k
     \item https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
-\end{enumerate}
+\end{itemize}
 
 Unfortunately, Benjamin Cowen does not have his risk metric calculation formula publicly available. In a past video TODO: link, he hinted that one piece used are the moving averages. Specifically when you take 50 day MA and you divide it by 50 week MA. That is the first value used.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/experiment-riskmetric.png}
+    \caption{Risk Metric Experiment}
+    \label{riskmetric-figure}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/experiment-riskmetric2.png}
+    \caption{Risk Metric Experiment}
+    \label{riskmetric2-figure}
+\end{figure}
+
+
+
 \subsection*{Optimizing for diminishing returns}
+
+\subsection*{Using total market capitalization data}
+
+\subsection*{Correlation with 24h volume data}
+
+\subsection*{Finding the optimal evaluation strategy}
+
+\section{Using Machine Learning Time Series Optimization}
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{limitations-and-improvements}

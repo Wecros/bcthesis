@@ -4,7 +4,7 @@ PRESENTATION_DIR := ./presentation
 PRESENTATION_FILE := xfilip46-thesis-presentation.pdf
 CONTAINER_NAME = backtester-dev
 
-.PHONY: clean create-venv docker-build docker-detached-exec docker-detached-up docker-down docker-up format git installdeps latex lint presentation run test thesis
+.PHONY: clean create-venv docker-build docker-detached-exec docker-detached-up docker-down docker-up format git installdeps latex lint presentation run test text thesis
 
 help:
 	@make -pRrq  -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
