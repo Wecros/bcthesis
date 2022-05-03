@@ -65,7 +65,7 @@ class TradingData:
     data: pd.DataFrame
     global_metrics: pd.DataFrame
     btc_historical: pd.DataFrame
-    symbols: set[str]
+    symbols: list[str]
     dates: npt.NDArray[pd.Timestamp]
     variables: TradingVariables
 
@@ -90,7 +90,8 @@ class StrategyResult:
 
 def convert_args_to_trading_variables(args):
     """Get trading variables from the input argument file in a managable dataclass."""
-    variables = {"pairs": args["pairs"]}
+    variables = {}
+    variables["pairs"] = args["pairs"]
     variables["start_date"], variables["end_date"] = map(
         pd.to_datetime, [args["start_date"], args["end_date"]]
     )
@@ -105,7 +106,7 @@ def convert_data_to_trading_data(
     btc_historical: pd.DataFrame,
     trading_vars: TradingVariables,
 ):
-    symbols = get_symbols_from_index(data)
+    symbols = trading_vars.pairs
     dates = get_dates_from_index(data)
     return TradingData(data, global_metrics, btc_historical, symbols, dates, trading_vars)
 

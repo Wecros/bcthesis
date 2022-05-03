@@ -9,6 +9,7 @@ from .utils import Portfolio, TradingData, get_risk_metric, set_index_for_data
 
 class RiskMetricStrategy(Strategy):
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
+        super().__init__(data, portfolio)
         risk_metric_option = kwargs.get("metric", "btc")
         risk_metric_data = {"btc": data.btc_historical, "total_marketcap": data.global_metrics}.get(
             risk_metric_option
@@ -22,10 +23,8 @@ class RiskMetricStrategy(Strategy):
         )
         df = df.drop(df.index[date_filter])
         df = set_index_for_data(df)
-        data.data = df
-        data.dates = self.riskmetric.index.values
-
-        super().__init__(data, portfolio)
+        self.data = df
+        self.dates = self.riskmetric.index.values
 
         self.threshold = 0.7
         self.states = {

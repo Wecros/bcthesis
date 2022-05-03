@@ -13,6 +13,7 @@ from .riskmetric_strategy import RiskMetricStrategy
 from .strategy import Strategy
 from .utils import (
     BTC_SYMBOL,
+    TIME_FORMAT,
     Portfolio,
     StrategyResult,
     TradingData,
@@ -44,10 +45,12 @@ def simulate(trading_data: TradingData):
     strategy_list = [
         [HodlStrategy],
         [RebalanceStrategy],
-        # [RebalanceStrategy, {"rebalance_interval": 5}],
+        # [RiskMetricStrategy],
+        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
+        [RebalanceStrategy, {"rebalance_interval": 5}],
         [RebalanceStrategy, {"rebalance_interval": 10}],
-        [RiskMetricStrategy],
-        [RiskMetricStrategy, {"metric": "total_marketcap"}],
+        # [RiskMetricStrategy],
+        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
         # [
         # StrategyMerger,
@@ -65,37 +68,43 @@ def simulate(trading_data: TradingData):
     results = simgen.get_results()
 
     annotation_text = (
-        f"Data Range: {trading_data.dates[0]}--{trading_data.dates[-1]} |"
+        f"Data Range: {trading_data.dates[0].strftime(TIME_FORMAT)}--"
+        f"{trading_data.dates[-1].strftime(TIME_FORMAT)} | "
         f"Data Interval: {trading_data.variables.interval_str}"
     )
     plotter = Plotter(
         trading_data,
         results,
-        x_title="1 day steps",
+        x_title=f"{trading_data.variables.interval_str} steps",
         y_title="Profit in $USD",
-        subplot_titles=[f"Strategy experiments ({annotation_text})"],
+        title_text=f"Strategy Experiments ({annotation_text})",
     )
 
-    plotter.plot_colorcoded_riskmetric()
-    plotter.plot_riskmetric_on_second_scale()
-    # plotter.plot_horizontal_line(0.7, secondary_y=True)
-
+    # plotter.change_title("")
     # plotter.plot_historical_btc()
-    # plotter.plot_historical_btc_colorcoded_riskmetric()
     # plotter.plot_historical_btc_riskmetric_on_second_scale()
 
-    # plotter.plot_total_martket_cap()
-    plotter.plot_riskmetric_colorcoded_total_market_cap()
-    plotter.plot_riskmetric_second_scale_total_market_cap()
-
-    plotter.plot_specific_symbols(trading_data.symbols - {BTC_SYMBOL})
+    # plotter.plot_strategies()
     # plotter.plot_all_symbols()
 
-    plotter.plot_strategies()
-    plotter.plot_log_y_first_axis()
-
+    plotter.plot_strategies_as_percentages()
+    plotter.plot_all_symbols_as_percentages()
     plotter.show()
-    # plotter.save('png')
+    plotter.reset_traces()
+
+    plotter.plot_unlog_y_first_axis()
+    plotter.plot_strategies_as_percentages()
+    plotter.show()
+    plotter.reset_traces()
+
+    plotter.plot_strategies()
+    plotter.plot_all_symbols()
+    plotter.show_both_log_and_linear()
+    plotter.reset_traces()
+
+    # plotter.change_title("Colorcoded Risk Metric")
+    # plotter.plot_historical_btc_colorcoded_riskmetric()
+    # plotter.show_both_log_and_linear()
 
 
 class StrategyGenerator:
