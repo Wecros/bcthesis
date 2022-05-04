@@ -34,21 +34,20 @@ def simulate(trading_data: TradingData):
     logging.info("Running simulation")
 
     # get historic BTC data if BTC is the only coin considered
-    if trading_data.symbols == {BTC_SYMBOL} and trading_data.variables.interval_str == "1d":
-        start_date = "2014-02-01"
+    if trading_data.symbols == [BTC_SYMBOL] and trading_data.variables.interval_str == "1d":
+        start_date = "2013-01-01"
         trading_data.data = transform_historical_btc_to_trading_data(
             trading_data.btc_historical, start_date
         )
         trading_data.dates = get_dates_from_index(trading_data.data)
-    # print(trading_data.data)
 
     strategy_list = [
-        [HodlStrategy],
-        [RebalanceStrategy],
+        # [HodlStrategy],
+        # [RebalanceStrategy],
         # [RiskMetricStrategy],
         # [RiskMetricStrategy, {"metric": "total_marketcap"}],
-        [RebalanceStrategy, {"rebalance_interval": 5}],
-        [RebalanceStrategy, {"rebalance_interval": 10}],
+        # [RebalanceStrategy, {"rebalance_interval": 5}],
+        # [RebalanceStrategy, {"rebalance_interval": 10}],
         # [RiskMetricStrategy],
         # [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
@@ -63,7 +62,6 @@ def simulate(trading_data: TradingData):
         # ],
     ]
     simgen = StrategyGenerator(strategy_list, trading_data)
-
     simgen.run()
     results = simgen.get_results()
 
@@ -72,6 +70,7 @@ def simulate(trading_data: TradingData):
         f"{trading_data.dates[-1].strftime(TIME_FORMAT)} | "
         f"Data Interval: {trading_data.variables.interval_str}"
     )
+
     plotter = Plotter(
         trading_data,
         results,
@@ -80,31 +79,12 @@ def simulate(trading_data: TradingData):
         title_text=f"Strategy Experiments ({annotation_text})",
     )
 
-    # plotter.change_title("")
-    # plotter.plot_historical_btc()
-    # plotter.plot_historical_btc_riskmetric_on_second_scale()
-
-    # plotter.plot_strategies()
-    # plotter.plot_all_symbols()
-
-    plotter.plot_strategies_as_percentages()
-    plotter.plot_all_symbols_as_percentages()
-    plotter.show()
-    plotter.reset_traces()
-
-    plotter.plot_unlog_y_first_axis()
-    plotter.plot_strategies_as_percentages()
-    plotter.show()
-    plotter.reset_traces()
-
-    plotter.plot_strategies()
     plotter.plot_all_symbols()
-    plotter.show_both_log_and_linear()
-    plotter.reset_traces()
+    plotter.plot_autots_prediction(trading_data.btc_historical)
 
-    # plotter.change_title("Colorcoded Risk Metric")
-    # plotter.plot_historical_btc_colorcoded_riskmetric()
-    # plotter.show_both_log_and_linear()
+    plotter.plot_log_y_first_axis()
+    plotter.change_title("")
+    plotter.show()
 
 
 class StrategyGenerator:

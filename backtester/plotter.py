@@ -2,10 +2,10 @@
 Module defining the plotter class used for plotting graphs.
 """
 
-
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
@@ -14,8 +14,11 @@ from .utils import (
     OUTPUT_PATH,
     StrategyResult,
     TradingData,
+    calculate_risk_metric,
     get_current_datetime_string,
+    get_general_risk_metric,
     get_risk_metric,
+    get_risk_metric_based_on_autots,
     get_risk_metric_based_on_total_marketcap,
     map_values_to_specific_dates,
 )
@@ -47,28 +50,7 @@ class Plotter:
         self.strategies: list[StrategyResult] = strategy_results
         self.riskmetric = get_risk_metric(data.btc_historical, data.dates[0], data.dates[-1])
 
-        custom_layout = go.Layout(
-            template="plotly_white",
-            font={
-                "family": "Roboto",
-                "size": 20,
-                "color": "black",
-            },
-            legend=dict(
-                yanchor="top",
-                y=0.99,
-                xanchor="left",
-                x=0.01,
-                font=dict(family="Courier", size=20, color="black"),
-                # bgcolor="LightSteelBlue",
-                bgcolor="rgba(149, 165, 166, 0.3)",
-                bordercolor="Black",
-                borderwidth=2,
-            ),
-            showlegend=True,
-            # colorway=px.colors.qualitative.Light24
-        )
-        self.figure.update_layout(custom_layout)
+        self.reupdate_layout()
         self.change_title(title_text)
         self.figure.update_xaxes(title_text=x_title)
         self.figure.update_yaxes(title_text=y_title)
@@ -138,7 +120,10 @@ class Plotter:
             go.Scatter(x=self.dates, y=self.data.loc[BTC_SYMBOL, "close"], name=BTC_SYMBOL)
         )
 
-    def plot_colorcoded_riskmetric(self):
+    def plot_colorcoded_riskmetric(self, data_to_use, riskmetric_function=calculate_risk_metric):
+        self.riskmetric = get_general_risk_metric(
+            data_to_use, riskmetric_function, self.dates[0], self.dates[-1]
+        )
         self.figure.add_trace(
             go.Scatter(
                 x=self.riskmetric.index,
@@ -178,13 +163,56 @@ class Plotter:
             )
         )
 
-    def plot_riskmetric_on_second_scale(self):
+    def plot_trading_volume(self):
+        print(self.data.loc[BTC_SYMBOL]["volume"])
+
+        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
+        self.figure.update_yaxes(title_text="Trading Volume", secondary_y=True)
+
+        df = self.data.loc[BTC_SYMBOL]
+        data = df["volume"] * df["close"]
+
+        print(data.corr(df["close"]))
+
+        self.figure.add_trace(
+            go.Scatter(x=self.dates, y=data, mode="lines", name="BTCUSDT 24h volume"),
+            secondary_y=True,
+        )
+
+    def plot_linearfit_trad_vol(self):
+        df = self.data.loc[BTC_SYMBOL]
+        data = df["volume"] * df["close"]
+        df["BTC Price"] = df["close"]
+        df["Volume in $USD"] = data
+        self.figure = px.scatter(df, x="BTC Price", y="Volume in $USD", trendline="ols")
+        self.reupdate_layout()
+
+    def plot_autots_prediction(self, data_to_use):
+        forecast_length = 21
+        forecast, up, low = get_risk_metric_based_on_autots(
+            data_to_use,
+            self.dates[0],
+            self.dates[-1] - pd.Timedelta(days=forecast_length),
+            forecast_length,
+        )
+        # print(up)
+        # print(low)
+        print(forecast)
+
+        self.figure.add_trace(
+            go.Scatter(x=forecast.index, y=forecast.price, name="AutoTS forecast"),
+        )
+
+    def plot_riskmetric_on_second_scale(
+        self, data_to_use, riskmetric_function=calculate_risk_metric, name="risk metric"
+    ):
+        self.riskmetric = get_general_risk_metric(
+            data_to_use, riskmetric_function, self.dates[0], self.dates[-1]
+        )
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
         self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
         self.figure.add_trace(
-            go.Scatter(
-                x=self.riskmetric.index, y=self.riskmetric["riskmetric"], name="risk metric"
-            ),
+            go.Scatter(x=self.riskmetric.index, y=self.riskmetric["riskmetric"], name=name),
             secondary_y=True,
         )
 
@@ -241,6 +269,30 @@ class Plotter:
                     ),
                 ),
             )
+
+    def plot_diminishing_returns(self):
+        """Days for diminishing returns are counted from the first transaction
+        recorded in Jan 12 2009.
+        """
+        a = -17.01593313
+        b = 5.84509376
+
+        FIRST_EXCHANGE = pd.Timestamp("2009-01-12")
+
+        start_d = (self.dates[0] - FIRST_EXCHANGE).days
+        end_d = (self.dates[-1] - FIRST_EXCHANGE).days
+        d = pd.Series(range(start_d, end_d))
+
+        price = 10 ** (a + b * np.log10(d))
+
+        self.figure.add_trace(
+            go.Scatter(
+                x=self.dates,
+                y=price,
+                mode="lines",
+                name="expected price of BTC according to formula",
+            )
+        )
 
     def plot_log_y(self):
         self.figure.update_yaxes(type="log")
@@ -325,6 +377,30 @@ class Plotter:
                 "text": title,
             }
         )
+
+    def reupdate_layout(self):
+        custom_layout = go.Layout(
+            template="plotly_white",
+            font={
+                "family": "Roboto",
+                "size": 20,
+                "color": "black",
+            },
+            legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=0.01,
+                font=dict(family="Courier", size=20, color="black"),
+                # bgcolor="LightSteelBlue",
+                bgcolor="rgba(149, 165, 166, 0.3)",
+                bordercolor="Black",
+                borderwidth=2,
+            ),
+            showlegend=True,
+            # colorway=px.colors.qualitative.Light24
+        )
+        self.figure.update_layout(custom_layout)
 
     def reset_traces(self):
         self.figure.data = []

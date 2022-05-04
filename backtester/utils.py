@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
+from autots import AutoTS
 from schema import Schema
 
 ROOT_PATH = Path(sys.argv[0]).parents[1]
@@ -221,6 +222,19 @@ def transform_historical_btc_to_trading_data(historical_tc: pd.DataFrame, start_
     return df
 
 
+def get_general_risk_metric(
+    data: pd.DataFrame,
+    metric_calculation_function,
+    start_date: pd.Timestamp,
+    end_date: pd.Timestamp,
+):
+    df = data.copy()
+    if "total_marketcap" in df:
+        df["price"] = df["total_marketcap"]
+    riskmetric_df = metric_calculation_function(df)
+    return riskmetric_df[start_date:end_date]
+
+
 def get_risk_metric(historical_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp):
     """Get risk metric relevant for the data's date range."""
     df = historical_df.copy()
@@ -250,6 +264,29 @@ def calculate_risk_metric(df: pd.DataFrame):
     return riskmetric_df
 
 
+def calculate_risk_metric_dim_returns(df: pd.DataFrame):
+    """Optimize risk metric for diminishing returns."""
+    # General MA risk metric
+    df["MA_50days"] = df["price"].rolling(50, min_periods=1).mean().dropna()
+    df["MA_50weeks"] = df["price"].rolling(50 * 7, min_periods=1).mean().dropna()
+
+    FIRST_EXCHANGE = pd.Timestamp("2009-01-12")
+    start_d = (df["MA_50days"].index.values[0] - FIRST_EXCHANGE).days
+    end_d = (df["MA_50days"].index.values[-1] - FIRST_EXCHANGE).days
+    d = pd.Series(range(start_d, end_d))
+    d.index = pd.date_range(start=df["price"].index.values[0], periods=d.size)
+
+    df["risk"] = ((df["MA_50days"]) / (df["MA_50weeks"])) * np.log(d)
+
+    # Normalization to 0-1 range
+    df["riskmetric"] = (df["risk"] - df["risk"].cummin()) / (
+        df["risk"].cummax() - df["risk"].cummin()
+    )
+
+    riskmetric_df = df[["riskmetric", "price"]].dropna()
+    return riskmetric_df
+
+
 def get_risk_metric_based_on_bitcoin(
     historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp
 ):
@@ -265,19 +302,47 @@ def get_risk_metric_based_on_total_marketcap(global_metrics: pd.DataFrame, start
     return riskmetric_df[start_date:end_date]
 
 
-def get_risk_metric_based_on_autots(historical_btc: pd.DataFrame, start_date, end_date):
-    from autots import AutoTS
-
-    df = historical_btc.copy()
+def get_risk_metric_based_on_autots(
+    historical_data: pd.DataFrame, start_date, end_date, forecast_length
+):
+    df = historical_data.copy()
+    df = df[start_date:end_date]
     df = df.reset_index()
-    print(df)
 
     model = AutoTS(
-        forecast_length=10, frequency="infer", ensemble="simple", drop_data_older_than_periods=200
+        forecast_length=forecast_length,
+        frequency="infer",
+        prediction_interval=0.9,
+        ensemble=None,
+        model_list="superfast",  # "superfast", "default", "fast_parallel"
+        transformer_list="fast",  # "superfast",
+        drop_most_recent=1,
+        max_generations=4,
+        num_validations=2,
+        validation_method="backwards",
     )
-    model = model.fit(df, date_col="date", value_col="price", id_col=None)
+    model = model.fit(
+        df,
+        date_col="date",
+        value_col="price",
+    )
 
     prediction = model.predict()
-    forecast = prediction.forecast
 
-    return forecast
+    # Print the details of the best model
+    print(model)
+
+    # point forecasts dataframe
+    forecasts_df = prediction.forecast
+    # upper and lower forecasts
+    forecasts_up, forecasts_low = prediction.upper_forecast, prediction.lower_forecast
+
+    # accuracy of all tried model results
+    model.results()
+    # and aggregated from cross validation
+    model.results("validation")
+
+    # print(model_results)
+    # print(validation_results)
+
+    return forecasts_df, forecasts_up, forecasts_low
