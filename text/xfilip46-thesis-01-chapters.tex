@@ -56,7 +56,7 @@ A \emph{stablecoin} is another important type of cryptocurrency. It aims to offe
 \label{blockchain}
 Blockchain or a distributed ledger\footnote{\url{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp}} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers~\cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure \ref{blockchain-figure}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
     \caption{Blockchain structure, attribution: Wikimedia TODO: citace}
@@ -112,7 +112,7 @@ There many types of rebalancing strategies. We will look at some of them now.
 \subsection*{Periodic Rebalancing}
 This is the simplest rebalancing to use. The rebalance happens after a fixed amount of time. For cryptocurrencies it makes sense to set shorter time due to rapid price fluctuations, something like 1 day. An example of periodic rebalancing can be seen in Figure \ref{periodic-rebalance-figure}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/periodic-rebalance.png}
     \caption{Periodic rebalance visualization, attribution: Shrimpy~\cite{portfolio-rebalancing}.}
@@ -126,7 +126,7 @@ Let's say we once again have 50/50 BTC/ETH allocations. Let's set the threshold 
 
 An example of threshold rebalancing can be seen in Figure \ref{threshold-rebalance-figure}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/threshold-rebalance.png}
     \caption{Threshold rebalance visualization, attribution: Shrimpy~\cite{portfolio-rebalancing}.}
@@ -157,14 +157,14 @@ Day trading are the investors that buy and sell the same asset over the span of 
 \section{Range Trading}
 Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure}. Range trading assumes that and tries to take guesses where are the limits using candlestick charts and support and resistance levels. Investors want to buy when prices reach the support level and sell when they reach the resistance level~\cite{5types-of-daytrading}. The support and resistance levels can be seen in Figure~\ref{sup-and-res-levels}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/trading-range.png}
     \caption{Trading range visualization, attribution: Investopedia~\cite{investopedia:trading-range}}
     \label{trading-range-figure}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/dotdash-final-trading-range.png}
     \caption{Support and resistance levels, attribution: Investopedia~\cite{investopedia:trading-range}}
@@ -178,11 +178,11 @@ It is needed to have a large bankroll to use this strategy effectively. Since th
 
 In Figure \ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
 
-\begin{figure}[ht]
-    \label{scalping-figure}
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/scalping.png}
     \caption{Scalping visualization, attribution: Quora~\cite{best-crypto-daytrading}}
+    \label{scalping-figure}
 \end{figure}
 
 \section{Automated Trading Systems or Bots}
@@ -200,7 +200,7 @@ There are two types of arbitrage when it comes to cryptocurrencies. The first on
 
 Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{\url{https://www.investopedia.com/terms/k/kimchi-premium.asp}} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit~\cite{hodlbot:day-trading-cryptocurrency}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/arbitrage.png}
     \caption{Arbitrage execution via multiple trading pairs, attribution: HodlBot~\cite{hodlbot:day-trading-cryptocurrency}}
@@ -247,7 +247,7 @@ The trader will set a strategy in place, then he will press the replay button (s
 
 Manual testing is a great way to control trader's emotions since they may feel the same emotions as in live environment. The disadvantage is that it is quite time-consuming. Trader may run a test for hours only to find out it was not a good strategy (though this result is also valuable). Secondly the amount of data the trader can test the strategy on is limited.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/tradingview-replay.png}
     \caption{TradingView replay functionality, attribution: TradingView~\cite{backtesting-crypto-trading-strategies}}
@@ -397,14 +397,14 @@ First thing to analyze is Bitcoin in particular. No other cryptocurrency has suc
 
 While the linear graph shows us the actual price changes, the logarithmic graph is also useful to us. It shows us relative price increases of the Bitcoin. It represents a percentage increase in price, change from \$10 to \$20 is the same as \$1000 to \$2000 since the investor will in both cases gain a profit of 100\%. Because of this, logarithmic scale is usually often for technical analysis.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_linear.png}
     \caption{Bitcoin linear price graph, attribution: CoinMarketCap~\cite{coinmarketcap}}
     \label{btc-linear-figure}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_log.png}
     \caption{Bitcoin logarithmic price graph, attribution: CoinMarketCap~\cite{coinmarketcap}}
@@ -472,7 +472,7 @@ One of the more promising frameworks was the \emph{vectorbt} library. I did a fe
 \subsection*{General Design}
 The general idea is to build a backtesting command line interface (CLI) application. It takes input arguments from the CLI or a configuration file and passes it to the argument parser. The parser parses the arguments, it then gets all the requested data either via API calls, or if the data already exists, fetch them from the local filesystem. All of the arguments, data range and data itself is then converted to a trading data data structure and passed to the simulator. The simulator calls several strategies and aggregates the results into a strategy result data structure. That is then passed to the Plotter class. Plotter plots the results and optionally prints out the strategies stats. The visualization can be seen in Figure \ref{structure-diagram}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/structure-diagram.png}
     \caption{General design structure of the backtester}
@@ -486,7 +486,7 @@ One interesting strategy in particular is the StrategyMerger class that allows m
 
 Strategy classes with their most important attributes are shown in Figure \ref{figure-strategy-class-diagram}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/strategy-class-diagram.png}
     \caption{Class diagram of strategies of the backtester}
@@ -674,19 +674,27 @@ Longest possible date range of portfolio B: 14th October 2020--today (limited by
 
 Intervals of 1 day will be used for long-range backtesting and 5 minute for backtesting in range of several days.
 
+Assets (tickers) of the portfolio C:
+\begin{itemize}
+    \item Bitcoin (BTC)
+\end{itemize}
+
+Portfolio C serves to backtest the bitocoin risk metric against its main driver.
+
+
 \subsection*{Benchmark Strategies}
 Our benchmark strategies are going to be HODL and periodic Rebalance. Periodic rebalance is going to be set to 1 day or 5 minute interval, depending on the data interval. If the adaptive strategy outperforms the mentioned strategies, it has a good potential to be a good strategy. HODL and rebalance is often used by starting investors, so this outperforming these is a step in a good direction.
 
 We will invest 1000\$ every time to make strategies comparable. Performance of the strategies in various settings can be seen in Figures \ref{figure-benchmark-1} and \ref{figure-benchmark-2}, in linear and logarithmic scale. We can see that the periodic rebalance interval matter. We will use the shortest interval as suggested by the assumptions in Section \ref{rebalance-assumptions}. One interesting find is that the rebalance strategy actually performs worse than HODL when used with the portfolio B.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/benchmark-A.png}
     \caption{Portfolio A: HODL and Rebalance performance}
     \label{figure-benchmark-1}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/benchmark-B.png}
     \caption{Portfolio B: HODL and Rebalance performance}
@@ -699,6 +707,7 @@ We will invest 1000\$ every time to make strategies comparable. Performance of t
 Unfortunately, Benjamin Cowen does not have his risk metric calculation formula publicly available. In a past video~\cite{youtube:cowen-moving-average}, he hinted that one piece used are the moving averages. Specifically when you take 50 day MA and you divide it by 50 week MA. That is the first value used.
 
 \subsection*{Testing Out the 50 Week / 50 Days}
+\label{subsection-50week50days}
 The formula becomes:
 $$risk = \frac{\mathit{SMA}_{50 days}}{\mathit{SMA}_{50 weeks}}$$
 
@@ -706,14 +715,14 @@ The results look quite similar to the metrics used by Benjamin Cowen. So far it 
 
 Here are the results projected on historical price of Bitcoin. Results are shown in Figures \ref{figure-50week-scale} and \ref{figure-50week-colorcoded} as 0-1 scale and colorcoded graph respectively. As can be seen, the metric's beginning does not make much sense. It does well during the December 2017 peak. During the later peaks it performs okay, but the risk is not as high as it should be during the peak of April 2021. This tells us that we should not only look at the overall risk, but probably also at how quickly the risk changes.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-scale.png}
     \caption{Historical Price of Bitcoin with Risk Metric Scale}
     \label{figure-50week-scale}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-colorcoded.png}
     \caption{Colorcoded Risk Metric}
@@ -721,7 +730,7 @@ Here are the results projected on historical price of Bitcoin. Results are shown
 \end{figure}
 
 \subsection*{Optimizing for Diminishing Returns}
-\label{dim-returns}
+\label{subsection-dimreturns}
 What are diminishing returns? It is a theory in economics that predicts that after an optimal capacity level is reached, adding additional factor of production will result in smaller increase in output~\cite{investopedia:diminishing-returns}.
 
 When we apply to Bitcoin, it means that the price growth is slowing, its returns are diminishing over time. Its supported by the fact that moving the price from 0.1\$ to 1\$ was relatively easy, but moving the price from 1000\$ to 10000\$ was significantly more difficult, requiring much more capital, even though the relative profit in percentages stays the same~\cite{bitcoin-diminishing-returns}. This would imply that expected returns of all hodlers diminish every time, making shorter-term hodlers more promising. This paragraph has been inspired by the source~\cite{bitcoin-diminishing-returns}.
@@ -733,7 +742,7 @@ with a = -17.01593313 and the slope b = 5.84509376 with d the number of days sin
 
 Expected price of Bitcoin, according to the formula above, can be seen in Figure \ref{figure-dim-formula}. The formula tells us that we should optimize for diminishing returns, but not only that. The equation itself can be used to serve as a metric. If the price is above the expected threshold, the investor should be cautious. When it is below, the investor can act more bullishly.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/expected-price-formula.png}
     \caption{Expected price of Bitcoin according to diminishing returns formula.}
@@ -747,7 +756,7 @@ $$risk = \frac{\mathit{SMA}_{50 days}}{\mathit{SMA}_{50 weeks}} * \log_{10}(d)$$
 
 The $\log$ part could be further tweaked with, but I have found that it works quite nicely. In Figure \ref{figure-dim-riskmetric} you can see the optimized risk metric against the original.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/riskmetric-dim-returns.png}
     \caption{Comparison of the diminishing returns optimization against the original.}
@@ -755,18 +764,19 @@ The $\log$ part could be further tweaked with, but I have found that it works qu
 \end{figure}
 
 \subsection*{Using Total Market Capitalization Data}
+\label{subsection-marketcap}
 Other thing considered is using the total market capitalization data instead of the historical price for bitcoin. This metric makes sense when using more types of cryptocurrencies than just bitcoin. All calculations and formulas stay the same, the only that changes is the data used---switching bitcoin data for total market capitalization.
 
 In Figures \ref{figure-total-marketcap-riskmetric} and \ref{figure-total-marketcap-riskmetric-dim-returns} comparison to the previous findings with the bitcoin risk metric can be seen. The metrics are quite similar, the bigger difference is that the total market capitalization metric gives more importance to the jump of July 2017. The diminishing returns optimization optimze the metrics, but no other change is observed.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/totalmarketcap-metric.png}
     \caption{Comparison of bitcoin data usage against total market capitalization data for the risk metric.}
     \label{figure-total-marketcap-riskmetric}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/totalmarketcap-metric-dimreturns.png}
     \caption{Comparison of bitcoin data usage against total market capitalization data for the risk metric. Diminishing returns optimization is applied.}
@@ -774,60 +784,128 @@ In Figures \ref{figure-total-marketcap-riskmetric} and \ref{figure-total-marketc
 \end{figure}
 
 \subsection*{Correlation With 24h Volume Data}
+\label{subsection-24hvolume-correlation}
 When using a strategy like the risk metric we have implemented, we are betting on one horse so to speak. Some unexpected turn can make us lose a lot of money. That is why it is sometimes more efficient to use a correlation with a different strategy to make the original strategy less error-prone. That is the motivation for this seciton.
 
-Correlation with the volume in \$USD traded in one day has been chosen for our strategy. It is a sensible metric. When more people trade the asset the price can be expected to fluctuate a lot---usually up---and vice versa. The data got is from the Binance exchange so slight data imperfection, due to not being the global data, can be expected. Let us first look at how the 24h volume looks when plotted against the price of Bitcoin.
+Correlation with the volume in \$USD traded in one day has been chosen for our strategy. It is a sensible metric. When more people trade the asset the price can be expected to fluctuate a lot---usually up---and vice versa.
 
-The data correlation between the two series is approximately $0.8$, with $1$ being the best positive correlation. It is not a great correlation, but it is not a bad one either. It gives a basis to work upon. Comparison can be seen in Figures \ref{figure-24volume-ols}, \ref{figure-24volume-lin} and \ref{figure-24volume-log}.
+The data correlation between the two series is approximately $0.73$, with $1$ being the best positive correlation. The computed correlation is not perfect, but it gives us a good basis to work upon. Comparison can be seen in Figures \ref{figure-24volume-ols}, \ref{figure-24volume-lin} and \ref{figure-24volume-log}.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-ols.png}
     \caption{Ordinary Least Squares method~\cite{wikipedia:ols} visualizing the correlation.}
     \label{figure-24volume-ols}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-lin.png}
     \caption{Linear graph comparison between Bitcoin price and \$USD volume.}
     \label{figure-24volume-lin}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-log.png}
     \caption{Log-log graph comparing the Bitcoin price and its \$USD volume.}
     \label{figure-24volume-log}
 \end{figure}
 
+Next step is to incorporate the daily \$USD volume with the risk metric. There are two ways to go about it. Either we incorporate the daily trading volume directly into the risk metric, making the risk higher when more volume is traded and vice versa. Or we incorporate the daily trading volume into the evaluation strategy. That means we will decide the buy or sell not just by the risk metric, but the evaluation algorithm will take the daily trading volume into consideration, too.
+
+Choosing the first approach, incorporating the trading volume into the risk metric itself, we can go about it in the following way. First we compute the smooth rolling average of the last 7 days of the trading volume. We take this average and normalize it between values 0.5 and -0.5. Then we take the original risk metric and we add some reduced value of the trading volume average on top of it, making the risk higher if more volume has been traded in the last 7 days and lower if less volume has been traded.
+
+The following formula is produced, the $'$ sign represent the normalization between $0$--$1$. The symbols BTC\_SMA represents the bitcoin smooth moving average and VOL\_SMA represent the trading volume moving average. I found that the quoficient of $0.2$ works quite well.
+$$risk = \left(\frac{\mathit{BTC\_SMA}_{50 days}}{\mathit{BTC\_SMA}_{50 weeks}}\right)' + \left(\mathit{VOL\_SMA}_{7 days}' - 0.5\right) * 0.2$$
+
+When optimizing it for diminishing returns, we just alter the original metric:
+$$risk = \left[\frac{\mathit{BTC\_SMA}_{50 days}}{\mathit{BTC\_SMA}_{50 weeks}} * \log_{10}(d)\right]' + \left(\mathit{VOL\_SMA}_{7 days}' - 0.5\right) * 0.2$$
+
+In Figure \ref{figure-24volume-7sma} the 7 days moving average of trading volume can be seen. In Figures \ref{figure-24volume-riskmetric} and \ref{figure-24volume-riskmetric-dimreturns} there can be seen how the correlated risk metrics fare against the original metric. In the second figure, the metric is optimized for diminishing returns.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/24volume-7sma.pdf}
+    \caption{Ordinary Least Squares method~\cite{wikipedia:ols} visualizing the correlation.}
+    \label{figure-24volume-7sma}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/24volume-riskmetric.pdf}
+    \caption{Linear graph comparison between Bitcoin price and \$USD volume.}
+    \label{figure-24volume-riskmetric}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/24volume-riskmetric-dimreturns.pdf}
+    \caption{Log-log graph comparing the Bitcoin price and its \$USD volume.}
+    \label{figure-24volume-riskmetric-dimreturns}
+\end{figure}
+
+
 \subsection*{Machine Learning Optimization}
+\label{subsection-ml-optimization}
+
 In this section the last optimization is touched upon. Machine Learning is a very vast subject. For the thesis's purpose, the time series prediction is our subject. Predictions of these types require a good model to learn upon to work well, otherwise the results are questionable at best. In this section the time series prediction is used to predtict the price of Bitcoin. This result could be later correlated with the previous achieved findings.
 
-The \texttt{AutoTS} Python library \cite{autots} is used to make the predictions. One of the ways that the machine learning optimization could be incorporated to the other tactics is the following. Every day it would predict the price for the following X (e.g. 10) days. Depending on how well the prediction is, it would either make the risk bigger or smaller.
+The \texttt{AutoTS} Python library~\cite{autots} is used to make the predictions. One of the ways that the machine learning optimization could be incorporated to the other tactics is the following. Every day it would predict the price for the following X (e.g. 10) days. Depending on how well the prediction is, it would either make the risk bigger or smaller.
 
-The forecasts got are too linera and usually too optimistic to be of any bigger use. Some forecast can be seen in Figure \ref{figure-autots-prediction}
+The forecasts got are too linear and usually too optimistic to be of any bigger use. Some forecast can be seen in Figure \ref{figure-autots-prediction}
 Since the results got are not reliable, the machine learning optimization is not evaluated. Further investigation of the machine learning algorithm would be needed.
 
-\begin{figure}[ht]
+\begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/autots-prediction.png}
-    \caption{AutoTS \cite{autots} prediction.}
+    \caption{AutoTS~\cite{autots} prediction.}
     \label{figure-autots-prediction}
 \end{figure}
 
 \section{Evaluating Strategies}
-Let us put the implemented strategies to use. In this section the correct evaluation strategy is found and each discussed strategy in Section \ref{section-strategies} evaluated.
+Let us put the implemented strategies to use. In this section the correct evaluation strategy is found and discussed strategies of Section \ref{section-strategies} evaluated.
 
-Some of the strategies, like machine learning optimization, is not evaluated since its usefulness has not been proved in the previous section.
+Some of the strategies, like machine learning optimization \ref{subsection-ml-optimization}, is not evaluated since its usefulness has not been proved in the previous section.
 
 \subsection*{Finding the Optimal Evaluation Strategy}
+By rigorous testing I have found that the ideal evaluation strategy is as follows: ...
+
+
+\subsection{Testing portfolio C}
+Let us start with the original bitcoin risk metric proposed in Section \ref{subsection-50week50days}. We will first test the metric on Bitcoin only (portfolio C).
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/strat-eval1.png}
+    \caption{Strategy evaluation.}
+    \label{figure-strat-eval}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/strat-eval2.png}
+    \caption{Strategy evaluation.}
+    \label{figure-strat-eval}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/strat-eval3.png}
+    \caption{Strategy evaluation.}
+    \label{figure-strat-eval}
+\end{figure}
 
 \subsection*{Evaluating Bitcoin Risk Metric}
+
+
 
 \subsection*{Evaluating Total Market Cap Risk Metric}
 
 \subsection*{Evaluating Bitcoin Risk Metric Correlated With Daily Volume}
+
+\subsection*{Day trading evaluation}
+Optimizing for long term investing is great, it has a lower risk than trading throughout the day while still keeping good profits. But one thing it cannot do is to gain capital fast, that is where day trading can shine. In this section the adaptive strategies are tested on a few several days window with 5 minute OHLCV portfolio data.
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{chapter-limitations-and-improvements}
@@ -854,9 +932,11 @@ It would advisable to add trending strategies to portfolio dynamically during ru
 
 Strategy correlation with FIAT money inflation would be interesting to see. The argument there is that as people have more money, the price naturally rises to match it.
 
-Metric based on diminishing returns expected price as described in Section \ref{dim-returns}
+Metric based on diminishing returns expected price as described in Section \ref{subsection-dimreturns}
 
 More intensive research regarding machine learning, and its correlation to other findings.
+
+One interesting strategy would be to find the riskmetric for every coin in portfolio and measure the risks and investitions individually on per coin basis.
 
 \subsection*{Backtester Optimization}
 Saving already computed strategies to the filesystem could be implemented to severily help save the time between individual runs of similar strategies. For example, the HODL strategy that the more interesting strategies are benchmarked against is the same between each individual run, same with rebalance.

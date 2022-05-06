@@ -28,7 +28,7 @@ def get_historical_btc_from_coingecko(end_date: pd.Timestamp):
     data = {}
     data["date"] = [date for date, _ in bitcoin_market_chart["prices"]]
     data["price"] = [price for _, price in bitcoin_market_chart["prices"]]
-    data["total_volume"] = [volume for _, volume in bitcoin_market_chart["total_volumes"]]
+    data["total_volume_24h"] = [volume for _, volume in bitcoin_market_chart["total_volumes"]]
     data["market_cap"] = [cap for _, cap in bitcoin_market_chart["market_caps"]]
 
     historical_btc = pd.DataFrame.from_dict(data)

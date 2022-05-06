@@ -101,17 +101,16 @@ class Strategy(ABC):
 
     def get_profit_in_btc(self):
         """Gain total portfolio profit in BTC relevant to the current step."""
-        self.get_profit_in_usd()
         coin = BTC_SYMBOL
         close = self.get_close_value(coin)
         return self.portfolio.coins[coin] / close
 
     def stats(self):
-        profitInUSD = self.get_profit_in_usd()
+        profitInUSD = self.profits_in_time[-1]
         return (
             f"Strategy: {type(self).__name__}\n"
             f"Profit in USD: {profitInUSD}\n"
-            f"Profit in USD: {self.get_profit_in_btc()}\n"
+            f"Profit in BTC: {self.get_profit_in_btc()}\n"
             f"Total USD invested: {self.total_usd_invested}\n"
             f"Ratio of profit to total USD invested (higher is better):"
             f"{profitInUSD / self.total_usd_invested}"

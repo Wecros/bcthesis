@@ -9,17 +9,13 @@ import plotly.express as px
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
+from .riskmetric_calculator import calculate_autots_prediction
 from .utils import (
     BTC_SYMBOL,
+    FIRST_BITCOIN_EXCHANGE,
     OUTPUT_PATH,
     StrategyResult,
     TradingData,
-    calculate_risk_metric,
-    get_current_datetime_string,
-    get_general_risk_metric,
-    get_risk_metric,
-    get_risk_metric_based_on_autots,
-    get_risk_metric_based_on_total_marketcap,
     map_values_to_specific_dates,
 )
 
@@ -48,7 +44,6 @@ class Plotter:
         self.dates: npt.NDArray[pd.Timestamp] = data.dates
         self.symbols: list[str] = data.symbols
         self.strategies: list[StrategyResult] = strategy_results
-        self.riskmetric = get_risk_metric(data.btc_historical, data.dates[0], data.dates[-1])
 
         self.reupdate_layout()
         self.change_title(title_text)
@@ -120,35 +115,7 @@ class Plotter:
             go.Scatter(x=self.dates, y=self.data.loc[BTC_SYMBOL, "close"], name=BTC_SYMBOL)
         )
 
-    def plot_colorcoded_riskmetric(self, data_to_use, riskmetric_function=calculate_risk_metric):
-        self.riskmetric = get_general_risk_metric(
-            data_to_use, riskmetric_function, self.dates[0], self.dates[-1]
-        )
-        self.figure.add_trace(
-            go.Scatter(
-                x=self.riskmetric.index,
-                y=self.riskmetric["price"],
-                mode="markers",
-                marker=dict(
-                    color=self.riskmetric["riskmetric"],
-                    colorscale="turbo",
-                    colorbar=COLORBAR_CONFIG,
-                ),
-                name="Colordcoded Riskmetric (BTC)",
-            )
-        )
-
-    def plot_historical_btc(self):
-        self.figure.add_trace(
-            go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
-        )
-
-    def plot_historical_btc_colorcoded_riskmetric(self):
-        riskmetric = get_risk_metric(
-            self.historical_btc,
-            self.historical_btc.index.values[0],
-            self.historical_btc.index.values[-1],
-        )
+    def plot_colorcoded_riskmetric(self, riskmetric, name="Colordcoded Riskmetric (BTC)"):
         self.figure.add_trace(
             go.Scatter(
                 x=riskmetric.index,
@@ -163,70 +130,68 @@ class Plotter:
             )
         )
 
-    def plot_trading_volume(self):
-        print(self.data.loc[BTC_SYMBOL]["volume"])
-
+    def plot_riskmetric_on_second_scale(self, riskmetric, name="risk metric"):
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
-        self.figure.update_yaxes(title_text="Trading Volume", secondary_y=True)
-
-        df = self.data.loc[BTC_SYMBOL]
-        data = df["volume"] * df["close"]
-
-        print(data.corr(df["close"]))
-
+        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
         self.figure.add_trace(
-            go.Scatter(x=self.dates, y=data, mode="lines", name="BTCUSDT 24h volume"),
+            go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name=name),
             secondary_y=True,
         )
 
+    def plot_historical_btc(self):
+        self.figure.add_trace(
+            go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
+        )
+
+    def plot_total_market_cap(self):
+        self.figure.add_trace(
+            go.Scatter(
+                x=self.global_metrics.index,
+                y=self.global_metrics["total_marketcap"],
+                name="Total crypto market cap in $USD",
+            )
+        )
+
+    def plot_trading_volume(self, second_scale=False):
+        if second_scale:
+            self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
+            self.figure.update_yaxes(title_text="Trading Volume", secondary_y=True)
+
+        df = self.historical_btc[self.dates[0] :].copy()
+
+        if second_scale:
+            self.figure.add_trace(
+                go.Scatter(
+                    x=df.index, y=df["total_volume_24h"], mode="lines", name="BTCUSDT 24h volume"
+                ),
+                secondary_y=True,
+            )
+        else:
+            self.figure.add_trace(
+                go.Scatter(
+                    x=df.index, y=df["total_volume_24h"], mode="lines", name="BTCUSDT 24h volume"
+                )
+            )
+
     def plot_linearfit_trad_vol(self):
-        df = self.data.loc[BTC_SYMBOL]
-        data = df["volume"] * df["close"]
-        df["BTC Price"] = df["close"]
-        df["Volume in $USD"] = data
+        df = self.historical_btc[self.dates[0] :].copy()
+        df["BTC Price"] = df["price"]
+        df["Volume in $USD"] = df["total_volume_24h"]
+        print(f'btc price to 24h volume correlation: {df["price"].corr(df["total_volume_24h"])}')
         self.figure = px.scatter(df, x="BTC Price", y="Volume in $USD", trendline="ols")
         self.reupdate_layout()
 
-    def plot_autots_prediction(self, data_to_use):
-        forecast_length = 21
-        forecast, up, low = get_risk_metric_based_on_autots(
+    def plot_autots_prediction(self, data_to_use, forecast_length=21):
+        forecast_length = forecast_length
+        forecast, up, low = calculate_autots_prediction(
             data_to_use,
             self.dates[0],
             self.dates[-1] - pd.Timedelta(days=forecast_length),
             forecast_length,
         )
-        # print(up)
-        # print(low)
-        print(forecast)
 
         self.figure.add_trace(
             go.Scatter(x=forecast.index, y=forecast.price, name="AutoTS forecast"),
-        )
-
-    def plot_riskmetric_on_second_scale(
-        self, data_to_use, riskmetric_function=calculate_risk_metric, name="risk metric"
-    ):
-        self.riskmetric = get_general_risk_metric(
-            data_to_use, riskmetric_function, self.dates[0], self.dates[-1]
-        )
-        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
-        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
-        self.figure.add_trace(
-            go.Scatter(x=self.riskmetric.index, y=self.riskmetric["riskmetric"], name=name),
-            secondary_y=True,
-        )
-
-    def plot_historical_btc_riskmetric_on_second_scale(self):
-        riskmetric = get_risk_metric(
-            self.historical_btc,
-            self.historical_btc.index.values[0],
-            self.historical_btc.index.values[-1],
-        )
-        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
-        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
-        self.figure.add_trace(
-            go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name="risk metric"),
-            secondary_y=True,
         )
 
     def plot_horizontal_line(self, value, *args, **kwargs):
@@ -276,11 +241,8 @@ class Plotter:
         """
         a = -17.01593313
         b = 5.84509376
-
-        FIRST_EXCHANGE = pd.Timestamp("2009-01-12")
-
-        start_d = (self.dates[0] - FIRST_EXCHANGE).days
-        end_d = (self.dates[-1] - FIRST_EXCHANGE).days
+        start_d = (self.dates[0] - FIRST_BITCOIN_EXCHANGE).days
+        end_d = (self.dates[-1] - FIRST_BITCOIN_EXCHANGE).days
         d = pd.Series(range(start_d, end_d))
 
         price = 10 ** (a + b * np.log10(d))
@@ -294,6 +256,12 @@ class Plotter:
             )
         )
 
+    def show_both_log_and_linear(self):
+        self.plot_unlog_y_first_axis()
+        self.show()
+        self.plot_log_y_first_axis()
+        self.show()
+
     def plot_log_y(self):
         self.figure.update_yaxes(type="log")
 
@@ -306,15 +274,6 @@ class Plotter:
     def plot_log_y_second_axis(self):
         self.figure.update_layout(yaxis2=dict(type="log"))
 
-    def plot_total_market_cap(self):
-        self.figure.add_trace(
-            go.Scatter(
-                x=self.global_metrics.index,
-                y=self.global_metrics["total_marketcap"],
-                name="Total crypto market cap in $USD",
-            )
-        )
-
     def plot_total_market_cap_capped_by_dates(self):
         market_cap = self.global_metrics[self.dates[0] : self.dates[-1]]
         self.figure.add_trace(
@@ -324,43 +283,6 @@ class Plotter:
                 name="Total crypto market cap in $USD",
             )
         )
-
-    def plot_riskmetric_colorcoded_total_market_cap(self):
-        riskmetric = get_risk_metric_based_on_total_marketcap(
-            self.global_metrics, self.global_metrics.index.values[0], self.dates[-1]
-        )
-        self.figure.add_trace(
-            go.Scatter(
-                x=riskmetric.index,
-                y=riskmetric["price"],
-                mode="markers",
-                marker=dict(
-                    color=riskmetric["riskmetric"],
-                    colorscale="turbo",
-                    colorbar=COLORBAR_CONFIG,
-                ),
-                name="Colordcoded Riskmetric (BTC)",
-            )
-        )
-
-    def plot_riskmetric_second_scale_total_market_cap(self):
-        riskmetric = get_risk_metric_based_on_total_marketcap(
-            self.global_metrics, self.global_metrics.index.values[0], self.dates[-1]
-        )
-        self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
-        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
-        self.figure.add_trace(
-            go.Scatter(
-                x=riskmetric.index, y=riskmetric["riskmetric"], name="total marketcap risk metric"
-            ),
-            secondary_y=True,
-        )
-
-    def show_both_log_and_linear(self):
-        self.plot_unlog_y_first_axis()
-        self.show()
-        self.plot_log_y_first_axis()
-        self.show()
 
     def change_title(self, title: str):
         self.figure.update_layout(
@@ -398,6 +320,9 @@ class Plotter:
                 borderwidth=2,
             ),
             showlegend=True,
+            # 2:1 graph resolution
+            width=1800,
+            height=900,
             # colorway=px.colors.qualitative.Light24
         )
         self.figure.update_layout(custom_layout)
@@ -412,4 +337,12 @@ class Plotter:
         return self.figure.show()
 
     def save(self, extension="pdf"):
-        return self.figure.write_image(OUTPUT_PATH / f"{get_current_datetime_string()}.{extension}")
+        # HACK: plotly shenenigans: https://github.com/plotly/plotly.py/issues/3469
+        import time
+
+        figure = "some_figure.pdf"
+        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
+        fig.write_image(figure, format="pdf")
+        time.sleep(1)
+
+        return self.figure.write_image(OUTPUT_PATH / f"newplot.{extension}")

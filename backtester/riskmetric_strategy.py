@@ -4,27 +4,13 @@ File defining the risk metric strategy.
 
 
 from .strategy import Strategy
-from .utils import Portfolio, TradingData, get_risk_metric, set_index_for_data
+from .utils import Portfolio, TradingData
 
 
 class RiskMetricStrategy(Strategy):
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
         super().__init__(data, portfolio)
-        risk_metric_option = kwargs.get("metric", "btc")
-        risk_metric_data = {"btc": data.btc_historical, "total_marketcap": data.global_metrics}.get(
-            risk_metric_option
-        )
-        self.riskmetric = get_risk_metric(risk_metric_data, data.dates[0], data.dates[-1])
-
-        # Ensure that data match the riskmetric dates
-        df = data.data.reset_index()
-        date_filter = (df["open_time"] < self.riskmetric.index.values[0]) | (
-            df["open_time"] > self.riskmetric.index.values[-1]
-        )
-        df = df.drop(df.index[date_filter])
-        df = set_index_for_data(df)
-        self.data = df
-        self.dates = self.riskmetric.index.values
+        self.riskmetric = kwargs.get("riskmetric")
 
         self.threshold = 0.7
         self.states = {
@@ -39,7 +25,6 @@ class RiskMetricStrategy(Strategy):
             0.2: False,
             0.1: False,
         }
-        self.name += f"{{metric: {risk_metric_option}}}"
 
     def execute_step(self):
         super().execute_step()
@@ -83,15 +68,15 @@ class RiskMetricStrategy(Strategy):
         elif risk < 0.8:
             if not self.states[0.8]:
                 self.states = self.set_states(0.8)
-                # self.buy_percentage(0.6)
-                self.sell()
-                self.buy()
+                self.buy_percentage(0.6)
+                # self.sell()
+                # self.buy()
         elif risk < 0.9:
             if not self.states[0.9]:
                 self.states = self.set_states(0.9)
-                # self.buy_percentage(0.8)
-                self.sell()
-                self.buy()
+                self.buy_percentage(0.2)
+                # self.sell()
+                # self.buy()
         else:
             if not self.states["sell"]:
                 self.states = self.set_states("sell")

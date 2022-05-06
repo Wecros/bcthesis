@@ -9,18 +9,16 @@ from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
 from .rebalance_strategy import RebalanceStrategy
+from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
 from .riskmetric_strategy import RiskMetricStrategy
 from .strategy import Strategy
 from .utils import (
-    BTC_SYMBOL,
     TIME_FORMAT,
     Portfolio,
     StrategyResult,
     TradingData,
     create_portfolio_from_data,
-    get_dates_from_index,
     noop,
-    transform_historical_btc_to_trading_data,
 )
 
 # HACK: Imports will not be removed automatically by formatter.
@@ -33,37 +31,36 @@ DCAStrategy
 def simulate(trading_data: TradingData):
     logging.info("Running simulation")
 
-    # get historic BTC data if BTC is the only coin considered
-    if trading_data.symbols == [BTC_SYMBOL] and trading_data.variables.interval_str == "1d":
-        start_date = "2013-01-01"
-        trading_data.data = transform_historical_btc_to_trading_data(
-            trading_data.btc_historical, start_date
-        )
-        trading_data.dates = get_dates_from_index(trading_data.data)
+    # trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
+
+    optimizations = RiskMetricOptimizations(
+        diminishing_returns=False, daily_volume_correlation=True
+    )
+    riskmetric = get_risk_metric(
+        trading_data.global_metrics, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    )
 
     strategy_list = [
-        # [HodlStrategy],
+        [HodlStrategy],
+        [RiskMetricStrategy, {"riskmetric": riskmetric}],
         # [RebalanceStrategy],
-        # [RiskMetricStrategy],
-        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [RebalanceStrategy, {"rebalance_interval": 5}],
         # [RebalanceStrategy, {"rebalance_interval": 10}],
-        # [RiskMetricStrategy],
-        # [RiskMetricStrategy, {"metric": "total_marketcap"}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
-        # [
-        # StrategyMerger,
-        # {
-        # "strategy_classes": [
-        # [RiskMetricStrategy],
-        # [RebalanceStrategy, {"rebalance_interval": 5}],
-        # ]
-        # },
-        # ],
     ]
     simgen = StrategyGenerator(strategy_list, trading_data)
     simgen.run()
     results = simgen.get_results()
+
+    for result in results:
+        if result.name == RiskMetricStrategy.__name__:
+            if optimizations.diminishing_returns:
+                result.name += " + dim returns"
+            if optimizations.daily_volume_correlation:
+                result.name += " + 24h volume correlation"
+            if not optimizations.diminishing_returns and not optimizations.daily_volume_correlation:
+                result.name = "RiskMetricStrategy - no optimizations"
+            result.name += " | total marketcap"
 
     annotation_text = (
         f"Data Range: {trading_data.dates[0].strftime(TIME_FORMAT)}--"
@@ -79,12 +76,16 @@ def simulate(trading_data: TradingData):
         title_text=f"Strategy Experiments ({annotation_text})",
     )
 
-    plotter.plot_all_symbols()
-    plotter.plot_autots_prediction(trading_data.btc_historical)
+    # plotter.plot_all_symbols()
+    plotter.plot_riskmetric_on_second_scale(riskmetric)
+    # plotter.plot_colorcoded_riskmetric(riskmetric)
 
-    plotter.plot_log_y_first_axis()
+    plotter.plot_strategies()
+
     plotter.change_title("")
+    plotter.plot_log_y_first_axis()
     plotter.show()
+    # plotter.save('pdf')
 
 
 class StrategyGenerator:
@@ -101,6 +102,8 @@ class StrategyGenerator:
     def run(self):
         for strategy in self.strategies:
             strategy.run_simulation()
+            # logging.info(f"{strategy.name}: {strategy.profits_in_time[-1]}")
+            logging.info(strategy.stats())
 
     def get_results(self):
         results = []
@@ -109,7 +112,6 @@ class StrategyGenerator:
                 strategy.name, strategy.profits_in_time, strategy.bought_dates, strategy.sold_dates
             )
             results.append(result)
-            logging.info(f"{result.name}: {result.profits[-1]}")
         return results
 
 

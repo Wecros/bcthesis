@@ -10,7 +10,6 @@ from pathlib import Path
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
-from autots import AutoTS
 from schema import Schema
 
 ROOT_PATH = Path(sys.argv[0]).parents[1]
@@ -29,6 +28,7 @@ COINMARKETCAP_LIMIT = 2000
 SEP = ":"
 TIME_FORMAT = "%Y-%m-%d"
 BTC_SYMBOL = "BTCUSDT"
+FIRST_BITCOIN_EXCHANGE = pd.Timestamp("2009-01-12")
 
 YAML_FILE_SCHEMA = Schema(
     {
@@ -208,141 +208,24 @@ def ensure_same_dates_between_dataframes(df1, df2):
     return df1, df2
 
 
-def transform_historical_btc_to_trading_data(historical_tc: pd.DataFrame, start_date):
-    df = historical_tc.drop(columns=["market_cap", "total_volume"]).reset_index()
-    df = df.rename(columns={"price": "close", "date": "open_time"})
+def transform_historical_btc_to_trading_data(historical_btc: pd.DataFrame, start_date):
+    df = historical_btc.drop(columns=["market_cap"]).reset_index()
+    df = df.rename(columns={"price": "close", "date": "open_time", "total_volume_24h": "volume"})
     df["pair"] = BTC_SYMBOL
     df["high"] = 0
     df["open"] = 0
     df["low"] = 0
-    df["volume"] = 0
     df = df[df["open_time"] >= start_date]
     df = set_index_for_data(df)
     df = df[["open", "high", "low", "close", "volume"]]
     return df
 
 
-def get_general_risk_metric(
-    data: pd.DataFrame,
-    metric_calculation_function,
-    start_date: pd.Timestamp,
-    end_date: pd.Timestamp,
-):
-    df = data.copy()
-    if "total_marketcap" in df:
-        df["price"] = df["total_marketcap"]
-    riskmetric_df = metric_calculation_function(df)
-    return riskmetric_df[start_date:end_date]
-
-
-def get_risk_metric(historical_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp):
-    """Get risk metric relevant for the data's date range."""
-    df = historical_df.copy()
-    if "total_marketcap" in df:
-        df["price"] = df["total_marketcap"]
-    riskmetric_df = calculate_risk_metric(df)
-    return riskmetric_df[start_date:end_date]
-
-
-def calculate_risk_metric(df: pd.DataFrame):
-    """Get dataframe cointaing the calculated metric."""
-    # Raven riskmetric, SEE: https://github.com/BitcoinRaven/Bitcoin-Risk-Metric-V2
-    # df["MA"] = df["price"].rolling(374, min_periods=1).mean().dropna()
-    # df["riskmetric_notnormalized"] = (np.log(df["price"]) - np.log(df["MA"])) * df.index**0.395
-
-    # General MA risk metric
-    df["MA_50days"] = df["price"].rolling(50, min_periods=1).mean().dropna()
-    df["MA_50weeks"] = df["price"].rolling(50 * 7, min_periods=1).mean().dropna()
-    df["risk"] = df["MA_50days"] / df["MA_50weeks"]
-
-    # Normalization to 0-1 range
-    df["riskmetric"] = (df["risk"] - df["risk"].cummin()) / (
-        df["risk"].cummax() - df["risk"].cummin()
-    )
-
-    riskmetric_df = df[["riskmetric", "price"]].dropna()
-    return riskmetric_df
-
-
-def calculate_risk_metric_dim_returns(df: pd.DataFrame):
-    """Optimize risk metric for diminishing returns."""
-    # General MA risk metric
-    df["MA_50days"] = df["price"].rolling(50, min_periods=1).mean().dropna()
-    df["MA_50weeks"] = df["price"].rolling(50 * 7, min_periods=1).mean().dropna()
-
-    FIRST_EXCHANGE = pd.Timestamp("2009-01-12")
-    start_d = (df["MA_50days"].index.values[0] - FIRST_EXCHANGE).days
-    end_d = (df["MA_50days"].index.values[-1] - FIRST_EXCHANGE).days
-    d = pd.Series(range(start_d, end_d))
-    d.index = pd.date_range(start=df["price"].index.values[0], periods=d.size)
-
-    df["risk"] = ((df["MA_50days"]) / (df["MA_50weeks"])) * np.log(d)
-
-    # Normalization to 0-1 range
-    df["riskmetric"] = (df["risk"] - df["risk"].cummin()) / (
-        df["risk"].cummax() - df["risk"].cummin()
-    )
-
-    riskmetric_df = df[["riskmetric", "price"]].dropna()
-    return riskmetric_df
-
-
-def get_risk_metric_based_on_bitcoin(
-    historical_btc: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp
-):
-    df = historical_btc.copy()
-    riskmetric_df = calculate_risk_metric(df)
-    return riskmetric_df[start_date:end_date]
-
-
-def get_risk_metric_based_on_total_marketcap(global_metrics: pd.DataFrame, start_date, end_date):
-    df = global_metrics.copy()
-    df["price"] = global_metrics["total_marketcap"]
-    riskmetric_df = calculate_risk_metric(df)
-    return riskmetric_df[start_date:end_date]
-
-
-def get_risk_metric_based_on_autots(
-    historical_data: pd.DataFrame, start_date, end_date, forecast_length
-):
-    df = historical_data.copy()
-    df = df[start_date:end_date]
-    df = df.reset_index()
-
-    model = AutoTS(
-        forecast_length=forecast_length,
-        frequency="infer",
-        prediction_interval=0.9,
-        ensemble=None,
-        model_list="superfast",  # "superfast", "default", "fast_parallel"
-        transformer_list="fast",  # "superfast",
-        drop_most_recent=1,
-        max_generations=4,
-        num_validations=2,
-        validation_method="backwards",
-    )
-    model = model.fit(
-        df,
-        date_col="date",
-        value_col="price",
-    )
-
-    prediction = model.predict()
-
-    # Print the details of the best model
-    print(model)
-
-    # point forecasts dataframe
-    forecasts_df = prediction.forecast
-    # upper and lower forecasts
-    forecasts_up, forecasts_low = prediction.upper_forecast, prediction.lower_forecast
-
-    # accuracy of all tried model results
-    model.results()
-    # and aggregated from cross validation
-    model.results("validation")
-
-    # print(model_results)
-    # print(validation_results)
-
-    return forecasts_df, forecasts_up, forecasts_low
+def get_historical_data_if_btc_is_only_coin_considered(trading_data):
+    if trading_data.symbols == [BTC_SYMBOL] and trading_data.variables.interval_str == "1d":
+        start_date = "2014-01-01"  # First total volume recorded on CoinGecko
+        trading_data.data = transform_historical_btc_to_trading_data(
+            trading_data.btc_historical, start_date
+        )
+        trading_data.dates = get_dates_from_index(trading_data.data)
+    return trading_data
