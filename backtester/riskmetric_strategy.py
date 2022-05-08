@@ -87,30 +87,3 @@ class RiskMetricStrategy(Strategy):
         self.states[state_to_set] = True
         self.sold_state = False
         return self.states
-
-    def buy_percentage(self, percent):
-        self.bought_dates.append(self.current_step)
-        coins = self.portfolio.coins
-
-        # print(self.riskmetric.loc[self.current_step]['riskmetric'])
-        # print(self.current_step)
-        # print(self.portfolio.usd)
-        # print(coins)
-
-        self.sell()
-
-        # print(self.portfolio.usd)
-        # print(coins)
-
-        usd_to_buy_coins_with = self.portfolio.usd * percent
-        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
-        for coin in coins:
-            close = self.get_close_value(coin)
-            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
-
-        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
-
-        # print(usd_to_buy_coins_with, usd_to_buy_one_coin_with)
-        # print(coins)
-        # print(self.portfolio.usd)
-        # print()

@@ -85,6 +85,51 @@ class Strategy(ABC):
         self.sold_state = True
         self.bought_state = False
 
+    def buy_partial(self, percent):
+        """Buy only a partial percentage of the coins. Keep the rest in stablecoins.
+        The percantage is always calculated from the total sum of coins + stablecoins."""
+        self.bought_dates.append(self.current_step)
+        coins = self.portfolio.coins
+
+        # print(self.riskmetric.loc[self.current_step]['riskmetric'])
+        # print(self.current_step)
+        # print(self.portfolio.usd)
+        # print(coins)
+
+        self.sell()
+
+        # print(self.portfolio.usd)
+        # print(coins)
+
+        usd_to_buy_coins_with = self.portfolio.usd * percent
+        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
+        for coin in coins:
+            close = self.get_close_value(coin)
+            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
+
+        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
+
+        # print(usd_to_buy_coins_with, usd_to_buy_one_coin_with)
+        # print(coins)
+        # print(self.portfolio.usd)
+        # print()
+
+    def sell_partial(self, percent):
+        """Sell only a partial percantage of the coins. Keep the rest in coins.
+        The percantage is always calculated from the total sum of coins + stablecoins."""
+        self.sold_dates.append(self.current_step)
+        coins = self.portfolio.coins
+
+        self.buy()
+
+        usd_to_buy_coins_with = self.portfolio.usd * percent
+        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
+        for coin in coins:
+            close = self.get_close_value(coin)
+            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
+
+        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
+
     def get_close_value(self, coin: str):
         """Get close value of a coin relevant to the current step."""
         # return self.data.loc[[(self.current_step, coin)]].close[0]
@@ -103,7 +148,8 @@ class Strategy(ABC):
         """Gain total portfolio profit in BTC relevant to the current step."""
         coin = BTC_SYMBOL
         close = self.get_close_value(coin)
-        return self.portfolio.coins[coin] / close
+        profit = self.get_profit_in_usd()
+        return profit / close
 
     def stats(self):
         profitInUSD = self.profits_in_time[-1]

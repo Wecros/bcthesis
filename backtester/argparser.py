@@ -53,7 +53,6 @@ def get_parsed_args():
     """
     parser = get_argument_parser()
     args = parser.parse_args()
-    print(args)
     if not args.file and not (args.interval and args.pairs and args.start_date and args.end_date):
         parser.error("Incomplete arguments or no argument file defined!")
 

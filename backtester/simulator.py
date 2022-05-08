@@ -5,14 +5,18 @@ File for orchestrating the various strategies in play.
 import logging
 from copy import deepcopy
 
+import plotly.graph_objs as go
+
 from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
 from .rebalance_strategy import RebalanceStrategy
 from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
 from .riskmetric_strategy import RiskMetricStrategy
+from .short_term_strategy import ShortTermStrategy
 from .strategy import Strategy
 from .utils import (
+    BTC_SYMBOL,
     TIME_FORMAT,
     Portfolio,
     StrategyResult,
@@ -26,6 +30,8 @@ HodlStrategy
 RebalanceStrategy
 RiskMetricStrategy
 DCAStrategy
+ShortTermStrategy
+BTC_SYMBOL
 
 
 def simulate(trading_data: TradingData):
@@ -34,21 +40,27 @@ def simulate(trading_data: TradingData):
     # trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
 
     optimizations = RiskMetricOptimizations(
-        diminishing_returns=False, daily_volume_correlation=True
+        diminishing_returns=False, daily_volume_correlation=False
     )
     riskmetric = get_risk_metric(
-        trading_data.global_metrics, optimizations, trading_data.dates[0], trading_data.dates[-1]
+        trading_data.btc_historical, optimizations, trading_data.dates[0], trading_data.dates[-1]
     )
+    riskmetric
+
+    ShortTermStrategy(trading_data).compute_metric()
 
     strategy_list = [
-        [HodlStrategy],
-        [RiskMetricStrategy, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategy, {"riskmetric": riskmetric}],
+        [ShortTermStrategy]
         # [RebalanceStrategy],
         # [RebalanceStrategy, {"rebalance_interval": 5}],
         # [RebalanceStrategy, {"rebalance_interval": 10}],
         # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
     ]
-    simgen = StrategyGenerator(strategy_list, trading_data)
+    portfolio = create_portfolio_from_data(
+        trading_data, cash=trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
+    )
+    simgen = StrategyGenerator(strategy_list, trading_data, portfolio)
     simgen.run()
     results = simgen.get_results()
 
@@ -73,19 +85,45 @@ def simulate(trading_data: TradingData):
         results,
         x_title=f"{trading_data.variables.interval_str} steps",
         y_title="Profit in $USD",
+        # title_text=f"Strategy Experiments ({annotation_text})",
         title_text=f"Strategy Experiments ({annotation_text})",
     )
 
-    # plotter.plot_all_symbols()
-    plotter.plot_riskmetric_on_second_scale(riskmetric)
+    # plotter.plot_riskmetric_on_second_scale(riskmetric)
     # plotter.plot_colorcoded_riskmetric(riskmetric)
 
+    plotter.plot_all_symbols()
     plotter.plot_strategies()
 
+    short_strat = simgen.strategies[0]
+    plotter.plot_bought_dates(strategies=[results[0]])
+    plotter.plot_sold_dates(strategies=[results[0]])
+
+    plotter.plot_line(
+        short_strat.steps, short_strat.riskmetric["riskmetric"], name="Moving average"
+    )
+    plotter.figure.add_trace(
+        go.Scatter(
+            x=short_strat.steps,
+            y=short_strat.riskmetric["min"],
+            mode="markers",
+            name="min",
+            marker=dict(size=10),
+        )
+    )
+    plotter.figure.add_trace(
+        go.Scatter(
+            x=short_strat.steps,
+            y=short_strat.riskmetric["max"],
+            mode="markers",
+            name="max",
+            marker=dict(size=10),
+        )
+    )
+
     plotter.change_title("")
-    plotter.plot_log_y_first_axis()
     plotter.show()
-    # plotter.save('pdf')
+    plotter.save("pdf")
 
 
 class StrategyGenerator:

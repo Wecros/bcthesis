@@ -16,6 +16,7 @@ from .utils import (
     OUTPUT_PATH,
     StrategyResult,
     TradingData,
+    get_current_datetime_string,
     map_values_to_specific_dates,
 )
 
@@ -49,6 +50,9 @@ class Plotter:
         self.change_title(title_text)
         self.figure.update_xaxes(title_text=x_title)
         self.figure.update_yaxes(title_text=y_title)
+
+    def plot_line(self, x, y, name):
+        self.figure.add_trace(go.Scatter(x=x, y=y, mode="lines", name=name))
 
     def plot_strategies_with_data(self):
         self.plot_all_symbols()
@@ -197,10 +201,16 @@ class Plotter:
     def plot_horizontal_line(self, value, *args, **kwargs):
         self.figure.add_hline(y=value, *args, **kwargs)
 
-    def plot_bought_dates(self):
-        for strategy in self.strategies:
+    def plot_vertical_line(self, value, *args, **kwargs):
+        self.figure.add_vline(x=value, *args, **kwargs)
+
+    def plot_bought_dates(self, strategies=None, dash=False):
+        if strategies is None:
+            strategies = self.strategies
+
+        for strategy in strategies:
             profits_bought = map_values_to_specific_dates(
-                self.dates, strategy.sold_dates, strategy.profits
+                self.dates, strategy.bought_dates, strategy.profits
             )
             self.figure.add_trace(
                 go.Scatter(
@@ -215,8 +225,16 @@ class Plotter:
                     ),
                 ),
             )
+            if dash:
+                for date in strategy.bought_dates:
+                    self.figure.add_vline(
+                        x=date, line_width=1, line_dash="dash", line_color="green"
+                    )
 
-    def plot_sold_dates(self):
+    def plot_sold_dates(self, strategies=None, dash=False):
+        if strategies is None:
+            strategies = self.strategies
+
         for strategy in self.strategies:
             profits_sold = map_values_to_specific_dates(
                 self.dates, strategy.sold_dates, strategy.profits
@@ -234,6 +252,9 @@ class Plotter:
                     ),
                 ),
             )
+            if dash:
+                for date in strategy.sold_dates:
+                    self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="red")
 
     def plot_diminishing_returns(self):
         """Days for diminishing returns are counted from the first transaction
@@ -305,7 +326,7 @@ class Plotter:
             template="plotly_white",
             font={
                 "family": "Roboto",
-                "size": 20,
+                "size": 24,
                 "color": "black",
             },
             legend=dict(
@@ -340,9 +361,13 @@ class Plotter:
         # HACK: plotly shenenigans: https://github.com/plotly/plotly.py/issues/3469
         import time
 
+        get_current_datetime_string
+
         figure = "some_figure.pdf"
         fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
         fig.write_image(figure, format="pdf")
         time.sleep(1)
 
-        return self.figure.write_image(OUTPUT_PATH / f"newplot.{extension}")
+        filename = "newplot"
+        # filename = get_current_datetime_string()
+        return self.figure.write_image(OUTPUT_PATH / f"{filename}.{extension}")

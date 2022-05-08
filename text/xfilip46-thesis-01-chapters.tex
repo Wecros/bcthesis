@@ -30,6 +30,7 @@ There are some prerequisites that the reader must be familiarized with in order 
     \item Bull market = A market in which prices are rising, encouraging buying.
     \item Fiat currency = Government-issued money.
     \item spread = Difference between buy and sell value of an asset.
+    \item OHLCV = open, high, low, close, value -- type of candlestick data
     \item MA = moving average, usually refers to smooth moving average.
     \item SMA = smooth moving average.
     \item ROI = Return of investment.
@@ -155,6 +156,7 @@ Sometimes DCA is used as a mean to invest into trusted assets on weekly/monthly 
 Day trading are the investors that buy and sell the same asset over the span of one day. They might even buy and sell the assets multiple times. They mostly use technical analysis of the market to achieve this goal. It is not recommended for beginner investors to choose this type of trading as it is much more risky than strategies described before.
 
 \section{Range Trading}
+\label{section-range-trading}
 Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure}. Range trading assumes that and tries to take guesses where are the limits using candlestick charts and support and resistance levels. Investors want to buy when prices reach the support level and sell when they reach the resistance level~\cite{5types-of-daytrading}. The support and resistance levels can be seen in Figure~\ref{sup-and-res-levels}.
 
 \begin{figure}[!hbt]
@@ -172,6 +174,7 @@ Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure
 \end{figure}
 
 \section{Scalping}
+\label{section-scalping}
 In scalping you try to profit from very small price movements over short periods, you might exit a trade seconds after entering it. It is best to use automated bots to increase the buying frequency. Scalpers take advantage of increased trading volume to profit. They want to exit before any news or short-term fluctuation changes the market's view of the coin~\cite{best-crypto-daytrading}.
 
 It is needed to have a large bankroll to use this strategy effectively. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees.
@@ -456,7 +459,21 @@ The metric oscillates between highs and lows. There have been 5 high points of t
 
 \subsection*{Machine Learning Time Series Optimizations}
 
-\section{Combinations}
+\section{Short-term Trading}
+When focusing on short-term trading, range trading and scalping discussed in Sections \ref{section-range-trading} and \ref{section-scalping} respectively. We try to guess the support and resistance levels.
+
+When talking about technical analysis, we need to make support and resistance levels into an account. They can be predicted in several ways. Round numbers are taken into account, like \$50 and \$100, since investors usually put stop orders at such whole number points. These points then serve as resistance levels since it takes very large number of purchases to absorb the sales. Moving average can be used to estimate the levels, too, as you can see in the Figure \ref{ma-support-resistance}. Other indicators include the golden ratio, number of touches and others. This paragraph has been inspired by the \cite{investopedia:support-and-resistance} source, where more detailed information can be found.
+
+In the thesis, moving averages are used to estimate the support and resistance levels and make according trades.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/ma-support-resistance.png}
+    \caption{Expected support and resisted levels computed by a moving average. Attribution: Investopedia \cite{investopedia:support-and-resistance}}
+    \label{ma-support-resistance}
+\end{figure}
+
+
 
 \chapter{Adaptive Strategy Design and Implementation}
 \label{chapter-implementation}
@@ -552,18 +569,10 @@ Due to a possbile long list of argument values, the arguments can be saved into 
 
 Among optional arguments belongs the logging level. It defines the logging level used for logging that informs the users of filesystem manipulations, simulation progress and results, or errors and debug information. Defaultly it is set to level INFO.
 
-\subsection*{Data Structures}
-Several data structures are defined to ease the work with data transformations. They are explained in the thesis so the reader is aware of the inner workings of the project, should he try to develop it.
-
-TODO: Define if it is really needed.
-
 \section{Other Helpful Structures}
 
 \subsection*{Plotter}
 \texttt{plotly}\footnote{\url{https://pypi.org/project/plotly/}} is used for plotting the final graphs. It works natively with the dataframe data used in \texttt{pandas}.
-
-\section{Testing}
-Simple testing was set up using the pytest framework\footnote{\url{https://docs.pytest.org/}}. The test files can be found in the \texttt{tests} folder. The tests serve to verify the basic functionality of the implemented trading strategies.
 
 \section{Deployment and Development}
 During the development of the project, code standards were enforced via various programming tools, such as linters, formatters, pre-commit and CI checks. All the selected technologies can be viewed in the repository of the project.
@@ -587,6 +596,9 @@ After activating the environment and installing the required packages via \textt
 
 \subsection*{Makefile}
 Makefile is used to put a common interface for all the other commands and tools. It is recommended to use the targets from Makefile for running and developing the project. All lint, format, containerization, testing, latex translation targets are located there.
+
+\subsection*{Testing}
+Simple testing was set up using the pytest framework\footnote{\url{https://docs.pytest.org/}}. The test files can be found in the \texttt{tests} folder. The tests serve to verify the basic functionality of the implemented trading strategies.
 
 \chapter{Adaptive Strategy Experiments}
 \label{chapter-experiments}
@@ -872,7 +884,7 @@ Some of the strategies, like machine learning optimization \ref{subsection-ml-op
 By rigorous testing I have found that the ideal evaluation strategy is as follows: ...
 
 
-\subsection{Testing portfolio C}
+\subsection*{Testing portfolio C}
 Let us start with the original bitcoin risk metric proposed in Section \ref{subsection-50week50days}. We will first test the metric on Bitcoin only (portfolio C).
 
 \begin{figure}[!hbt]
@@ -898,14 +910,54 @@ Let us start with the original bitcoin risk metric proposed in Section \ref{subs
 
 \subsection*{Evaluating Bitcoin Risk Metric}
 
-
-
 \subsection*{Evaluating Total Market Cap Risk Metric}
 
 \subsection*{Evaluating Bitcoin Risk Metric Correlated With Daily Volume}
 
-\subsection*{Day trading evaluation}
+\section{Testing For Day Trading}
 Optimizing for long term investing is great, it has a lower risk than trading throughout the day while still keeping good profits. But one thing it cannot do is to gain capital fast, that is where day trading can shine. In this section the adaptive strategies are tested on a few several days window with 5 minute OHLCV portfolio data.
+
+\subsection*{Creating the Strategy}
+Instead of looking for loing moving averages of 50 weeks and days as before, we will look at a different indicator. Moving average of 6 hours---that means 72 ticks of 5 minute data---is used as the metric. The moving average smooths out the rigidity of the 5 minute data and allows us to exploit the rising and falling trends during the day. It is a form of range trading \ref{section-range-trading} where we take advantage of the fact that cryptocurrencies fluctuate multiple times during a day.
+
+\subsection*{Strategy Evaluation}
+The strategy is tested on bitcoin only. It does not make much sense to test the strategies with many cryptocurrencies, because the strategy is tailored to one asset only. Theoretically, a portfolio with many cryptocurrencies can run this strategy individually per every currency.
+
+The basic evaluation strategy is to sell at the local maxima of the moving average and buy at the local minima. Thus trying to buy low and sell high. The local maxima and minima take the 5 points from each side into consideration---this prevents too many extrema next to each other, which would not be useful.
+
+Three date range have been chosen to evaluate the results. A date range with a falling, rising and changing trend. The results can be seen in Figures \ref{figure-short-term-rising}, \ref{figure-short-term-falling} and \ref{figure-short-term-changing}.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/short-term-rising.pdf}
+    \caption{27th Sep--10th Oct 2021 rising trend that registered rise from \$43000 to \$55000.}
+    \label{figure-short-term-rising}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/short-term-falling.pdf}
+    \caption{9th Nov--25th Nov 2021 falling trend that registered fall from \$65000 to \$55000.}
+    \label{figure-short-term-falling}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/short-term-changing.pdf}
+    \caption{6th Feb--26th Mar 2022 changing trend.}
+    \label{figure-short-term-changing}
+\end{figure}
+
+Surprsingly, all the date ranges experienced somewhat constant profits, with the falling date range's difference against HODL being most noticable. Here it must be said that no exchange fees are taken into the account. Most of the individual trades generate a little profit that only accumulates over time---meaning that exchange fees would diminish the results noticable and must be taken into the account when considering using the strategy. Nevertheless, the results are pleasing.
+
+Let us see how the strategy fares when applied over several months. The date range chosen is February until April of the year 2022. The results can be seen in \ref{figure-short-term-long}. The profits trend upwards in an almost linear fashion. The strategy has shown very promising results so far.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/short-term-long.pdf}
+    \caption{6th Feb--26th Mar 2022 changing trend.}
+    \label{figure-short-term-long}
+\end{figure}
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{chapter-limitations-and-improvements}
@@ -915,6 +967,8 @@ So far we have only discussed the backtesting framework developed. For practical
 This would require either heavily changing the existing framework or creating a new project entirely. I would design in such a way, that the working backtesting framework would be solely for experimenting with new strategies or validating the chosen strategies for the current day. The projects could work in conjecture this way. The practical deployment would send the new daily data to the backtesting framework which would then send a signal to the deployment on what to do---buy, sell, rebalance, etc.
 
 This would also require working with always up-to-date data, not just historical. Some different API endpoints may be used.
+
+Other improvement to the overall framework would be to add the exchange fees when the investor buys or sells. The current results would get a bit diminished by this fact. This abstraction for the thesis has been approved by the supervisor.
 
 \section{TODO: Comparison to Existing Solutions}
 \begin{enumerate}
@@ -938,6 +992,8 @@ More intensive research regarding machine learning, and its correlation to other
 
 One interesting strategy would be to find the riskmetric for every coin in portfolio and measure the risks and investitions individually on per coin basis.
 
+Stablecoin trading would be a good strategy to generate profit during longer bear markets. This would mean that the strategy is always looking for an opportunity to generate money, even if the market is not hospitable. This would make the whole strategy process even more resilient to the market changes.
+
 \subsection*{Backtester Optimization}
 Saving already computed strategies to the filesystem could be implemented to severily help save the time between individual runs of similar strategies. For example, the HODL strategy that the more interesting strategies are benchmarked against is the same between each individual run, same with rebalance.
 
@@ -949,4 +1005,6 @@ Configuration file could be extended to include strategy definitions too. In thi
 P\&L per trade visualization could be informative, as well as incorporate other metric like Sharpe Ratio into the statistics output.
 
 \chapter{Conclusion}
+I have demonstrated that my framework is general enough to support the implementation of both long-term and short-term strategies in section .. and .. respectively.
+
 \label{conclusion}

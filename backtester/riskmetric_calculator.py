@@ -29,10 +29,13 @@ def get_risk_metric(
     end_date: pd.Timestamp,
 ) -> pd.DataFrame:
     """Get risk metric dataframe calculated from the historical data and optimiztions data."""
-    # When using total market capitalization we need to change the column name accordingly.
     df = historical_data.copy()
+    # When using total market capitalization we need to change the column name accordingly.
     if "total_marketcap" in df:
         df["price"] = df["total_marketcap"]
+    # When using the Binance data we need to change the column name accordingly.
+    if "close" in df:
+        df["price"] = df["close"]
     riskmetric_df = _calculate_risk_metric(df, optimizations)
     return riskmetric_df[start_date:end_date]
 
