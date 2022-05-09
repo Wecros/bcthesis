@@ -3,49 +3,49 @@
 
 \chapter{Introduction}
 
-When we look at cryptocurrencies, there is a very lucrative market. That is why people have always found new ways to make money from trading cryptocurrencies. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That is why there is a need for adaptive strategies that can prosper through both of them.
+The cryptocurrency market is very lucrative for people that want to turn a profit in cryptocurrency trading, constantly coming up with new methods of doing so.. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That is why there is a need for adaptive strategies that can prosper through both of them.
 
-I will explore the idea of the adaptive trading strategies for cryptocurrencies in this thesis. Firstly we need to find a way how to predict if the market will go up or down. Then we need to apply sufficient trading strategies regarding the percentage probability of market going up or down. That is the basic idea.
+I will explore the idea of the adaptive trading strategies for cryptocurrencies in this thesis. Firstly we need to find a way how to predict if the market will go up or down. Then we need to apply sufficient trading strategies based on the percentage probability of trends rising or falling. That is the high-level overview of the idea presented in this thesis.
 
-To get to this point I will explore the current trading strategies that are used for trading cryptocurrencies. Analyze current simulation tools available today and analyze the historic trading data to find some patterns. Looking at current state of adaptive strategies for cryptocurrencies is also necessary.
+To address the problems outlined above, I will explore the current trading strategies that are used for trading cryptocurrencies. Research current simulation tools available today and analyze the historic trading data to find some patterns. Looking at current state of adaptive strategies for cryptocurrencies is also necessary.
 
 \subsection*{Organization}
 
 The rest of this work is divided into several chapters.
 
-Firstly, there is the chapter \ref{chapter-background}, which gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In the chapter \ref{chapter-trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In the chapter \ref{chapter-simulation-tools} several existing simulation tools are explored and compared. During chapter \ref{chapter-data-analysis} the backlog of cryptocurrency trading data provided by the supervisor is analyzed and the important events summarized.
+Chapter \ref{chapter-background}, gives the reader a sufficient theoretical background that is required to understand the later chapters of the thesis. In Chapter \ref{chapter-trading-stategies} I look at the existing trading strategies and analyze their effectiveness. In Chapter \ref{chapter-simulation-tools} several existing simulation tools are explored and compared. During Chapter \ref{chapter-data-analysis} the backlog of cryptocurrency trading data provided by the supervisor is analyzed and the important events summarized.
 
-After these chapters the thesis becomes more oriented towards the project goal of the backtester itself. In chapter \ref{chapter-strategy-proposals}, several adaptive strategies are proposed. In chapter \ref{chapter-implementation} the design, development and implementation of the backtester itself is detailed. After that, in chapter \ref{chapter-experiments} the proposed adaptive trading strategies are tested out using the developed backtester and results are evaluated. Finally, limitations and further improvements of practical deployment are discussed in chapter \ref{chapter-limitations-and-improvements}
-
+After these chapters the thesis becomes more oriented towards the project goal of the backtester itself. In Chapter \ref{chapter-implementation} the design, development and implementation of the backtester itself is detailed. After that, in Chapter \ref{chapter-experiments} adaptive trading strategies are proposed and tested using the developed backtester, and results are evaluated. Finally, limitations and further improvements of practical deployment are discussed in Chapter \ref{chapter-limitations-and-improvements}
 
 \chapter{Background}
 \label{chapter-background}
 
-There are some prerequisites that the reader must be familiarized with in order to understand the thesis. The basic knowledge of what a cryptocurrency is must be explained. As well as clear understanding of some terms that are regularly used in the thesis.
+To understand the full context of the thesis, the reader should be familiarized with certain concepts and terms that will be used regularly throughout the thesis. This section aims to provide this context.
 
 \subsection*{List of Terms Generally Used in the Thesis and Among Crypto Investors}
 \begin{itemize}
-    \item Best strategy = A strategy that yields the most money -- has the best profit.
-    \item Bear market = A market in which prices are falling, encouraging selling.
-    \item Bull market = A market in which prices are rising, encouraging buying.
-    \item Fiat currency = Government-issued money.
-    \item spread = Difference between buy and sell value of an asset.
-    \item OHLCV = open, high, low, close, value -- type of candlestick data
-    \item MA = moving average, usually refers to smooth moving average.
-    \item SMA = smooth moving average.
-    \item ROI = Return of investment.
-    \item FOMO = Fear of missing out.
-    \item FUD = Fear, uncertainty, doubt.
-    \item API = Application programming interface.
+    \item Best strategy: A strategy that yields the most money -- has the best profit.
+    \item Bear market: A market in which prices are falling, encouraging selling.
+    \item Bull market: A market in which prices are rising, encouraging buying.
+    \item Fiat currency: Government-issued money.
+    \item Spread: Difference between buy and sell value of an asset.
+    \item OHLCV: open, high, low, close, value -- type of candlestick data
+    \item MA: moving average, usually refers to smooth moving average (SMA).
+    \item SMA: smooth moving average.
+    \item ROI: Return of investment.
+    \item FOMO: Fear of missing out.
+    \item FUD: Fear, uncertainty, doubt.
+    \item API: Application programming interface.
+    \item Sell $\Leftrightarrow$ transfer coins to stablecoins
 \end{itemize}
 
 \section{What is a Cryptocurrency?}
-\emph{Cryptocurrency} is a digital currency that is secured by cryptography~\cite{investopedia-cryptocurrency}. There are algorithms in place that make it nearly impossible to counterfeit or double-spend the currency. Cryptocurrencies are based on a decentralized networks based on the blockchain (see \ref{blockchain}) technology. Because of this the cryptocurrencies are not issued by any central authority (unlike conventional currency). This makes them theoretically immune to government interference or manipulation.
+A \emph{cryptocurrency} is a digital currency that is secured by cryptography~\cite{investopedia-cryptocurrency}. There are algorithms in place that make it nearly impossible to counterfeit or double-spend the currency. Cryptocurrencies are based on a decentralized networks based on the blockchain (see \ref{blockchain}) technology. Because of this the cryptocurrencies are not issued by any central authority (unlike conventional currency). This makes them theoretically immune to government interference or manipulation.
 
 \subsection*{Types of Cryptocurrency}
-\emph{Bitcoin} is the original and to this day the most popular and valuable cryptocurrency. It was invented by an anonymous person called \emph{Satoshi Nakamoto} in 2008 via a white paper~\cite{satoshi}. As of 12th January 2022, there are over 18.9 million bitcoins in circulation with a total market capitalization of around \$810 million~\cite{coinmarketcap}, making it roughly 40\% of the total cryptocurrency market.
+\emph{Bitcoin} is the original and to this day the most popular and valuable cryptocurrency. It was invented by an anonymous person called \emph{Satoshi Nakamoto} in 2008 via a white paper~\cite{satoshi}. As of 12th January 2022, there are over 18.9 million Bitcoins in circulation with a total market capitalization of around \$810 million~\cite{coinmarketcap}, making it roughly 40\% of the total cryptocurrency market.
 
-Each new cryptocurrency claims to have different function and specification. New cryptocurrencies are created daily. Most are not lucrative to investors at all while others surprise the market with their new innovations. For example, Ethereum's \emph{ether} markets itself as a gas for their underlying smart contract\footnote{\url{https://www.investopedia.com/terms/s/smart-contracts.asp}} platform. Another example is Ripple's \emph{XRP} which aims to facilitate international bank transfers. New cryptocurrencies started to rise due to bitcoin's many unsuitable aspects.
+Each new cryptocurrency claims to have different function and specification. New cryptocurrencies are created daily. Most are not lucrative to investors at all, while others surprise the market with their new innovations. For example, Ethereum's \emph{Ether} markets itself as a gas for their underlying smart contract\footnote{\url{https://www.investopedia.com/terms/s/smart-contracts.asp}} platform. Another example is Ripple's \emph{XRP} which aims to facilitate international bank transfers. New cryptocurrencies started to rise due to Bitcoin's many unsuitable aspects.
 
 \label{stablecoins-ref}
 A \emph{stablecoin} is another important type of cryptocurrency. It aims to offer price stability and is backed by a reverse asset\footnote{\url{https://www.investopedia.com/terms/r/reserve-assets.asp}} like the US dollar. They attempt to offer the best of both worlds---the instant processing and security of privacy payments of cryptocurrencies, and the non-volatile character of fiat currencies~\cite{investopedia-stablecoin}.
@@ -55,12 +55,12 @@ A \emph{stablecoin} is another important type of cryptocurrency. It aims to offe
 
 \subsection*{Blockchain}
 \label{blockchain}
-Blockchain or a distributed ledger\footnote{\url{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp}} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers~\cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure \ref{blockchain-figure}.
+Blockchain, or a distributed ledger,\footnote{\url{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp}} is a digital database that is shared and synchronized across a distributed network consisting of very large number of computers~\cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure \ref{blockchain-figure}.
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
-    \caption{Blockchain structure, attribution: Wikimedia TODO: citace}
+    \caption{Blockchain structure, attribution: Wikimedia Commons \cite{wikimedia:blockchain}.}
     \label{blockchain-figure}
 \end{figure}
 
@@ -136,7 +136,7 @@ An example of threshold rebalancing can be seen in Figure \ref{threshold-rebalan
 
 \subsection*{Assumptions}
 \label{rebalance-assumptions}
-One study around rebalancing has been already mentioned, let's look into some of them in more detail now. The studies~\cite{portfolio-diversity} and~\cite{diversify-perform-better} conducted by the Shrimpy organization have found some interesting results. Both of the studies took into account only periodic rebalancing. They have found that the shorter the time period for rebalance, the better the results, maximizing them at 1 hour period. The other interesting discovery was that if the portfolio had more assets in it---was more diversified---the better were the results. The diversification really took advantage of the sell high buy low formula.
+One study around rebalancing has been already mentioned, let's look into some of them in more detail now. The studies~\cite{portfolio-diversity} and~\cite{diversify-perform-better} conducted by the Shrimpy organization have found some interesting results. Both of the studies took into account only periodic rebalancing. They have found that the shorter the time period for rebalance, the better the results, maximizing them at 1 hour period. The other interesting discovery was that if the portfolio had more assets in it---was more diversified---the better the results are. The diversification really took advantage of the sell high buy low formula.
 
 Another study~\cite{rebalancing-strategy} confirmed that a portfolio with a larger number of assets performs better. Some other interesting facts have been observed during the simulations that improve the performance of the portfolio:
 \begin{itemize}
@@ -146,6 +146,7 @@ Another study~\cite{rebalancing-strategy} confirmed that a portfolio with a larg
 \end{itemize}
 
 \section{Dollar Cost Averaging}
+\label{section-dca}
 Dollar Cost Averaging (DCA) is a strategy often recommended to the beginner investors. The investor makes periodic purchases of the asset in an effort to reduce the volatility of the market. This removes much of the detailed work needed to time the market in order to make purchases at the best price.
 
 Through studies~\cite{DCA-study} it seems that the advantage of DCA lies more in the reduced psychological effort in order to time the market than in the actual results. Single buy-and-hold strategy seems to outperform DCA in more cases.
@@ -162,14 +163,14 @@ Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/trading-range.png}
-    \caption{Trading range visualization, attribution: Investopedia~\cite{investopedia:trading-range}}
+    \caption{Trading range visualization, attribution: Investopedia~\cite{investopedia:trading-range}.}
     \label{trading-range-figure}
 \end{figure}
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/dotdash-final-trading-range.png}
-    \caption{Support and resistance levels, attribution: Investopedia~\cite{investopedia:trading-range}}
+    \caption{Support and resistance levels, attribution: Investopedia~\cite{investopedia:trading-range}.}
     \label{sup-and-res-levels}
 \end{figure}
 
@@ -177,14 +178,14 @@ Asset move in certain ranges, as you can see in Figure \ref{trading-range-figure
 \label{section-scalping}
 In scalping you try to profit from very small price movements over short periods, you might exit a trade seconds after entering it. It is best to use automated bots to increase the buying frequency. Scalpers take advantage of increased trading volume to profit. They want to exit before any news or short-term fluctuation changes the market's view of the coin~\cite{best-crypto-daytrading}.
 
-It is needed to have a large bankroll to use this strategy effectively. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees.
+A large bankroll is required for effective use of this strategy. Since the return of investment is really low, the amount gain must be significant enough. It also needs to cover trading fees.
 
 In Figure \ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/scalping.png}
-    \caption{Scalping visualization, attribution: Quora~\cite{best-crypto-daytrading}}
+    \caption{Scalping visualization, attribution: Quora~\cite{best-crypto-daytrading}.}
     \label{scalping-figure}
 \end{figure}
 
@@ -192,7 +193,7 @@ In Figure \ref{scalping-figure} it can be seen how scalping can take quick and s
 \label{bots}
 Automated trading systems---also referred as algorithmic trading---allow investors to set specific rules for enter and exit of a trade that can be automatically executed via computer program. Some platforms claim that 70\% to 80\% of trading done comes from the automated systems~\cite{investopedia-bot-trading}.
 
-One of the advantages is that the automated trading systems take emotions out of the trading---they only work on a specific criteria. The automated trading systems need to use software or APIs available from the broker. The outcome made in this thesis is expected to be used by some automated trading system.
+One of the advantages is that the automated trading systems take emotions out of the trading---they only work on a specific criteria. The automated trading systems need to use software or APIs available from the broker. The product of this thesis is expected to be used by these automated trading systems.
 
 Automated trading systems are one of the only options to use when considering strategies like scalping due to the ease of getting in and out of a trade in seconds without room for failure. The software also allows backtesting the chosen strategy on historical data from which it can be seen how well it does perform.
 
@@ -201,28 +202,28 @@ Arbitrage involves buying cryptocurrency in one market and selling it for higher
 
 There are two types of arbitrage when it comes to cryptocurrencies. The first one focuses on finding prices mismatches across different trading pairs on a single exchange. The other is the one that was already described---locating significant price differences on multiple exchanges. Both types take advantage of an automated trading system that monitors the exchanges and looks for price differences. In Figure \ref{arbitrage-figure} you can see how the first type can be profitable.
 
-Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{\url{https://www.investopedia.com/terms/k/kimchi-premium.asp}} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying bitcoin on US exchanges and selling it on the Korean ones for profit~\cite{hodlbot:day-trading-cryptocurrency}.
+Regarding the second type of exchange. In January a legendary \emph{kimchi premium}\footnote{\url{https://www.investopedia.com/terms/k/kimchi-premium.asp}} happened. Bitcoin traded almost 40\% higher on the Korean exchanges that the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying Bitcoin on US exchanges and selling it on the Korean ones for profit~\cite{hodlbot:day-trading-cryptocurrency}.
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/arbitrage.png}
-    \caption{Arbitrage execution via multiple trading pairs, attribution: HodlBot~\cite{hodlbot:day-trading-cryptocurrency}}
+    \caption{Arbitrage execution via multiple trading pairs, attribution: HodlBot~\cite{hodlbot:day-trading-cryptocurrency}.}
     \label{arbitrage-figure}
 \end{figure}
 
 \section{Stablecoin Trading}
 
-When talking about different trading strategies, the focus is usual on the method of the trategy, not the asset themselves. But when it comes to specific thing like stable coints, there is an opportunity to handle them in such a way to generate profits for us.
+When talking about different trading strategies, the focus is usual on the method of the trategy, not the asset themselves. But when it comes to specific thing like stablecoins, there is an opportunity to handle them in such a way to generate profits for investors.
 The term stablecoin has already been explained in \ref{stablecoins-ref}. It is a coin which has its value pegged to some external reference.
 
-For example it was found in~\cite{make-money-stablecoins} that a de-pegging of stablecoins happens periodically often as a result of temporary shock to the crypto system. During those events profit can be made when trading pegged and de-pegged stablecoins between each other. The author chose DAI and USDC pair for their experiments. It was shown that between August 2019 and March 2020 the spread between DAI and USDC has been fluctuating between 2 to 3\%. Advantage could be taken of this fact---selling DAI for USDC when the price is high and buy it back for USDC when the price returns to the peg.
+For example it was found in~\cite{make-money-stablecoins} that a de-pegging of stablecoins happens periodically often as a result of temporary shock to the crypto system. During those events profit can be made when trading pegged and de-pegged stablecoins between each other. The author chose the stablecoins DAI\footnote{\url{https://coinmarketcap.com/currencies/multi-collateral-dai/markets/}} and USDC\footnote{\url{https://coinmarketcap.com/currencies/usd-coin/}} for their experiments. It was shown that between August 2019 and March 2020 the spread between DAI and USDC has been fluctuating between 2 to 3\%. Advantage could be taken of this fact---selling DAI for USDC when the price is high and buy it back for USDC when the price returns to the peg.
 
 One thing to remember is to only trade when the spread is sufficient so that the trading fees won't make the profit diminish.
 
 \chapter{Existing Simulation Tools for Testing Trading Strategies}
 \label{chapter-simulation-tools}
 
-In this chapter different simulation tools, their application, usefulness and differences, are discussed. We must distinguish few types of simulation tools when talking about them. When a novice investors first sets foot in the cryptocurrency market, they might be startled by the complexity of the market. They want to learn, but maybe they do not want to lose all their money in the process. That is the perfect opportunity for a manual simulated tool. Investors can invest fake virtual money while all of the market's trading data is accurate and up to date.
+In this chapter different simulation tools, their application, usefulness and differences, are discussed. When discussing simulation tools, their different types must be distinguished. When novice investors first set foot in the cryptocurrency market, they might be startled by the complexity of the market. They want to learn, but maybe they do not want to lose all their money in the process. That is the perfect opportunity for a manual simulated tool. Investors can invest fake virtual money while all of the market's trading data is accurate and up to date.
 
 \section*{Types of cryptocurrency simulators}
 
@@ -234,17 +235,17 @@ In this chapter different simulation tools, their application, usefulness and di
 
 \emph{Cryptocurrency market games} are games that have less emphasis on the trading skills and more on the entertainment of trading. They are mostly fun way to compete with your friends or strangers. The player that creates the strongest portfolio is considered the best. The winner is then the player with the best investments at the end of the specific game.~\cite{top-stocks-crypto-trading-simulators}.
 
-\emph{Virtual trading simulators} are simulators where users can closely track the real market and actively trade cryptocurrencies for virtual profit~\cite{top-stocks-crypto-trading-simulators}. The main goal is to use the simulated experience for building and improving the real life trading skills of the user. You can test-drive and backtest your strategy here.
+\emph{Virtual trading simulators} are simulators where users can closely track the real market and actively trade cryptocurrencies for virtual profit~\cite{top-stocks-crypto-trading-simulators}. The main goal is to use the simulated experience for building and improving the real life trading skills of the user. You can test-drive and backtest your strategy with these.
 
-\emph{Backtesting simulation tools} are similar to the virtual trading simulators in a way, that it aims to make its users better at trading. While the conventional trading simulators only work in real time, there are simulation tools where its users can input chosen strategy and see it run across multiple years of historical data and see how it performed in seconds. This is the type of simulation tools that will be used in this thesis. It basically uses backtesting for the cryptocurrency strategy's validation.
+\emph{Backtesting simulation tools} are similar to the virtual trading simulators in a way, that it aims to make its users better at trading. While the conventional trading simulators only work in real time, there are simulation tools where its users can input chosen strategy and see it run across multiple years of historical data and see how it performed in seconds. This is the type of simulation tool that will be used in this thesis. It basically uses backtesting for the cryptocurrency strategy's validation.
 
 \section{What is Backtesting?}
-The section was inspired by this source~\cite{backtesting-crypto-trading-strategies}.
+The section was inspired by the Bybit article about backtesting cryptocurrency strategies ~\cite{backtesting-crypto-trading-strategies}.
 
-Backtesting means applying a trading strategy or some analytical method on a historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
+Backtesting means applying a trading strategy or some analytical method on historical data and analyzing the performance of the current strategy or method. If the strategy shows promise, the trader may use it in a live environment on an exchange. Backtesting does not guarantee future results, but can be a good indicator and filter the effective strategies from the ineffective ones. Backtesting can also detect recurring patterns and exploit those patterns for profits.
 
 \subsection*{Discretionary Backtesting}
-Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell order with each signal they receive. They trader may decide to conduct the testing using software such as TradingView\footnote{\url{https://www.tradingview.com/}}.
+Discretionary backtesting is a manual form of backtesting. The trader manually places buy and sell orders with each signal they receive. The trader may decide to conduct the testing using software such as TradingView\footnote{\url{https://www.tradingview.com/}}.
 
 The trader will set a strategy in place, then he will press the replay button (shown in Figure \ref{tradingview-figure}) and select period of history to test on. The trader will then make discretionary decisions to buy or sell based on the signals.
 
@@ -253,7 +254,7 @@ Manual testing is a great way to control trader's emotions since they may feel t
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/tradingview-replay.png}
-    \caption{TradingView replay functionality, attribution: TradingView~\cite{backtesting-crypto-trading-strategies}}
+    \caption{TradingView replay functionality, attribution: TradingView~\cite{backtesting-crypto-trading-strategies}.}
     \label{tradingview-figure}
 \end{figure}
 
@@ -292,29 +293,29 @@ OHLCV abbreviations explained~\cite{kaiko-ohlcv}:
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/OHLCV-data.png}
-        \caption{How can OHLCV data look like, attribution: Kaiko~\cite{kaiko-ohlcv}}
+        \caption{How can OHLCV data look like, attribution: Kaiko~\cite{kaiko-ohlcv}.}
         \label{OHLCV-figure}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/candlestick-data.png}
-        \caption{Candlestick explained, attribution: Investopedia~\cite{investopedia:candlestick-charts}}
+        \caption{Candlestick explained, attribution: Investopedia~\cite{investopedia:candlestick-charts}.}
         \label{candlestick-figure}
     \end{subfigure}
-    \caption{OHLCV Candlestick Data}
+    \caption{OHLCV Candlestick Data.}
 \end{figure}
 
-There are several imperfection to the OHLCV candlestick data. Firstly, there is no information which prices have been traded for which volume. Additionally, if a trader has a large account, there might not be enough cryptocurrency available to trade without moving the market price---negatively impacting the backtest results. Traders typically use candlestick data because it is easiest to acquire.
+There are several imperfections in the OHLCV candlestick data. Firstly, there is no information which prices have been traded for which volume. Additionally, if a trader has a large account, there might not be enough cryptocurrency available to trade without moving the market price---negatively impacting the backtest results. Traders typically use candlestick data because it is easiest to acquire.
 
 \subsection*{Order Book Data}
 An order book is one of the best data sources and resolves some challenges of the candlestick data. It includes snapshots of the market, including the market's price, volume and depth. With this type of data traders have a better representation of what orders are available at any given time.
 
-It allows testers to simulate bid-ask spread, slippage and liquidity when testing a particular strategy. All of these unavailable to testers using candlestick data. The challenge with order book data is that it is hard to come by. There is tremendous amount of data with order book snapshots so the exchanges choose not to hold the data, as it would be too expensive to store. Therefore usually the developers needs to collect and store the data from the exchange themselves or access the snapshots through a third-party service.
+It allows testers to simulate bid-ask spread, slippage and liquidity when testing a particular strategy. All of these are unavailable to testers using candlestick data. The challenge with order book data is that it is hard to come by. There is tremendous amount of data with order book snapshots so the exchanges choose not to hold the data, as it would be too expensive to store. Therefore usually the developers need to collect and store the data from the exchange themselves or access the snapshots through a third-party service.
 
 \section{Performance Analysis}
 \label{performance-analysis}
-This section was again inspired by the~\cite{backtesting-crypto-trading-strategies} source.
+The section was again inspired by the Bybit article about backtesting cryptocurrency strategies ~\cite{backtesting-crypto-trading-strategies}.
 
 Performance of the given trading system or strategy is commonly gauged against parameters such as profit and loss (P\&L), success ratio, and Sharpe ratio.
 
@@ -341,10 +342,10 @@ where:
     \item $R_p$ = standard deviation of the portfolio's excess return
 \end{itemize}
 
-Generally, the greater the value of the Sharpe ratio, the more attractive the risk-adjusted return. The yield for the US Treasury bound is often used as the risk-free ratio. One of the limitation of the Sharpe ratio is that it assumes that the returns are normally distributed, which is simply not true.
+Generally, the greater the value of the Sharpe ratio, the more attractive the risk-adjusted return. The yield for the US Treasury bound is often used as the risk-free ratio. One of the limitation of the Sharpe ratio is that it assumes that the returns are normally distributed, which is simply not true. Financial markets are not normally distributed, because of large number of surprising drops and spikes in the price. Additionally, it would mean that price movements in either direction is equally risky. The financial reality tells us that that is not the case.
 
 \section{Popular Simulation Tools}
-Some popular and easily available simulation tools are Holderlab\footnote{\url{https://holderlab.io/}}, Zenbot\footnote{\url{https://github.com/DeviaVir/zenbot}}, Gekko\footnote{\url{https://gekko.wizb.it/}}, Altrady\footnote{\url{https://www.altrady.com/}}, and Binance's Python backtesting\footnote{\url{https://www.binance.com/}}.
+Some popular and easily available simulation tools are Holderlab,\footnote{\url{https://holderlab.io/}} Zenbot,\footnote{\url{https://github.com/DeviaVir/zenbot}} Gekko,\footnote{\url{https://gekko.wizb.it/}} Altrady,\footnote{\url{https://www.altrady.com/}} and Binance's Python backtesting\footnote{\url{https://www.binance.com/}}.
 
 \section{What type of cryptocurrency simulation tool should we use?}
 When looking at the explored simulation tools it is clear that an automated backtesting program will be used to test the proposed adaptive trading strategy. I will use the OHLCV candlestick data provided by the supervisor and look for order book data if needed. When evaluating the strategy I will not only look at P\&L ratio, but also the average winner and losing trades, risk-to-reward ratio and more complex tools like Sharpe ratio.
@@ -353,7 +354,7 @@ When looking at the explored simulation tools it is clear that an automated back
 When looking at possible languages to use I consider available libraries and frameworks. I decided to use Python for its many available trading and backtesting frameworks and because of my personal experience with it for data collection.
 
 \subsection*{Backtesting Frameworks}
-Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy}\footnote{\url{https://numpy.org/}}, \emph{pandas}\footnote{\url{https://pandas.pydata.org/}} and \emph{matplotlib}\footnote{\url{https://matplotlib.org/}} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by~\cite{python-backtesting-frameworks} source.
+Let's look at the available backtesting frameworks for Python. Using frameworks might make things easier for us. Between the candidates for backtesting frameworks I put PyAlgoTrade, bt, backtrader, zipline and Blueshift. Apart from that \emph{numpy},\footnote{\url{https://numpy.org/}} \emph{pandas}\footnote{\url{https://pandas.pydata.org/}} and \emph{matplotlib}\footnote{\url{https://matplotlib.org/}} libraries will be probably of great use for general data transformation and visualization. Following section's lines have been inspired by~\cite{python-backtesting-frameworks} source.
 
 When reviewing backtesting frameworks it's always good to ask what asset classes you are trading, what data frequency and detail is required and what order type should be supported by the chosen framework. Some frameworks go beyond backtesting and include live trading capabilities that make it easier for potential deployment.
 
@@ -377,15 +378,15 @@ We will now look at a few backtesting frameworks for Python and lightly compare 
 \chapter{Trading Data Analysis}
 \label{chapter-data-analysis}
 
-In this chapter the history data of cryptocurrency market is analyzed. We try to find trends and patterns that we can then use to our advantage when coming up with an adaptive trading strategy.
+In this chapter the historical data of cryptocurrency market is analyzed. We try to find trends and patterns that we can then use to our advantage when coming up with an adaptive trading strategy.
 
 \section{Types of Analysis}
-This section was inspired by the~\cite{binance:bitcoin-price-history} source.
+This section was inspired by the Binance Academy article about Bitcoin's price history ~\cite{binance:bitcoin-price-history}.
 
-Before we analyze the cryptocurrencies themselves, let's take a look at ways how to analyze them. There are generally three possible methods: technical, fundamental and sentiment analysis. Each type has its strength and weaknesses. Combining them together creates a clearer picture.
+Before we analyze the cryptocurrencies themselves, let's take a look at ways how to analyze them. There are generally three possible methods: technical, fundamental and sentiment analysis. Each type has its strengths and weaknesses. Combining them together creates a clearer picture.
 
 \subsection*{Technical Analysis -- TA}
-The main focus here is on the historical price and volume data. We can create 50-day moving average (SMA) by taking the last 50 days' prices and averaging them. If a cryptocurrency has been trading under its 50-day SMA for a few weeks and suddenly breaks through, it may be seen as a sign of possible recovery.
+The main focus here is on the historical price and volume data. We can create 50-day moving average (SMA) by taking the last 50 days' prices and averaging them. If a cryptocurrency has been trading under its 50-day SMA for a few weeks and suddenly breaks through, it may be seen as a sign of possible recovery. The technical analysis is the analysis mostly used in the thesis.
 
 \subsection*{Fundamental Analysis -- FA}
 Fundamental analysis takes its merits from the fundamental, intrinsic value of a project or cryptocurrency. It concentrates on internal and external factors to try to establish the asset's actual value. For example, you could take a look at daily cryptocurrency's transaction to measure the network's popularity. If the number of transactions rises over time, it may suggest the value of the project and that its price may rice.
@@ -394,92 +395,85 @@ Fundamental analysis takes its merits from the fundamental, intrinsic value of a
 Sentiment analysis is the use of market sentiment to predict the price movements. Market sentiment represents the feelings and mood of investors towards an asset. These are typically categorized into bullish and bearish sentiments. A significant increase in google searches about purchasing some cryptocurrency may suggest a market sentiment.
 
 \section{Bitcoin Price Analysis}
-This section was inspired by the~\cite{binance:bitcoin-price-history} source.
+This section was inspired by the Binance Academy article about Bitcoin's price history~\cite{binance:bitcoin-price-history} and Investopedia's article on Bitcoin's price history~\cite{investopedia:bitcoin-price-history}.
 
 First thing to analyze is Bitcoin in particular. No other cryptocurrency has such an impact on the cryptocurrency market and still remains to have impact to this day. Bitcoin has started it all, so it is only appropriate to analyze it completely. We can see the linear and logarithmic graphs in Figures \ref{btc-linear-figure} and \ref{btc-log-figure} respectively.
 
-While the linear graph shows us the actual price changes, the logarithmic graph is also useful to us. It shows us relative price increases of the Bitcoin. It represents a percentage increase in price, change from \$10 to \$20 is the same as \$1000 to \$2000 since the investor will in both cases gain a profit of 100\%. Because of this, logarithmic scale is usually often for technical analysis.
+While the linear graph shows us the actual price changes, the logarithmic graph is also useful to us. It shows us relative price increases of the Bitcoin. It represents a percentage increase in price, change from \$10 to \$20 is the same as \$1000 to \$2000 since the investor will in both cases gain a profit of 100\%. Because of this, logarithmic scale is usually often used for technical analysis.
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_linear.png}
-    \caption{Bitcoin linear price graph, attribution: CoinMarketCap~\cite{coinmarketcap}}
+    \caption{Bitcoin linear price graph, attribution: CoinMarketCap~\cite{coinmarketcap}.}
     \label{btc-linear-figure}
 \end{figure}
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_log.png}
-    \caption{Bitcoin logarithmic price graph, attribution: CoinMarketCap~\cite{coinmarketcap}}
+    \caption{Bitcoin logarithmic price graph, attribution: CoinMarketCap~\cite{coinmarketcap}.}
     \label{btc-log-figure}
 \end{figure}
 
-\section{Data Analysis Provided by Supervisor}
+Bitcoin's history can be nicely seen in Figure \ref{figure-investopedia-btc-history}. When Bitcoin was introduced in year 2009, it had a price of zero. It took until July 17, 2010 for the price to jump to mere \$0.09. From April 2011 to June 2011 the Bitocoin gained 2,960\%, rising from \$1.0 and peaking at \$29.60. A recession followed and Bitcoin bottomed out at \$2.05 by November. 2012 proved to be generally uneventful year for Bitcoin. 2013 again witnessed strong gains in price. It reached \$230 in April. In December, the Bitcoin spiked to \$1237 and fell to \$687 three days later. 2014 did not register any major spikes. During the years of 2015 and 2016, the prices slowly climbed, reaching over \$900 by the end of 2016.
 
-TODO:
+In 2017, Bitcoin's price hovered around \$1,000 until it broke \$2,000 in May. It skyrocketed on December 15 to \$19,345. That is where the Bitcoin gained its first huge media coverage. Mainstream investors, governments, economics took notice. Other cryptocurrencies began quick developing to compete with the Bitcoin. Bitcoin's price moved sideways during the next two years with small bursts of price.
 
-\begin{itemize}
-    \item Bitcoin's difficulty has been increased + Elon Musk tweet -> correlation
-    \item China banned cryptocurrencies
-    \begin{itemize}
-        \item how long did the recession last and how it developed
-    \end{itemize}
-    \item why we do not see small recession as bear market
-    \item most cryptocurrencies are driven by bitcoin change, that means they are driven by world events.
-\end{itemize}
+When the economy shutdown in 2020 due to the COVID-19 pandemic---Bitcoin woke up once again. The cryptocurrency started the year around \$7,000. The shutdown combined with subsequent government policy made investors fearful about the global economy and accelerated Bitcoin's rise. On 23rd November, Bitcoin was trading at \$19,157. Bitcoin's price rised to just under \$29,000 in December 2020, increasing 416\% from the start of the year.
 
-\chapter{Adaptive Trading Strategy Proposals}
-FIXME: Most of the proposals are also mentioned in the chapter Experiments, should I still include it? Maybe I could write the theory here and leave the experiments only for implementation and results. Some not implemented strategies could also be put here.
+Bitcoin took less than a month of 2021 to beat the record of 2020, surpassing \$40,000 by January 7. By mid-April, Bitcoin reached new all-time high of over \$60,000 as Coinbase\footnote{\url{https://www.coinbase.com/}}, a cryptocurrency exchange, went public in the stock market. Bitcoin was once again in the front of the media coverage, which propelled its price more upwards, to the peak of \$63,000 on April 12, 2021.
 
-\label{chapter-strategy-proposals}
+By the Summer, prices went down by 50\%, hitting just under \$30,000 in July. Another bull run started in September, with prices scraping \$52,600, but it was took down to \$40,700 two weeks later. On November 10, Bitcoin reached its all-time high once again, \$68,990. In December 2021, prices fell down again as uncertainty about inflation alongside the new COVID-19 variant, Omicron, began to scare the investors.
 
-\section{Proposals}
-
-\subsection*{Bull Market Behavior}
-During the possible Bull Market we hold coins, rebalance and buy more of them.
-
-\subsection*{Bear Market Behavior}
-During Bear Market we transfer our holding to stablecoins (in certain percentage) so that the market fall does not impede us.
-
-\section{Bitcoin Risk Metric}
-This term was most probably coined and invented by Benjamin Cowen on his youtube channel \footnote{\url{https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg}}, or at least it is mostly associated with his figure. It is an alogirthm that prescribes a certain risk value, between 0 and 1, to each day of bitcoin price. It takes into account the maximum value that has already occured so far in the history. This strategy is often favourable by DCA. Depending on the risk scale, you either invest more if the risk is lower and invest less (or not at all) if the risk is high.
-
-The metric oscillates between highs and lows. There have been 5 high points of the metric since the year 2015.
-
-\subsection*{DCA}
-\label{DCA}
-
-\section{Adjusted Risk Metric}
-
-\section{Other Optimizations}
-
-\subsection*{24H Volume---Correlation}
-
-\subsection*{Number of Larger Drops in Market}
-
-\subsection*{Machine Learning Time Series Optimizations}
-
-\section{Short-term Trading}
-When focusing on short-term trading, range trading and scalping discussed in Sections \ref{section-range-trading} and \ref{section-scalping} respectively. We try to guess the support and resistance levels.
-
-When talking about technical analysis, we need to make support and resistance levels into an account. They can be predicted in several ways. Round numbers are taken into account, like \$50 and \$100, since investors usually put stop orders at such whole number points. These points then serve as resistance levels since it takes very large number of purchases to absorb the sales. Moving average can be used to estimate the levels, too, as you can see in the Figure \ref{ma-support-resistance}. Other indicators include the golden ratio, number of touches and others. This paragraph has been inspired by the \cite{investopedia:support-and-resistance} source, where more detailed information can be found.
-
-In the thesis, moving averages are used to estimate the support and resistance levels and make according trades.
+From the observed events, we can see that media coverage drives the price upwards. And that Bitcoin is susceptible to economic circumstances, as seen during the COVID-19 pandemic. One other intersting fact is that on June 9, 2021, El Salvador made Bitcoin legal tender---meaning it can be used for any transaction where business accept it. It is the first country to do this to this day.
 
 \begin{figure}[!hbt]
     \centering
-    \includegraphics[width=\columnwidth]{figures/ma-support-resistance.png}
-    \caption{Expected support and resisted levels computed by a moving average. Attribution: Investopedia \cite{investopedia:support-and-resistance}}
-    \label{ma-support-resistance}
+    \includegraphics[width=\columnwidth]{figures/investopedia-bitcoin-price-history.png}
+    \caption{Bitcoin's price history in detail, attribution: Investopedia~\cite{investopedia:bitcoin-price-history}.}
+    \label{figure-investopedia-btc-history}
 \end{figure}
 
+\subsection*{Elon Musk Tweets}
+This section has been inspired by the Vox article \cite{vox:elon} and the CoinDesk article \cite{coindesk:elon}
 
+One of the most influential figure when it comes to his tweets is Elon Musk, and when it comes to the cryptocurrency market, it applies in double. The price roller coaster of 2021 started when Elon Musk tweeted that Tesla would no longer accept Bitcoin as payment due to envionmental concerns. In result, the price of Bitcoin dropped by 15\%. After suggesting that Tesla is selling Bitcoin, the price continued to plummet down. The next tweet stabilized the market for a bit, Musk ensured that Tesla has not sold any Bitcoin. A broken heart emoji with the \#Bitcoin hashtag ensured another fall. A price has however began to rise once again, when Mush had tweeted that Tesla would once again start accepting Bitcoin.
+
+The whole event can be seen in Figure \ref{figure-vox-elon}.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/vox-elon.png}
+    \caption{Bitcoin's price correlation with Elon Musk's tweets, attribution: Vox~\cite{vox:elon}.}
+    \label{figure-vox-elon}
+\end{figure}
+
+Similar events transpired, but with the Dogecoin\footnote{\url{https://coinmarketcap.com/currencies/dogecoin/}} cryptocurrency in mind. The observed events can be seen in Figure \ref{figure-coindesk-elon}.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/coindesk-elon.png}
+    \caption{Dogecoin's price correlation with Elon Musk's tweets, attribution: CoinDesk~\cite{coindesk:elon}.}
+    \label{figure-coindesk-elon}
+\end{figure}
+
+As the reader can see, there is a correlation between Elon Musk's cryptocurrency tweets and the cryptocurrency prices. A quick reaction to his tweets may lead to significant profits when acted out accordingly, since there is a time before the market catches up with the tweets.
+
+\subsection*{China Ban On Cryptocurrencies}
+After the China ban on cryptocurrency trading and mining in May 2021 \cite{china-ban-2}, the Bitcoin price fell down. It followed one week after Elon Musk's tweet about Tesla no longer accepting Bitcoin. These joint events showed that media coverage and world events can easily influence the price of Bitcoin, expecially when combined.
+
+\subsection*{What Influences the Price of Cryptocurrencies?}
+Since most coins are dependent on the Bitcoin's price movement \cite{investopedia:altcoins}, by studying what influences Bitcoin we can understand how other coins act. The prices firstly depend on the perceived value and supply and demand \cite{investopedia:bitcoin-price-history}. If people believe a cryptocurrency is worth a specific amount, they purchase it, especially if they think it will increase in price. Since there will ever be only 21 million Bitcoins in circulation, the closer the supply gets to the limit, the higher should be the price.
+
+As described before, media coverage, regulation and other world news can easily influence the price of cryptocurrencies. Some interesting discovery can be made. By closely (preferably via an automated way) watching the world news and quickly reacting, a considerable profit can be made.
 
 \chapter{Adaptive Strategy Design and Implementation}
 \label{chapter-implementation}
 
+Before we get to the strategy proposals, the design and implementation of the backtester program, used to test and analyze the strategies, needs to be discussed. The strategy proposals are immediately supported by implementation and useful Figures in this way. And it is more logically presented in this way, since the implementation is tied to the proposals themselves.
+
 \section{Design}
-During my search, I initially tinkered with several frameworks to test out their capabilities. The basic idea was that if a framework would prove satisfactory I would use it and tweak it to my needs so I do not reinvent the wheel again.
+During my reserach, I initially tinkered with several frameworks to test out their capabilities. The basic idea was that if a framework would prove \emph{satisfactory} I would use it and tweak it to my needs so I do not reinvent the wheel again. A satisfactory framework in my definition would be easy to work with, easy to learn and matched to the needs of the proposed adaptive strategies.
 
 Alas, during my tinker with Python frameworks as \emph{PyAlgoTrade}, \emph{backtrader} or \emph{zipline}, the frameworks were either outdated or they did not meet my needs of adaptive strategies.
 
@@ -492,7 +486,7 @@ The general idea is to build a backtesting command line interface (CLI) applicat
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/structure-diagram.png}
-    \caption{General design structure of the backtester}
+    \caption{General design structure of the backtester.}
     \label{structure-diagram}
 \end{figure}
 
@@ -506,13 +500,13 @@ Strategy classes with their most important attributes are shown in Figure \ref{f
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/strategy-class-diagram.png}
-    \caption{Class diagram of strategies of the backtester}
+    \caption{Class diagram of strategies of the backtester.}
     \label{figure-strategy-class-diagram}
 \end{figure}
 
 
 \section{Fetch of Trading Data}
-Initial trading data that was used for the experiments were initially provided by the supervisor. Due to their incompletness and due to them being out-of-date, a need for more complete data was created.
+Initial trading data that was used for the experiments were initially provided by the supervisor. Due to their incompletness and due to them being out-of-date, there was a need for more complete data.
 
 I designed the data fetch into a few categories. I then researched each category and chose the best suited API provider for the thesis.
 
@@ -520,7 +514,7 @@ I designed the data fetch into a few categories. I then researched each category
 I needed OHLCV 5 minute and 1 hour data to test various strategies this way. After going through some recommendations I settled with Binance API\footnote{\url{https://www.binance.com/en/support/faq/c-6}} for OHLCV data since I already had an account with them. All that is needed are public and secret API keys to make the requests.
 
 \subsection*{Historical BTC}
-One of the disadvantages of Binance API is that it only goes as far back as it started. That is to the July 2018. When calculating things like bitcoin risk metric it is advantegous to have earlier data available. To this end I used the free and public CoinGecko API\footnote{\url{https://www.coingecko.com/en/api/documentation}}. The \texttt{coins/market\_chart} endpoint was ideal for this use case.
+One of the disadvantages of Binance API is that it only goes as far back as it started. That is to the July 2018. When calculating things like Bitcoin risk metric it is advantegous to have earlier data available. To this end I used the free and public CoinGecko API \cite{coingecko:documentation}. The \texttt{coins/market\_chart} endpoint was ideal for this use case.
 
 Historical data have daily interval and include only the price and volume of each day, so it is not the standard OHLCV data. The data dates to the year 2013.
 
@@ -536,38 +530,16 @@ Ideally, we would get all of our data from single API provider. Unfortunately, I
 
 The only API that needs public and private keys is the Binance API. The keys are hidden in the \texttt{.env} file and got from the configuration library called \texttt{python-decouple}\footnote{\url{https://pypi.org/project/python-decouple/}}
 
-\section{Usage}
-FIXME: Move this section to appendices---manual
-
-Usage is defined in the standard environment of bash command line interface. All needed commands are provided by the Makefile and can be listed by running \texttt{make}.
-
-Install dependencies:
-\begin{minted}{bash}
-make installdeps
-\end{minted}
-
-Run the project:
-\begin{minted}{bash}
-# using Makefile
-make run
-
-# using the module itself + argument file
-python -m backtester -f args.yaml
-
-# using the module itself + CLI arguments
-python -m backtester -s 2020-01-01 -e 2022-01-01 -i 1d -p BTCUSDT ETHUSDT
-\end{minted}
-
 \section{Data Input}
 There are a few different program arguments that are needed to be specified.
 
-Pairs are used to select the cryptocurrency pairs we want to trade. Since Binance requires both of the assets to be cryptocurrencies we cannot select \$USD. Closest asset to it is the token that is pegged against \$USD, USDT. So if you want to choose trading pair where the price of bitcoin and \$USD is compared, choose BTCUSDT.
+Pairs are used to select the cryptocurrency pairs we want to trade. Since Binance requires both of the assets to be cryptocurrencies we cannot select \$USD. Closest asset to it is the token that is pegged against \$USD, USDT. So if you want to choose trading pair where the price of Bitcoin and \$USD is compared, choose BTCUSDT.
 
 Starting and ending date do exactly as the name suggests, they define the data range in which the data is fetched. The interval argument defines the OHLCV interval between each data, it uses Binance abbreviations and there are several possible values. The values I mostly used were 5m and 1h interval, that means that the OHLCV data fetched will be either 5 minute or 1 hour apart.
 
-Due to a possbile long list of argument values, the arguments can be saved into a file in the YAML\footnote{\url{https://yaml.org/}} format. Its schema is then validated and arguments dictionary got via the \texttt{schema}\footnote{\url{https://pypi.org/project/schema/}} and \texttt{PyYAML}\footnote{\url{https://pypi.org/project/PyYAML/}} Python libraries respectively.
+Due to a possbile long list of argument values, the arguments can be saved into a file in the YAML\footnote{\url{https://yaml.org/}} format. Its schema is then validated and arguments dictionary retrieved via the \texttt{schema}\footnote{\url{https://pypi.org/project/schema/}} and \texttt{PyYAML}\footnote{\url{https://pypi.org/project/PyYAML/}} Python libraries respectively.
 
-Among optional arguments belongs the logging level. It defines the logging level used for logging that informs the users of filesystem manipulations, simulation progress and results, or errors and debug information. Defaultly it is set to level INFO.
+Among optional arguments belongs the logging level. It defines the logging level used for logging that informs the users of filesystem manipulations, simulation progress and results, or errors and debug information. By default it is set to level INFO.
 
 \section{Other Helpful Structures}
 
@@ -598,7 +570,7 @@ After activating the environment and installing the required packages via \textt
 Makefile is used to put a common interface for all the other commands and tools. It is recommended to use the targets from Makefile for running and developing the project. All lint, format, containerization, testing, latex translation targets are located there.
 
 \subsection*{Testing}
-Simple testing was set up using the pytest framework\footnote{\url{https://docs.pytest.org/}}. The test files can be found in the \texttt{tests} folder. The tests serve to verify the basic functionality of the implemented trading strategies.
+Simple testing was set up using the pytest framework\footnote{\url{https://docs.pytest.org/}}. The test files can be found in the \texttt{tests} folder. The tests serve to verify the basic functionality of the implemented trading strategies. The current tests cover the 58\% of the code base, the coverage can be checked by running makefile target \texttt{coverage}.
 
 \chapter{Adaptive Strategy Experiments}
 \label{chapter-experiments}
@@ -610,7 +582,7 @@ All of the graphs decpited in the section have been produced by the implemented 
 \section{Evaluation Strategy}
 Before we get to the individual experiments, the main process for evaluating the experiments must be described. There are 2 caveats to this process. Firstly we need to define the strategy that tells the probability of market going up or down, let us call it the risk metric. And secondly we need to find the optimal strategy that works with this metric---that means an algorithm that decides what to do when the metric is at such level and what to do if it is in a different level---finite state machine.
 
-Basically, the thesis can be split into a function and a finite state machine. The function's inputs is the today date and some kind of other data used for calculating the metric (e.g. historical price of Bitcoin). Function then calculates the risk (limited between <0,1>) for the current day and passes the value to the finite state machine. The automata then decides on what to do, taking its previous steps into the account.
+Basically, the thesis can be split into a function and a finite state machine. The function's inputs is the today date and some kind of other data used for calculating the metric (e.g. historical price of Bitcoin). The function then calculates the risk (limited between <0,1>) for the current day and passes the value to the finite state machine. The automata then decides on what to do, taking its previous steps into the account.
 
 \subsection*{Finite State Machine behavior}
 The most basic idea is to transfer the coins to stablecoins when the risk is near the high boundary and transfer back to coins when it is again nearing the lower boundary. Alternatively, when using the DCA strategy \ref{DCA}, we do not invest when the risk is high and invest more money the lower the risk is.
@@ -646,7 +618,7 @@ Coin to stablecoin ratios can look like this:
 
 
 \subsection*{Used Datasets}
-We will be testing with a few portfolios. Every portfolio will start with base 1000\$ USD budget. Portfolio A is using only the bitcoin and ethereum, these two assets show promising and stable growth and have been the 2 biggest contributors to total market capitalization. As of May 1st 2022, the two cryptocurrencies contribute to almost 62\% of total market capitalization~\cite{coinmarketcap:globalmetrics}. Both cryptocurrencies of the portfolio date back to the earliest Binance data point.
+We will be testing with a few portfolios. Every portfolio will start with base 1000\$ USD budget. Portfolio A is using only the Bitcoin and ethereum, these two assets show promising and stable growth and have been the 2 biggest contributors to total market capitalization. As of May 1st 2022, the two cryptocurrencies contribute to almost 62\% of total market capitalization~\cite{coinmarketcap:globalmetrics}. Both cryptocurrencies of the portfolio date back to the earliest Binance data point.
 
 For portfolio B, the top 20 coins (not tokens) listed on the CoinMarketcap~\cite{coinmarketcap} (as of 1st May 2022), based on market capitalization and disregarding stablecoins, have been chosen. The total age of the portfolio is much younger, dating back to 2020. The difference between the portfolios should show how the strategies change depending on the portfolio size and disparity.
 
@@ -702,21 +674,22 @@ We will invest 1000\$ every time to make strategies comparable. Performance of t
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/benchmark-A.png}
-    \caption{Portfolio A: HODL and Rebalance performance}
+    \caption{Portfolio A: HODL and Rebalance performance.}
     \label{figure-benchmark-1}
 \end{figure}
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/benchmark-B.png}
-    \caption{Portfolio B: HODL and Rebalance performance}
+    \caption{Portfolio B: HODL and Rebalance performance.}
     \label{figure-benchmark-2}
 \end{figure}
 
 \section{Implementation of Strategies---Risk Metric}
 \label{section-strategies}
+\emph{Bitcoin risk metric} term was most probably coined and invented by Benjamin Cowen on his youtube channel \cite{youtube:cowen-yt-channel}, or at least it is mostly associated with his figure. It is an alogirthm that prescribes a certain risk value, between 0 and 1, to each day of Bitcoin price. It takes into account the maximum value that has already occured so far in the history. This strategy is often favourable by DCA. Depending on the risk scale, you either invest more if the risk is lower and invest less (or not at all) if the risk is high. The metric oscillates between highs and lows. There have been 5 high points of the metric since the year 2011.
 
-Unfortunately, Benjamin Cowen does not have his risk metric calculation formula publicly available. In a past video~\cite{youtube:cowen-moving-average}, he hinted that one piece used are the moving averages. Specifically when you take 50 day MA and you divide it by 50 week MA. That is the first value used.
+Unfortunately, Benjamin Cowen does not have his risk metric calculation formula publicly available. In a past video~\cite{youtube:cowen-moving-average}, he hinted that moving averages are used for the computation. Specifically when you take 50 day moving average and you divide it by 50 week moving average. That is the first value used.
 
 \subsection*{Testing Out the 50 Week / 50 Days}
 \label{subsection-50week50days}
@@ -730,14 +703,14 @@ Here are the results projected on historical price of Bitcoin. Results are shown
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-scale.png}
-    \caption{Historical Price of Bitcoin with Risk Metric Scale}
+    \caption{Historical Price of Bitcoin with Risk Metric Scale.}
     \label{figure-50week-scale}
 \end{figure}
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-colorcoded.png}
-    \caption{Colorcoded Risk Metric}
+    \caption{Colorcoded Risk Metric.}
     \label{figure-50week-colorcoded}
 \end{figure}
 
@@ -777,21 +750,21 @@ The $\log$ part could be further tweaked with, but I have found that it works qu
 
 \subsection*{Using Total Market Capitalization Data}
 \label{subsection-marketcap}
-Other thing considered is using the total market capitalization data instead of the historical price for bitcoin. This metric makes sense when using more types of cryptocurrencies than just bitcoin. All calculations and formulas stay the same, the only that changes is the data used---switching bitcoin data for total market capitalization.
+Other thing considered is using the total market capitalization data instead of the historical price for Bitcoin. This metric makes sense when using more types of cryptocurrencies than just Bitcoin. All calculations and formulas stay the same, the only that changes is the data used---switching Bitcoin data for total market capitalization.
 
-In Figures \ref{figure-total-marketcap-riskmetric} and \ref{figure-total-marketcap-riskmetric-dim-returns} comparison to the previous findings with the bitcoin risk metric can be seen. The metrics are quite similar, the bigger difference is that the total market capitalization metric gives more importance to the jump of July 2017. The diminishing returns optimization optimze the metrics, but no other change is observed.
+In Figures \ref{figure-total-marketcap-riskmetric} and \ref{figure-total-marketcap-riskmetric-dim-returns} comparison to the previous findings with the Bitcoin risk metric can be seen. The metrics are quite similar, the bigger difference is that the total market capitalization metric gives more importance to the jump of July 2017. The diminishing returns optimization optimze the metrics, but no other change is observed.
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/totalmarketcap-metric.png}
-    \caption{Comparison of bitcoin data usage against total market capitalization data for the risk metric.}
+    \caption{Comparison of Bitcoin data usage against total market capitalization data for the risk metric.}
     \label{figure-total-marketcap-riskmetric}
 \end{figure}
 
 \begin{figure}[!hbt]
     \centering
     \includegraphics[width=\columnwidth]{figures/totalmarketcap-metric-dimreturns.png}
-    \caption{Comparison of bitcoin data usage against total market capitalization data for the risk metric. Diminishing returns optimization is applied.}
+    \caption{Comparison of Bitcoin data usage against total market capitalization data for the risk metric. Diminishing returns optimization is applied.}
     \label{figure-total-marketcap-riskmetric-dim-returns}
 \end{figure}
 
@@ -828,7 +801,7 @@ Next step is to incorporate the daily \$USD volume with the risk metric. There a
 
 Choosing the first approach, incorporating the trading volume into the risk metric itself, we can go about it in the following way. First we compute the smooth rolling average of the last 7 days of the trading volume. We take this average and normalize it between values 0.5 and -0.5. Then we take the original risk metric and we add some reduced value of the trading volume average on top of it, making the risk higher if more volume has been traded in the last 7 days and lower if less volume has been traded.
 
-The following formula is produced, the $'$ sign represent the normalization between $0$--$1$. The symbols BTC\_SMA represents the bitcoin smooth moving average and VOL\_SMA represent the trading volume moving average. I found that the quoficient of $0.2$ works quite well.
+The following formula is produced, the $'$ sign represent the normalization between $0$--$1$. The symbols BTC\_SMA represents the Bitcoin smooth moving average and VOL\_SMA represent the trading volume moving average. I found that the quoficient of $0.2$ works quite well.
 $$risk = \left(\frac{\mathit{BTC\_SMA}_{50 days}}{\mathit{BTC\_SMA}_{50 weeks}}\right)' + \left(\mathit{VOL\_SMA}_{7 days}' - 0.5\right) * 0.2$$
 
 When optimizing it for diminishing returns, we just alter the original metric:
@@ -881,47 +854,146 @@ Let us put the implemented strategies to use. In this section the correct evalua
 Some of the strategies, like machine learning optimization \ref{subsection-ml-optimization}, is not evaluated since its usefulness has not been proved in the previous section.
 
 \subsection*{Finding the Optimal Evaluation Strategy}
-By rigorous testing I have found that the ideal evaluation strategy is as follows: ...
+One interesting discovery during the testing was that transfering coins to stablecoins when risk gets higher may not be beneficial at all. If the risk keeps on rising we will lose on the precious gains that come from the rising effect. We will still keep some of the gains, but not the entirety of it because we transfered a considerable amount of our coins to stablecoins. That is why I started to consider the fact that we should not only focus on the risk itself, but also on the nature of the direction itself---finding local maxima and minima and minding the slope.
 
+\subsection*{Evaluation Strategy -- Risk Only}
+When playing around with the risk values I have found good results when using the following values:
+\begin{itemize}
+    \item $Risk \ge  0.9$: All capital is converted to stablecoins.
+    \item $0.8 \le Risk < 0.0$: 60\% converted.
+    \item $0.7 \le Risk < 0.8$: 30\% converted.
+    \item $0.6 \le Risk < 0.7$: Capital is in coins only.
+    \item $0.5 \le Risk < 0.6$: Capital is in coins only.
+    \item $0.4 \le Risk < 0.5$: Capital is in coins only.
+    \item $0.3 \le Risk < 0.4$: Capital is in coins only.
+    \item $0.2 \le Risk < 0.3$: Capital is in coins only.
+    \item $0.1 \le Risk < 0.2$: Capital is in coins only.
+    \item $Risk < 0.1$: Capital is in coins only.
+\end{itemize}
 
-\subsection*{Testing portfolio C}
-Let us start with the original bitcoin risk metric proposed in Section \ref{subsection-50week50days}. We will first test the metric on Bitcoin only (portfolio C).
+The results can be seen in the joint Figure \ref{figure-combined-riskmetric} of all the evaluation strategies under the name "RiskMetricStrategyRisLogic". It did better than HODLing, but only barely finishing at $\$41,700$ compared to HODL's $\$37,600$.
+
+\subsection*{Evaluation Strategy -- Local Extrema Only}
+\label{subsection-local-extrema}
+When looking at the extrema, we look at the nature of the risk's direction. When we encounter a local maximum, we transfer all the coins to stablecoins, and when we encounter a minimum, we transfer those stablecoins back to coins---selling high, buying low. The results are again seen in the joint Figure \ref{figure-combined-riskmetric}. The strategy did very well. At the end the investor has around $\$127,000$ compared to the HODL's $\$37,600$. That is more than 3 times higher turn out!
+
+\subsection*{Evaluation Strategy -- Risk And Extrema Combination}
+Even though the results of the local extrema look very good, I cannot wonder if the two indicators cannot be somehow combined. The combination works as follows. When local maximum is encountered we sell, and when we encounter a local minimum, we buy. That is the same behaviour as previously. The twist is that when we buy we check the risk metric. If the risk is high, we only buy so much and when it is low, we sell less.
+
+I have prepared 3 combined strategies, the first checks the risk both when selling and buying, the second focuses on optimizing selling only, and the third on the buy only. Results can again be seen in the aforementioned Figure \ref{figure-combined-riskmetric}.
+
+The first combined strategy performed the worst out of the three. The second one is the average, and the third performed the best, still not outperforming the local extrema strategy, ending at around $\$113,000$. We must keep in mind, that even though the third strategy was the best out of the three, that does not mean that optimizing for buy only is a profitable strategy, it just means that it is less damaging to the portfolio profit. That being said, all of the combined strategies outperformed the risk-only strategy.
 
 \begin{figure}[!hbt]
     \centering
-    \includegraphics[width=\columnwidth]{figures/strat-eval1.png}
-    \caption{Strategy evaluation.}
-    \label{figure-strat-eval}
+    \includegraphics[width=\columnwidth]{figures/combined-riskmetric.pdf}
+    \caption{Showcase of evaluation strategies for the same risk metric.}
+    \label{figure-combined-riskmetric}
 \end{figure}
+
+\subsection*{Evaluation Strategy -- DCA}
+\label{subsection-eval-dca}
+We have traded the coins to stablecoins and back, when we simulated the strategies so far. The other option is to never sell the coins we have, but rather buy additional coins when the opportunity presents itself. That is the point of the DCA (dollar cost avaraging) strategy explained in detail in section \cite{section-dca}.
+
+Depending on the risk's value, we will change our DCA investments accordingly. When the risk is high, less money or no money is invested, and when the risk is low, we try to invest the most money we have. To benchmark this strategy in a reasonable fashion, there will be no portfolio limit to what we can invest. To benchmark against regular DCA, we will take the overall \$USD invested and invest it over regular DCA, which invests the same amount of money each day. The real life scenario, where a portfolio could use the variable strategy, would be a portfolio that is dynamic and can offer to take money from other assets. Alternatively, a person that invests once in a while may look at the current risk and adjust his investment accordingly.
+
+I tried a few different evaluation strategies during the simulations. The one I used at first is defined as follows:
+\begin{itemize}
+    \item $Risk \ge  0.7$: Do not invest.
+    \item $0.6 \le Risk < 0.7$: Invest sum x1.
+    \item $0.5 \le Risk < 0.6$: Invest sum x2.
+    \item $0.4 \le Risk < 0.5$: Invest sum x3.
+    \item $0.3 \le Risk < 0.4$: Invest sum x4.
+    \item $0.2 \le Risk < 0.3$: Invest sum x5.
+    \item $0.1 \le Risk < 0.2$: Invest sum x6.
+    \item $Risk < 0.1$: Invest sum x7.
+\end{itemize}
+
+The results were better than the classic DCA strategy, by about 20\%. The strategies are benchmarked by the ratio of profit in \$USD to the total \$USD invested. Higher the ratio, better the strategy.
+
+Next, an evaluation strategy that follows the Fibonacci sequence was tested. It has been proven that the Fibonacci sequence can work really well when working with financial markets \cite{investopedia:fibonacci}, so I gave it a try. The strategy is defined as follows:
+\begin{itemize}
+    \item $Risk \ge  0.9$: Do not invest.
+    \item $0.8 \le Risk < 0.9$: Invest sum x1.
+    \item $0.7 \le Risk < 0.8$: Invest sum x1.
+    \item $0.6 \le Risk < 0.7$: Invest sum x2.
+    \item $0.5 \le Risk < 0.6$: Invest sum x3.
+    \item $0.4 \le Risk < 0.5$: Invest sum x5.
+    \item $0.3 \le Risk < 0.4$: Invest sum x8.
+    \item $0.2 \le Risk < 0.3$: Invest sum x13.
+    \item $0.1 \le Risk < 0.2$: Invest sum x21.
+    \item $Risk < 0.1$: Invest sum x34.
+\end{itemize}
+
+As you can see, the sequence is in a perfect mathematical order. And the results are positive, being around 13\% better than the previous strategy, and about 36\% better than the classic DCA. That is a solid improvement. It is interesting that Fibonacci can work well in an unexpected way.
+
+I tried to optimize the sequence once more, restricting the investment only under the 0.7 risk and removing the second number 1 of the sequence. The strategy acts followingly:
+\begin{itemize}
+    \item $Risk \ge  0.7$: Do not invest.
+    \item $0.6 \le Risk < 0.7$: Invest sum x1.
+    \item $0.5 \le Risk < 0.6$: Invest sum x2.
+    \item $0.4 \le Risk < 0.5$: Invest sum x3.
+    \item $0.3 \le Risk < 0.4$: Invest sum x5.
+    \item $0.2 \le Risk < 0.3$: Invest sum x8.
+    \item $0.1 \le Risk < 0.2$: Invest sum x13.
+    \item $Risk < 0.1$: Invest sum x21.
+\end{itemize}
+
+This strategy is better to the general investing, since a multiple of 21 is less demanding than multiple of 34. The strategy performed better, but only a hair. It is 0.4\$ percent better than the previous optimizations. A really minor improvement.
+
+All results can be seen in the joint Figure \ref{figure-dca-investing}, the primary ypsilon scale follows the profitable ratio. You can see that the two last strategies overlap almost completely. An interesting observation is that the DCA strategies only get better overtime. That makes, since they need time to make advantage of the fluctuations in the market, and that cannot happen immediately.
+
+The final ratio of profit against the amount invested are as follows:
+\begin{itemize}
+    \item Classic DCA: 40.2
+    \item Risk optimized DCA: 48.15
+    \item Risk-Fibonacci DCA: 54.74
+    \item Risk-Fibonacci Adjusted DCA: 54.74
+\end{itemize}
+
+The numbers represnt the return of investment. When looking at the classic DCA value, it tells investors that if they rigorously used the strategy every day from the year June 2017 until May 2022, the money invested would have multiplied 40 times. That is a very significant return of investment. Even better for te optimized versions that take the risk into account. One thing must be kept in mind, the trades are done without any exchange feeds. Since the trades are very frequent, profits would be cut to some extent. This could again ve mitigated by using longer interval.
+
+I tried simulating the strategies with different time intervals for the DCA buy, but simila results were achieved, that is why there is no additional Figure displaying it.
 
 \begin{figure}[!hbt]
     \centering
-    \includegraphics[width=\columnwidth]{figures/strat-eval2.png}
-    \caption{Strategy evaluation.}
-    \label{figure-strat-eval}
+    \includegraphics[width=\columnwidth]{figures/combined-dca-investing.pdf}
+    \caption{Showcase of evaluation strategies for the DCA strategy.}
+    \label{figure-dca-investing}
 \end{figure}
+
+\section{Simulating The Risk Metric Optimizations}
+So far we used the default risk metric defined in Section \ref{subsection-50week50days} without any optimizations. In this section optimizations are simulated with the best evaluation strategy we have discovered in the previous Section. Local extrema is chosen for coin to stablecoin transfer and the adjusted Fibonacci sequence strategy is chosen for the DCA investing.
+
+\subsection*{Local Extrema Evaluation Strategy}
+Used evaluation strategy was defined in Section \ref{subsection-local-extrema}. Results can be seen in Figure.
+
+
+\subsection*{Adjusted Fibonacci Sequence Strategy}
+Adjusted Fibonacci sequence strategy was defined in Section \ref{subsection-eval-dca}. Results can be seen in Figure.
+
+\section{Working With Portfolios of Many Coins}
+
+\section{Simulating Short-term Trading}
+When focusing on short-term trading, range trading and scalping discussed in Sections \ref{section-range-trading} and \ref{section-scalping} respectively. We try to guess the support and resistance levels.
+
+When talking about technical analysis, we need to make support and resistance levels into an account. They can be predicted in several ways. Round numbers are taken into account, like \$50 and \$100, since investors usually put stop orders at such whole number points. These points then serve as resistance levels since it takes very large number of purchases to absorb the sales. Moving average can be used to estimate the levels, too, as you can see in the Figure \ref{figure-ma-support-resistance}. Other indicators include the golden ratio, number of touches and others. This paragraph has been inspired by the Investopedia article \cite{investopedia:support-and-resistance}, where more detailed information can be found.
 
 \begin{figure}[!hbt]
     \centering
-    \includegraphics[width=\columnwidth]{figures/strat-eval3.png}
-    \caption{Strategy evaluation.}
-    \label{figure-strat-eval}
+    \includegraphics[width=\columnwidth]{figures/ma-support-resistance.png}
+    \caption{Expected support and resisted levels computed by a moving average. Attribution: Investopedia \cite{investopedia:support-and-resistance}.}
+    \label{figure-ma-support-resistance}
 \end{figure}
 
-\subsection*{Evaluating Bitcoin Risk Metric}
-
-\subsection*{Evaluating Total Market Cap Risk Metric}
-
-\subsection*{Evaluating Bitcoin Risk Metric Correlated With Daily Volume}
-
-\section{Testing For Day Trading}
+\label{section-testing-day-trading}
 Optimizing for long term investing is great, it has a lower risk than trading throughout the day while still keeping good profits. But one thing it cannot do is to gain capital fast, that is where day trading can shine. In this section the adaptive strategies are tested on a few several days window with 5 minute OHLCV portfolio data.
 
 \subsection*{Creating the Strategy}
 Instead of looking for loing moving averages of 50 weeks and days as before, we will look at a different indicator. Moving average of 6 hours---that means 72 ticks of 5 minute data---is used as the metric. The moving average smooths out the rigidity of the 5 minute data and allows us to exploit the rising and falling trends during the day. It is a form of range trading \ref{section-range-trading} where we take advantage of the fact that cryptocurrencies fluctuate multiple times during a day.
 
 \subsection*{Strategy Evaluation}
-The strategy is tested on bitcoin only. It does not make much sense to test the strategies with many cryptocurrencies, because the strategy is tailored to one asset only. Theoretically, a portfolio with many cryptocurrencies can run this strategy individually per every currency.
+The strategy is simulated on Bitcoin only. It does not make much sense to test the strategies with many cryptocurrencies, because the strategy is tailored to one asset only. Theoretically, a portfolio with many cryptocurrencies can run this strategy individually per every currency.
 
 The basic evaluation strategy is to sell at the local maxima of the moving average and buy at the local minima. Thus trying to buy low and sell high. The local maxima and minima take the 5 points from each side into consideration---this prevents too many extrema next to each other, which would not be useful.
 
@@ -964,31 +1036,53 @@ Let us see how the strategy fares when applied over several months. The date ran
 
 So far we have only discussed the backtesting framework developed. For practical use, actual API calls to cryptomarket exchanges such as Binance\footnote{\url{https://www.binance.com/}} or Coinbase\footnote{\url{https://www.coinbase.com/}} would be needed.
 
-This would require either heavily changing the existing framework or creating a new project entirely. I would design in such a way, that the working backtesting framework would be solely for experimenting with new strategies or validating the chosen strategies for the current day. The projects could work in conjecture this way. The practical deployment would send the new daily data to the backtesting framework which would then send a signal to the deployment on what to do---buy, sell, rebalance, etc.
+This would require either heavily changing the existing framework or creating a new project entirely. I would design it in such a way, that the working backtesting framework would be solely for experimenting with new strategies or validating the chosen strategies for the current day. The projects could work in conjecture this way. The practical deployment would send the new daily data to the backtesting framework which would then send a signal to the deployment on what to do---buy, sell, rebalance, etc.
 
 This would also require working with always up-to-date data, not just historical. Some different API endpoints may be used.
 
 Other improvement to the overall framework would be to add the exchange fees when the investor buys or sells. The current results would get a bit diminished by this fact. This abstraction for the thesis has been approved by the supervisor.
 
-\section{TODO: Comparison to Existing Solutions}
-\begin{enumerate}
-    \item 3Commas
-    \item Cowen Risk Metric
-\end{enumerate}
+\section{Comparison to Existing Solutions}
+I have found it hard to compare my solution to the existing ones without using the tool myself. I can only tell from what the individual solutions are offering how it is similar to my findings and how it is different from them.
+
+\subsection{Comparing My Risk Metric to Benjamin Cowen's}
+Since the Benjamin Cowen's risk metric's formula is not publicly available, we can compare the results got from my optimizations to his latest findings showcased in video \cite{youtube:bitcoin-risk-metric-latest}. All of his analysis are available at \cite{intothecryptoverse} at a subscription level.
+
+When comparing a screenshot from the latest video \cite{youtube:bitcoin-risk-metric-latest} in Figure \cite{figure-cowen-screenshot} to the thesis's Bitcoin risk metrics in Figure \cite{figure-combined-bitcoin-riskmetric}, we see that the Benjamin Cowen's Bitcoin risk metric is much more rigid. This is simulated in the thesis's 24 hour volume correlation optimization. It is unclear if Benjamin Cowen uses this type of correlation at all, though. When looking at the major up and downs, it is very similar and the general direction is also similar.
+
+I can say that both metrics come from the same background, but the one Benjamin Cowen is using uses other types of optimizations or indicators that aren't used in this thesis. Although, the results you can get with both metrics should be quite similar.
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/cowen-riskmetric-screenshot.png}
+    \caption{Screenshot of Benjamin Cowen's Bitcoin risk metric from video \cite{youtube:bitcoin-risk-metric-latest}. Attribution: Benjamin Cowen \cite{youtube:cowen-yt-channel}.}
+    \label{figure-cowen-screenshot}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/combined-bitcoin-metrics.pdf}
+    \caption{Showcase of the thesis's Bitcoin risk metrics.}
+    \label{figure-combined-bitcoin-riskmetric}
+\end{figure}
+
+\subsection{Comparing My Strategies To Automated Bot Systems}
+Looking at automated bot systems, two working commercial bot systems have been analyzed, Pionex \cite{pionex} and 3Commas \cite{3commas}. Since I do not have any account with either of them, the offered features are analyzed instead. Pionex uses an interesting feature called Grid trading \cite{pionex-grid-trading}, it uses a set grid of prices that are used to capitalize the market's fluctuations. Capitalizing the market's fluctuations is the topic of the Section \cite{section-testing-day-trading}, where a bit different approach is used. Other Pionex's bots include DCA bot and Rebalance bot. Both of these bots are easily backtested with the thesis backtester framework.
+
+3Commas offers options to backtest your own strategy within their framework \cite{3commas-trading-view}. I would guess that backtesting in such a way is easier for investors not skilled in programming. It offers similar features as Pionex, including the DCA and HODL bots.
+
 
 \section{Further Ideas and Involvement}
 The science and technical analysis of cryptocurrencies is a vast subject and time is limited. There is an infinite number of things to test and analyze. The framework itself could be improved. Below are some strategies, optimizations and ideas that I considered during the thesis and that can be worked on in further involvement.
 
 \subsection*{Strategies}
-Top 7 trading cryptocurrencies CoinGecko API endpoint could be used to buy trending cryptocurrencies based on the believe that they would rise soon.
+Top 7 trading cryptocurrencies CoinGecko API endpoint \cite{coingecko:documentation} could be used to buy trending cryptocurrencies based on the believe that they would rise soon.
 
 It would advisable to add trending strategies to portfolio dynamically during run rather then starting with the top 20 portfolio only. Some interesting results may be found if we change the coins dynamically, selling those that underperform periodically and add the ones that got bigger capitalization recently.
 
 Strategy correlation with FIAT money inflation would be interesting to see. The argument there is that as people have more money, the price naturally rises to match it.
 
-Metric based on diminishing returns expected price as described in Section \ref{subsection-dimreturns}
-
-More intensive research regarding machine learning, and its correlation to other findings.
+More intensive research regarding machine learning, and its correlation to other findings, would definitely be interesting.
 
 One interesting strategy would be to find the riskmetric for every coin in portfolio and measure the risks and investitions individually on per coin basis.
 
@@ -1005,6 +1099,13 @@ Configuration file could be extended to include strategy definitions too. In thi
 P\&L per trade visualization could be informative, as well as incorporate other metric like Sharpe Ratio into the statistics output.
 
 \chapter{Conclusion}
-I have demonstrated that my framework is general enough to support the implementation of both long-term and short-term strategies in section .. and .. respectively.
-
 \label{conclusion}
+The goal of the thesis was to propose and implement adaptive trading strategies that would adapt to the rising and falling markets and generate more stable profits. The goal has been achieved and demonstreated in several ways, focusing on both long-term and short-term date ranges. In the process, an extensible backtesting framework was created, general enough to support the implementation of both long-term and short-term strategies.
+
+Regarding the thesis formal specification. Existing trading strategies have been studied and achieved results analyzed and assumptions summarized. Existing simulation tools have been described. Cryptocurrency trading data have been analyzed and some interesting events summarized. Adaptive trading strategies have been proposed, implemented in form of a backtester and evaluated against traditional approaches. Both 5 minute OHLC and 1 day OHLC data have been used during the thesis. Finally, further improvements and limitations of the practical deployment have been described.
+
+It has been found that the Bitcoin risk metric, can be used as a form of adaptive trading strategy for long-term investing. This risk metric can be optimized and total market capitalization price can be used instead of Bitcoin price for better results. Regarding short-term strategy, buying and selling during local extrema of price's smooth moving average can be really beneficial to the overall profits.
+
+I learned a great detail of information about economics of the market trading and cryptocurrencies in general. I see how a backtester can be built now and how should a trading strategy be implemented.
+
+Regarding my future plans, I plan to keep working on the backtester itself. There are several improvements that could be applied, such as optimzing the backtester's computing time, web user interface. There are many strategies that should be explored too, for example, trying to generate profit from trading stablecoins when holding them, exploring machine learning in a greater detail, and many others. More advanced profit analysis, such as Sharpe Ratio, and P\&L per trade visualization, may lead to interesting discoveries. My other plans are to make an automated trading system that would use the strategies backtested by the backtester program.

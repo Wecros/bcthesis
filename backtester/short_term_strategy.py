@@ -16,7 +16,9 @@ class ShortTermStrategy(Strategy):
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
         super().__init__(data, portfolio)
         self.riskmetric = self.compute_metric()
+        print(self.portfolio)
         self.buy()
+        print(self.portfolio)
 
     def compute_metric(self):
         args = {
@@ -32,20 +34,22 @@ class ShortTermStrategy(Strategy):
         df["risk"] = df["price"].rolling(288 * 1 // 4, min_periods=1).mean().dropna()
         df["riskmetric"] = df["risk"]
 
-        n = 5
-        df["min"] = df.iloc[argrelextrema(df.riskmetric.values, np.less_equal, order=n)[0]][
-            "riskmetric"
-        ]
-        df["max"] = df.iloc[argrelextrema(df.riskmetric.values, np.greater_equal, order=n)[0]][
-            "riskmetric"
-        ]
+        checked_values_after_before = 5
+        df["min"] = df.iloc[
+            argrelextrema(df.riskmetric.values, np.less_equal, order=checked_values_after_before)[0]
+        ]["riskmetric"]
+        df["max"] = df.iloc[
+            argrelextrema(
+                df.riskmetric.values, np.greater_equal, order=checked_values_after_before
+            )[0]
+        ]["riskmetric"]
 
-        riskmetric_df = df[["riskmetric", "price", "min", "max"]]
+        df = df[["riskmetric", "price", "min", "max"]]
+        riskmetric_df = df[df["riskmetric"].notna()]
         return riskmetric_df[self.steps[0] : self.steps[-1]]
 
     def execute_step(self):
         super().execute_step()
-        self.riskmetric.loc[self.current_step]["riskmetric"]
         local_min = self.riskmetric.loc[self.current_step]["min"]
         local_max = self.riskmetric.loc[self.current_step]["max"]
 

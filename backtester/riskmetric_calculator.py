@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 from autots import AutoTS
+from scipy.signal import argrelextrema
 
 from .utils import FIRST_BITCOIN_EXCHANGE
 
@@ -56,7 +57,16 @@ def _calculate_risk_metric(df: pd.DataFrame, optimizations: RiskMetricOptimizati
         df["risk"].cummax() - df["risk"].cummin()
     )
 
-    riskmetric_df = df[["riskmetric", "price"]].dropna()
+    checked_values_after_before = 5
+    df["min"] = df.iloc[
+        argrelextrema(df.riskmetric.values, np.less_equal, order=checked_values_after_before)[0]
+    ]["riskmetric"]
+    df["max"] = df.iloc[
+        argrelextrema(df.riskmetric.values, np.greater_equal, order=checked_values_after_before)[0]
+    ]["riskmetric"]
+
+    df = df[["riskmetric", "price", "min", "max"]]
+    riskmetric_df = df[df["riskmetric"].notna()]
     return riskmetric_df
 
 

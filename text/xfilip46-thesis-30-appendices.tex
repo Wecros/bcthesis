@@ -5,7 +5,47 @@
 % Placing of table of contents of the memory media here should be consulted with a supervisor
 
 \chapter{Contents of the included storage media}
+TODO
 
 \chapter{Manual}
+Usage is defined in the standard environment of bash command line interface. All needed commands are provided by the Makefile and can be listed by running \texttt{make}.
 
-%\chapter{Configuration file}
+\subsection*{Installation}
+Multiple options are available for installation. Python version 3.9 should be installed on the target system.
+
+Local install:
+\begin{minted}{bash}
+make installdeps
+\end{minted}
+
+Virtual environment installation:
+\begin{minted}{bash}
+make create-venv
+. venv/bin/activate
+make installdeps
+\end{minted}
+
+Containerized development:
+\begin{minted}{bash}
+make docker-build  # docker-compose build
+\end{minted}
+
+\subsection*{How to run the project}
+There are a few ways to run the project.
+
+Via Makefile:
+\begin{minted}{bash}
+make run
+\end{minted}
+
+With arguments:
+\begin{minted}{bash}
+python -m backtester <your_arguments>
+\end{minted}
+
+Via Docker:
+\begin{minted}{bash}
+make docker-up  # docker-compose up
+\end{minted}
+
+The \texttt{args.yaml} configuration file should be edited to change the backtester behaviour. After that, the \texttt{simulate()} function found in the file \texttt{simulator.py} can be edited to make other strategies and plotting available.

@@ -2,6 +2,7 @@
 File cointaining useful functions for testing strategies.
 """
 
+import numpy as np
 import pandas as pd
 
 from backtester.argparser import get_data_dataframe
@@ -67,3 +68,14 @@ def _add_symbol_to_dict_data(
             value = [0 for date in dates]
         new_data[arg].extend(value)
     return new_data
+
+
+def update_close_values(data, coin_close_dict):
+    df = data.data.reset_index()
+    for coin, close_list in coin_close_dict.items():
+        df["close"] = np.where(
+            df["pair"] == coin,
+            np.resize(close_list, data.dates.size * len(data.symbols)),
+            df["close"],
+        )
+    return set_index_for_data(df)

@@ -1,10 +1,10 @@
 """
-File for testing basic functionality of the implemented strategies.
+File for testing basic functionality of the implemented rebalance strategy.
 """
 
 import numpy as np
 import pytest
-from utils import get_data_from_dict
+from utils import get_data_from_dict, update_close_values
 
 from backtester.rebalance_strategy import RebalanceStrategy
 from backtester.utils import create_portfolio_from_data, set_index_for_data

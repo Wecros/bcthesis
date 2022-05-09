@@ -5,14 +5,22 @@ File for orchestrating the various strategies in play.
 import logging
 from copy import deepcopy
 
-import plotly.graph_objs as go
-
+from .dca_riskmetric_strategy import (
+    DCARiskMetricStrategy7to0,
+    DCARiskMetricStrategyFibonacci,
+    DCARiskMetricStrategyFibonacciAdjusted,
+)
 from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
 from .rebalance_strategy import RebalanceStrategy
 from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
-from .riskmetric_strategy import RiskMetricStrategy
+from .riskmetric_strategy import (
+    RiskMetricStrategy,
+    RiskMetricStrategyCombined,
+    RiskMetricStrategyExtremaLogic,
+    RiskMetricStrategyRiskLogic,
+)
 from .short_term_strategy import ShortTermStrategy
 from .strategy import Strategy
 from .utils import (
@@ -22,6 +30,7 @@ from .utils import (
     StrategyResult,
     TradingData,
     create_portfolio_from_data,
+    get_historical_data_if_btc_is_only_coin_considered,
     noop,
 )
 
@@ -29,6 +38,9 @@ from .utils import (
 HodlStrategy
 RebalanceStrategy
 RiskMetricStrategy
+RiskMetricStrategyExtremaLogic
+RiskMetricStrategyRiskLogic
+RiskMetricStrategyCombined
 DCAStrategy
 ShortTermStrategy
 BTC_SYMBOL
@@ -37,32 +49,63 @@ BTC_SYMBOL
 def simulate(trading_data: TradingData):
     logging.info("Running simulation")
 
-    # trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
+    trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
+
+    historical_data_used = trading_data.btc_historical
 
     optimizations = RiskMetricOptimizations(
         diminishing_returns=False, daily_volume_correlation=False
     )
-    riskmetric = get_risk_metric(
-        trading_data.btc_historical, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    optimizations_dim = RiskMetricOptimizations(
+        diminishing_returns=True, daily_volume_correlation=False
     )
-    riskmetric
+    optimizations_dim_vol = RiskMetricOptimizations(
+        diminishing_returns=True, daily_volume_correlation=True
+    )
 
-    ShortTermStrategy(trading_data).compute_metric()
+    riskmetric = get_risk_metric(
+        historical_data_used, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    )
+    riskmetric_dim = get_risk_metric(
+        historical_data_used, optimizations_dim, trading_data.dates[0], trading_data.dates[-1]
+    )
+    riskmetric_dim_vol = get_risk_metric(
+        historical_data_used, optimizations_dim_vol, trading_data.dates[0], trading_data.dates[-1]
+    )
+    riskmetric_dim
+    riskmetric_dim_vol
 
     strategy_list = [
-        # [RiskMetricStrategy, {"riskmetric": riskmetric}],
-        [ShortTermStrategy]
+        # [RiskMetricStrategyRiskLogic, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategyExtremaLogic, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategyCombined, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategyCombined2, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategyCombined3, {"riskmetric": riskmetric}],
         # [RebalanceStrategy],
         # [RebalanceStrategy, {"rebalance_interval": 5}],
         # [RebalanceStrategy, {"rebalance_interval": 10}],
-        # [StrategyMerger, {"strategy_classes": [[RiskMetricStrategy], [RebalanceStrategy]]}],
+        [DCARiskMetricStrategy7to0, {"riskmetric": riskmetric}],
+        [DCARiskMetricStrategyFibonacci, {"riskmetric": riskmetric}],
+        [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
     ]
-    portfolio = create_portfolio_from_data(
-        trading_data, cash=trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
-    )
+    portfolio = create_portfolio_from_data(trading_data, cash=0)
+    # portfolio = create_portfolio_from_data(
+    # trading_data, cash=1000
+    # )
+
     simgen = StrategyGenerator(strategy_list, trading_data, portfolio)
     simgen.run()
     results = simgen.get_results()
+
+    simgen.strategies[0].total_usd_invested / (len(trading_data.dates))
+    strategy_list2 = [
+        [DCAStrategy, {"base": 5}],
+        # [DCAStrategy, {"base": simgen.strategies[1].total_usd_invested / ((len(trading_data.dates)) / simgen.strategies[1].dca_interval), "dca_interval": simgen.strategies[1].dca_interval}],
+    ]
+
+    simgen2 = StrategyGenerator(strategy_list2, trading_data, portfolio)
+    simgen2.run()
+    results.extend(simgen2.get_results())
 
     for result in results:
         if result.name == RiskMetricStrategy.__name__:
@@ -72,56 +115,52 @@ def simulate(trading_data: TradingData):
                 result.name += " + 24h volume correlation"
             if not optimizations.diminishing_returns and not optimizations.daily_volume_correlation:
                 result.name = "RiskMetricStrategy - no optimizations"
-            result.name += " | total marketcap"
+            if historical_data_used is trading_data.global_metrics:
+                result.name += " | total marketcap"
+            else:
+                ...
 
     annotation_text = (
         f"Data Range: {trading_data.dates[0].strftime(TIME_FORMAT)}--"
         f"{trading_data.dates[-1].strftime(TIME_FORMAT)} | "
         f"Data Interval: {trading_data.variables.interval_str}"
     )
+    annotation_text
 
     plotter = Plotter(
         trading_data,
         results,
         x_title=f"{trading_data.variables.interval_str} steps",
-        y_title="Profit in $USD",
+        y_title="Return of investment (x times)",
         # title_text=f"Strategy Experiments ({annotation_text})",
-        title_text=f"Strategy Experiments ({annotation_text})",
+        title_text=f"",
     )
 
-    # plotter.plot_riskmetric_on_second_scale(riskmetric)
-    # plotter.plot_colorcoded_riskmetric(riskmetric)
+    portfolio = create_portfolio_from_data(
+        trading_data, cash=trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
+    )
+    logging.info(
+        f'HODL strategy profit: {trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[-1]), "close"] / trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]}'
+    )
 
-    plotter.plot_all_symbols()
+    # plotter.plot_all_symbols()
+
+    plotter.plot_riskmetric_on_second_scale(riskmetric)
+    # plotter.plot_riskmetric_on_second_scale(riskmetric_dim, name="risk metric + diminishing returns")
+    # plotter.plot_riskmetric_on_second_scale(riskmetric_dim_vol, name="risk metric + dim returns and 24h vol corr")
+    # plotter.plot_colorcoded_riskmetric(riskmetric)
+    # plotter.plot_riskmetric_maxima_minima_on_second_scale(riskmetric)
+
+    # for i in range(len(simgen.strategies)):
+    # results[i].profits /= simgen.strategies[i].total_usd_invested
+    # results[3].profits /= simgen2.strategies[0].total_usd_invested
+
     plotter.plot_strategies()
 
-    short_strat = simgen.strategies[0]
-    plotter.plot_bought_dates(strategies=[results[0]])
-    plotter.plot_sold_dates(strategies=[results[0]])
+    # plotter.plot_bought_dates()
+    # plotter.plot_sold_dates()
 
-    plotter.plot_line(
-        short_strat.steps, short_strat.riskmetric["riskmetric"], name="Moving average"
-    )
-    plotter.figure.add_trace(
-        go.Scatter(
-            x=short_strat.steps,
-            y=short_strat.riskmetric["min"],
-            mode="markers",
-            name="min",
-            marker=dict(size=10),
-        )
-    )
-    plotter.figure.add_trace(
-        go.Scatter(
-            x=short_strat.steps,
-            y=short_strat.riskmetric["max"],
-            mode="markers",
-            name="max",
-            marker=dict(size=10),
-        )
-    )
-
-    plotter.change_title("")
+    # plotter.plot_log_y_first_axis()
     plotter.show()
     plotter.save("pdf")
 

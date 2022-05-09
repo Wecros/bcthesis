@@ -28,8 +28,6 @@ class Strategy(ABC):
             self.portfolio = create_portfolio_from_data(data)
         self.total_usd_invested = self.portfolio.usd
 
-        self.bought_state: bool = False
-        self.sold_state: bool = True
         self.bought_dates: list[pd.Timestamp] = []
         self.sold_dates: list[pd.Timestamp] = []
 
@@ -47,28 +45,28 @@ class Strategy(ABC):
         self.profits_in_time[self.i] = self.get_profit_in_usd()
 
     def buy(self):
-        if self.bought_state:
-            logging.info(f"Tried to buy with a bought state, step: {self.current_step}")
-            return
-        self.set_bought_state()
+        if self.portfolio.usd == 0:
+            logging.info(f"Tried to buy with 0 dollars, step: {self.current_step}")
+            return -1
         self.bought_dates.append(self.current_step)
         self.execute_buy_logic()
+        return 0
 
     def execute_buy_logic(self):
         coins = self.portfolio.coins
         usd_per_coin = self.portfolio.usd / len(coins)
         for coin in coins:
             close = self.get_close_value(coin)
-            coins[coin] = usd_per_coin / close
+            coins[coin] += usd_per_coin / close
         self.portfolio.usd = 0
 
     def sell(self):
-        if self.sold_state:
-            logging.info(f"Tried to sell with a sold state, step: {self.current_step}")
-            return
-        self.set_sold_state()
+        if all(value == 0 for value in self.portfolio.coins.values()):
+            logging.info(f"Tried to sell with 0 $USD in coins, step: {self.current_step}")
+            return -1
         self.sold_dates.append(self.current_step)
         self.execute_sell_logic()
+        return 0
 
     def execute_sell_logic(self):
         coins = self.portfolio.coins
@@ -77,58 +75,53 @@ class Strategy(ABC):
             self.portfolio.usd += self.portfolio.coins[coin] * close
             self.portfolio.coins[coin] = 0
 
-    def set_bought_state(self):
-        self.bought_state = True
-        self.sold_state = False
-
-    def set_sold_state(self):
-        self.sold_state = True
-        self.bought_state = False
-
-    def buy_partial(self, percent):
+    def buy_partial(self, percentage):
         """Buy only a partial percentage of the coins. Keep the rest in stablecoins.
-        The percantage is always calculated from the total sum of coins + stablecoins."""
+        The percantage is always calculated from the total sum of coins + stablecoins.
+
+        NOTE: If you want to partially sell, just inverse the wanted percentage on buy_partial()
+        sell() <=> buy_partial(0)
+        buy() <=> buy_partial(100)
+        buy_partial(90) <=> "sell_partial(10)"
+        """
+        assert 0 <= percentage <= 100
+        self.bought_dates.append(self.current_step)
+        return self._execute_partial_logic(percentage)
+
+    def sell_partial(self, percentage):
+        """Sell only a partial percentage of the coins. Keep the rest in coins.
+        The percantage is always calculated from the total sum of coins + stablecoins.
+        """
+        assert 0 <= percentage <= 100
+        self.sold_dates.append(self.current_step)
+        return self._execute_partial_logic(100 - percentage)
+
+    def _execute_partial_logic(self, percentage):
+        """Execute partial buy."""
+        coins = self.portfolio.coins
+        ratio = percentage / 100
+        assert 0 <= ratio <= 1
+
+        # Execute the sell so that we have all USD available - technically also do rebalance
+        self.execute_sell_logic()
+
+        usd_to_buy_coins_with = self.portfolio.usd * ratio
+        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
+        for coin in coins:
+            close = self.get_close_value(coin)
+            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
+
+        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
+
+    def buy_additional(self, usd: float):
+        """Buy additional coins using new income. Used for DCA types of stratgies."""
         self.bought_dates.append(self.current_step)
         coins = self.portfolio.coins
-
-        # print(self.riskmetric.loc[self.current_step]['riskmetric'])
-        # print(self.current_step)
-        # print(self.portfolio.usd)
-        # print(coins)
-
-        self.sell()
-
-        # print(self.portfolio.usd)
-        # print(coins)
-
-        usd_to_buy_coins_with = self.portfolio.usd * percent
-        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
+        usd_to_buy_coin_with = usd / len(coins)
         for coin in coins:
             close = self.get_close_value(coin)
-            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
-
-        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
-
-        # print(usd_to_buy_coins_with, usd_to_buy_one_coin_with)
-        # print(coins)
-        # print(self.portfolio.usd)
-        # print()
-
-    def sell_partial(self, percent):
-        """Sell only a partial percantage of the coins. Keep the rest in coins.
-        The percantage is always calculated from the total sum of coins + stablecoins."""
-        self.sold_dates.append(self.current_step)
-        coins = self.portfolio.coins
-
-        self.buy()
-
-        usd_to_buy_coins_with = self.portfolio.usd * percent
-        usd_to_buy_one_coin_with = usd_to_buy_coins_with / len(coins)
-        for coin in coins:
-            close = self.get_close_value(coin)
-            self.portfolio.coins[coin] += usd_to_buy_one_coin_with / close
-
-        self.portfolio.usd = self.portfolio.usd - usd_to_buy_coins_with
+            coins[coin] += usd_to_buy_coin_with / close
+        self.total_usd_invested += usd
 
     def get_close_value(self, coin: str):
         """Get close value of a coin relevant to the current step."""
@@ -158,6 +151,6 @@ class Strategy(ABC):
             f"Profit in USD: {profitInUSD}\n"
             f"Profit in BTC: {self.get_profit_in_btc()}\n"
             f"Total USD invested: {self.total_usd_invested}\n"
-            f"Ratio of profit to total USD invested (higher is better):"
+            f"Ratio of profit to total USD invested (higher is better): "
             f"{profitInUSD / self.total_usd_invested}"
         )

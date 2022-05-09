@@ -142,6 +142,32 @@ class Plotter:
             secondary_y=True,
         )
 
+    def plot_riskmetric_maxima_minima(self, riskmetric):
+        self.figure.add_trace(self._min_scatter(riskmetric))
+        self.figure.add_trace(self._max_scatter(riskmetric))
+
+    def plot_riskmetric_maxima_minima_on_second_scale(self, riskmetric):
+        self.figure.add_trace(self._min_scatter(riskmetric), secondary_y=True)
+        self.figure.add_trace(self._max_scatter(riskmetric), secondary_y=True)
+
+    def _min_scatter(self, riskmetric):
+        return go.Scatter(
+            x=self.dates,
+            y=riskmetric["min"],
+            mode="markers",
+            name="local min",
+            marker=dict(size=10, color="blue"),
+        )
+
+    def _max_scatter(self, riskmetric):
+        return go.Scatter(
+            x=self.dates,
+            y=riskmetric["max"],
+            mode="markers",
+            name="local max",
+            marker=dict(size=10, color="red"),
+        )
+
     def plot_historical_btc(self):
         self.figure.add_trace(
             go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
@@ -208,53 +234,67 @@ class Plotter:
         if strategies is None:
             strategies = self.strategies
 
+        dates = []
+        profits = []
         for strategy in strategies:
             profits_bought = map_values_to_specific_dates(
                 self.dates, strategy.bought_dates, strategy.profits
             )
-            self.figure.add_trace(
-                go.Scatter(
-                    x=np.array(strategy.bought_dates),
-                    y=profits_bought,
-                    mode="markers",
-                    name="bought",
-                    marker_symbol="triangle-up",
-                    marker=dict(
-                        color="green",
-                        size=15,
-                    ),
+            dates.append(strategy.bought_dates)
+            profits.append(profits_bought)
+
+        x = np.array([date for sublist in dates for date in sublist])
+        y = np.array([profit for sublist in profits for profit in sublist])
+
+        self.figure.add_trace(
+            go.Scatter(
+                x=x,
+                y=y,
+                mode="markers",
+                name="bought",
+                marker_symbol="triangle-up",
+                marker=dict(
+                    color="green",
+                    size=15,
                 ),
-            )
-            if dash:
-                for date in strategy.bought_dates:
-                    self.figure.add_vline(
-                        x=date, line_width=1, line_dash="dash", line_color="green"
-                    )
+            ),
+        )
+        if dash:
+            for date in strategy.bought_dates:
+                self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="green")
 
     def plot_sold_dates(self, strategies=None, dash=False):
         if strategies is None:
             strategies = self.strategies
 
+        dates = []
+        profits = []
         for strategy in self.strategies:
             profits_sold = map_values_to_specific_dates(
                 self.dates, strategy.sold_dates, strategy.profits
             )
-            self.figure.add_trace(
-                go.Scatter(
-                    x=np.array(strategy.sold_dates),
-                    y=profits_sold,
-                    mode="markers",
-                    name="sold",
-                    marker_symbol="triangle-down",
-                    marker=dict(
-                        color="red",
-                        size=15,
-                    ),
+            dates.append(strategy.sold_dates)
+            profits.append(profits_sold)
+
+        x = np.array([date for sublist in dates for date in sublist])
+        y = np.array([profit for sublist in profits for profit in sublist])
+
+        self.figure.add_trace(
+            go.Scatter(
+                x=x,
+                y=y,
+                mode="markers",
+                name="sold",
+                marker_symbol="triangle-down",
+                marker=dict(
+                    color="red",
+                    size=15,
                 ),
-            )
-            if dash:
-                for date in strategy.sold_dates:
-                    self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="red")
+            ),
+        )
+        if dash:
+            for date in strategy.sold_dates:
+                self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="red")
 
     def plot_diminishing_returns(self):
         """Days for diminishing returns are counted from the first transaction
@@ -363,7 +403,7 @@ class Plotter:
 
         get_current_datetime_string
 
-        figure = "some_figure.pdf"
+        figure = "/tmp/some_figure.pdf"
         fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
         fig.write_image(figure, format="pdf")
         time.sleep(1)
