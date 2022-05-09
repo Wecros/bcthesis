@@ -951,7 +951,7 @@ If the results from the previous DCA return of investment, mentioned in Section 
 \section{Working With Portfolios of Many Coins}
 We implemented the adaptive strategies. We defined the optimal evaluation strategies. We found the perfect risk combinations to go with these strategies. But all these simulated only one cryptocurrency---Bitcoin. This section focuses on simulating many coins, how are the results compared to previous findings and the traditional rebalance approach described in Section \ref{section-rebalance}.
 
-\subsection{Choosing the Coins}
+\subsection*{Choosing the Coins}
 Two portfolios are used for the evaluation. Portfolio A is using only the Bitcoin and Ethereum, these two assets show promising and stable growth and have been the 2 biggest contributors to total market capitalization. As of May 1st 2022, the two cryptocurrencies contribute to almost 62\% of total market capitalization~\cite{coinmarketcap:globalmetrics}. Both cryptocurrencies of the portfolio date back to the earliest Binance data point, 17th August 2017.
 
 For portfolio B, many more coins are chosen. The top 18 coins (not tokens) listed on the CoinMarketcap~\cite{coinmarketcap}, based on market capitalization and disregarding stablecoins, have been chosen. The coins have been chosen not only by the current day, but I made sure they were at least somewhat popular during the two previous years. The overall age of the portfolio is much younger, only dating back to 2020. The difference between the portfolios should show how the strategies change depending on the portfolio size and disparity.
@@ -1115,7 +1115,7 @@ Other improvement to the overall framework would be to add the exchange fees whe
 \section{Comparison to Existing Solutions}
 I have found it hard to compare my solution to the existing ones without using the tool myself. I can only tell from what the individual solutions are offering how it is similar to my findings and how it is different from them.
 
-\subsection{Comparing My Risk Metric to Benjamin Cowen's}
+\subsection*{Comparing My Risk Metric to Benjamin Cowen's}
 Since the Benjamin Cowen's risk metric's formula is not publicly available, we can compare the results got from my optimizations to his latest findings showcased in video \cite{youtube:bitcoin-risk-metric-latest}. All of his analysis are available at \cite{intothecryptoverse} at a subscription level.
 
 When comparing a screenshot from the latest video \cite{youtube:bitcoin-risk-metric-latest} in Figure \ref{figure-cowen-screenshot} to the thesis's Bitcoin risk metrics in Figure \ref{figure-combined-bitcoin-riskmetric}, we see that the Benjamin Cowen's Bitcoin risk metric is much more rigid. This is simulated in the thesis's 24-hour volume correlation optimization. It is unclear if Benjamin Cowen uses this type of correlation at all, though. When looking at the major up and downs, it is very similar, and the general direction is also similar.
@@ -1136,7 +1136,7 @@ I can say that both metrics come from the same background, but the one Benjamin 
     \label{figure-combined-bitcoin-riskmetric}
 \end{figure}
 
-\subsection{Comparing My Strategies To Automated Bot Systems}
+\subsection*{Comparing My Strategies To Automated Bot Systems}
 Looking at automated bot systems, two working commercial bot systems have been analyzed, Pionex \cite{pionex} and 3Commas \cite{3commas}. Since I do not have any account with either of them, the offered features are analyzed instead. Pionex uses an interesting feature called Grid trading \cite{pionex-grid-trading}, it uses a set grid of prices that are used to capitalize the market's fluctuations. Capitalizing the market's fluctuations is the topic of the Section \ref{section-testing-day-trading}, where a bit different approach is used. Other Pionex's bots include DCA bot and rebalance bot. Both of these bots are easily backtested with the thesis backtester framework.
 
 3Commas offers options to backtest your own strategy within their framework \cite{3commas-trading-view}. I would guess that backtesting in such a way is easier for investors not skilled in programming. It offers similar features as Pionex, including the DCA and HODL bots.
