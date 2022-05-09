@@ -11,7 +11,6 @@ from backtester.utils import (
     Portfolio,
     TradingData,
     create_portfolio_from_data,
-    set_index_for_data,
 )
 
 

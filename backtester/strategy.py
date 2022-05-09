@@ -46,7 +46,7 @@ class Strategy(ABC):
 
     def buy(self):
         if self.portfolio.usd == 0:
-            logging.info(f"Tried to buy with 0 dollars, step: {self.current_step}")
+            logging.debug(f"Tried to buy with 0 dollars, step: {self.current_step}")
             return -1
         self.bought_dates.append(self.current_step)
         self.execute_buy_logic()
@@ -62,7 +62,7 @@ class Strategy(ABC):
 
     def sell(self):
         if all(value == 0 for value in self.portfolio.coins.values()):
-            logging.info(f"Tried to sell with 0 $USD in coins, step: {self.current_step}")
+            logging.debug(f"Tried to sell with 0 $USD in coins, step: {self.current_step}")
             return -1
         self.sold_dates.append(self.current_step)
         self.execute_sell_logic()

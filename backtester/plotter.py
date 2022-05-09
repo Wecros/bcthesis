@@ -58,13 +58,13 @@ class Plotter:
         self.plot_all_symbols()
         self.plot_strategies()
 
-    def plot_all_symbols(self):
+    def plot_all_symbols(self, visible=True):
         for symbol in self.symbols:
-            self._plot_symbol(symbol)
+            self._plot_symbol(symbol, visible=visible)
 
-    def _plot_symbol(self, symbol: str):
+    def _plot_symbol(self, symbol: str, visible=True):
         self.figure.add_trace(
-            go.Scatter(x=self.dates, y=self.data.loc[symbol, "close"], name=symbol)
+            go.Scatter(x=self.dates, y=self.data.loc[symbol, "close"], name=symbol, visible=visible)
         )
 
     def plot_all_symbols_as_percentages(self):
@@ -134,13 +134,25 @@ class Plotter:
             )
         )
 
-    def plot_riskmetric_on_second_scale(self, riskmetric, name="risk metric"):
+    def plot_riskmetric_on_second_scale(self, riskmetric, name="risk metric", dash=False, **kwargs):
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
         self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
-        self.figure.add_trace(
-            go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name=name),
-            secondary_y=True,
-        )
+        if dash:
+            self.figure.add_trace(
+                go.Scatter(
+                    x=riskmetric.index,
+                    y=riskmetric["riskmetric"],
+                    name=name,
+                    line_dash="dash",
+                    **kwargs,
+                ),
+                secondary_y=True,
+            )
+        else:
+            self.figure.add_trace(
+                go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name=name, **kwargs),
+                secondary_y=True,
+            )
 
     def plot_riskmetric_maxima_minima(self, riskmetric):
         self.figure.add_trace(self._min_scatter(riskmetric))
@@ -205,10 +217,12 @@ class Plotter:
 
     def plot_linearfit_trad_vol(self):
         df = self.historical_btc[self.dates[0] :].copy()
-        df["BTC Price"] = df["price"]
-        df["Volume in $USD"] = df["total_volume_24h"]
+        df["BTC Price in $USD"] = df["price"]
+        df["Daily traded volume in $USD"] = df["total_volume_24h"]
         print(f'btc price to 24h volume correlation: {df["price"].corr(df["total_volume_24h"])}')
-        self.figure = px.scatter(df, x="BTC Price", y="Volume in $USD", trendline="ols")
+        self.figure = px.scatter(
+            df, x="BTC Price in $USD", y="Daily traded volume in $USD", trendline="ols"
+        )
         self.reupdate_layout()
 
     def plot_autots_prediction(self, data_to_use, forecast_length=21):
@@ -409,5 +423,5 @@ class Plotter:
         time.sleep(1)
 
         filename = "newplot"
-        # filename = get_current_datetime_string()
+        filename = get_current_datetime_string()
         return self.figure.write_image(OUTPUT_PATH / f"{filename}.{extension}")

@@ -3,6 +3,24 @@ pairs:
 - BTCUSDT
 #- ETHUSDT
 
+#- XRPUSDT
+#- ADAUSDT
+#- DOTUSDT
+#- LTCUSDT
+#- BNBUSDT
+#- BCHUSDT
+#- AVAXUSDT
+#- LUNAUSDT
+#- XMRUSDT
+#- XLMUSDT
+#- TRXUSDT
+#- NEARUSDT
+#- ATOMUSDT
+#- ALGOUSDT
+#- MATICUSDT
+#- SOLUSDT
+
+
 start_date: '2017-01-01'
 end_date: '2022-05-01'
 interval: 1d

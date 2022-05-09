@@ -10,7 +10,7 @@ from .utils import Portfolio, TradingData
 class RebalanceStrategy(Strategy):
     def __init__(self, data: TradingData, portfolio: Portfolio = None, **kwargs):
         super().__init__(data, portfolio)
-        self.rebalance_interval = kwargs.get("rebalance_interval", 1)
+        self.rebalance_interval = kwargs.get("interval", 1)
         # self.rebalance_ratio = 'even'
         self.rebalance_ratio = 100 / len(self.portfolio.coins)
         self.interval_until_next_rebalance = self.rebalance_interval

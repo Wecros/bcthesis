@@ -2,12 +2,11 @@
 File for testing basic functionality of the implemented rebalance strategy.
 """
 
-import numpy as np
 import pytest
 from utils import get_data_from_dict, update_close_values
 
 from backtester.rebalance_strategy import RebalanceStrategy
-from backtester.utils import create_portfolio_from_data, set_index_for_data
+from backtester.utils import create_portfolio_from_data
 
 
 @pytest.fixture
@@ -23,17 +22,6 @@ def usd():
 @pytest.fixture
 def portfolio(data, usd):
     return create_portfolio_from_data(data, usd)
-
-
-def update_close_values(data, coin_close_dict):
-    df = data.data.reset_index()
-    for coin, close_list in coin_close_dict.items():
-        df["close"] = np.where(
-            df["pair"] == coin,
-            np.resize(close_list, data.dates.size * len(data.symbols)),
-            df["close"],
-        )
-    return set_index_for_data(df)
 
 
 def test_rebalance_strategy(data, portfolio):

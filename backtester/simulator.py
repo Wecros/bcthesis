@@ -14,7 +14,6 @@ from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
 from .rebalance_strategy import RebalanceStrategy
-from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
 from .riskmetric_strategy import (
     RiskMetricStrategy,
     RiskMetricStrategyCombined,
@@ -30,8 +29,11 @@ from .utils import (
     StrategyResult,
     TradingData,
     create_portfolio_from_data,
+    ensure_same_dates_between_dataframes,
+    get_dates_from_index,
     get_historical_data_if_btc_is_only_coin_considered,
     noop,
+    set_index_for_data,
 )
 
 # HACK: Imports will not be removed automatically by formatter.
@@ -41,9 +43,15 @@ RiskMetricStrategy
 RiskMetricStrategyExtremaLogic
 RiskMetricStrategyRiskLogic
 RiskMetricStrategyCombined
+DCARiskMetricStrategyFibonacciAdjusted
+DCARiskMetricStrategy7to0
+DCARiskMetricStrategyFibonacci
 DCAStrategy
 ShortTermStrategy
 BTC_SYMBOL
+ensure_same_dates_between_dataframes
+set_index_for_data
+get_dates_from_index
 
 
 def simulate(trading_data: TradingData):
@@ -51,74 +59,94 @@ def simulate(trading_data: TradingData):
 
     trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
 
-    historical_data_used = trading_data.btc_historical
+    trading_data.btc_historical
 
-    optimizations = RiskMetricOptimizations(
-        diminishing_returns=False, daily_volume_correlation=False
-    )
-    optimizations_dim = RiskMetricOptimizations(
-        diminishing_returns=True, daily_volume_correlation=False
-    )
-    optimizations_dim_vol = RiskMetricOptimizations(
-        diminishing_returns=True, daily_volume_correlation=True
-    )
+    # optimizations = RiskMetricOptimizations(
+    # diminishing_returns=False, daily_volume_correlation=False
+    # )
+    # optimizations_dim = RiskMetricOptimizations(
+    # diminishing_returns=True, daily_volume_correlation=False
+    # )
+    # optimizations_dim_vol = RiskMetricOptimizations(
+    # diminishing_returns=True, daily_volume_correlation=True
+    # )
+    # optimizations_vol = RiskMetricOptimizations(
+    # diminishing_returns=False, daily_volume_correlation=True
+    # )
 
-    riskmetric = get_risk_metric(
-        historical_data_used, optimizations, trading_data.dates[0], trading_data.dates[-1]
-    )
-    riskmetric_dim = get_risk_metric(
-        historical_data_used, optimizations_dim, trading_data.dates[0], trading_data.dates[-1]
-    )
-    riskmetric_dim_vol = get_risk_metric(
-        historical_data_used, optimizations_dim_vol, trading_data.dates[0], trading_data.dates[-1]
-    )
-    riskmetric_dim
-    riskmetric_dim_vol
+    # riskmetric = get_risk_metric(
+    # historical_data_used, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    # )
+    # riskmetric_dim = get_risk_metric(
+    # historical_data_used, optimizations_dim, trading_data.dates[0], trading_data.dates[-1]
+    # )
+    # riskmetric_dim_vol = get_risk_metric(
+    # historical_data_used, optimizations_dim_vol, trading_data.dates[0], trading_data.dates[-1]
+    # )
+    # riskmetric_vol = get_risk_metric(
+    # historical_data_used, optimizations_vol, trading_data.dates[0], trading_data.dates[-1]
+    # )
+
+    # riskmetric_market_cap = get_risk_metric(
+    # trading_data.global_metrics, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    # )
+    # riskmetric_dim_market_cap = get_risk_metric(
+    # trading_data.global_metrics,
+    # optimizations_dim,
+    # trading_data.dates[0],
+    # trading_data.dates[-1],
+    # )
+    # riskmetric_dim_vol_market_cap = get_risk_metric(
+    # trading_data.global_metrics,
+    # optimizations_dim_vol,
+    # trading_data.dates[0],
+    # trading_data.dates[-1],
+    # )
+    # riskmetric_vol_market_cap = get_risk_metric(
+    # trading_data.global_metrics,
+    # optimizations_vol,
+    # trading_data.dates[0],
+    # trading_data.dates[-1],
+    # )
+
+    # df = trading_data.data.reset_index()
+    # df = df.set_index(['open_time'])
+    # df, riskmetric_dim_vol = ensure_same_dates_between_dataframes(df, riskmetric_dim_vol)
+    # df, riskmetric_dim_vol_market_cap = (
+    # ensure_same_dates_between_dataframes(df, riskmetric_dim_vol_market_cap)
+    # )
+    # df = df.reset_index()
+    # df = df.rename(columns={"index": "open_time"})
+    # trading_data.data = set_index_for_data(df)
+    # trading_data.dates = get_dates_from_index(trading_data.data)
 
     strategy_list = [
-        # [RiskMetricStrategyRiskLogic, {"riskmetric": riskmetric}],
-        # [RiskMetricStrategyExtremaLogic, {"riskmetric": riskmetric}],
-        # [RiskMetricStrategyCombined, {"riskmetric": riskmetric}],
-        # [RiskMetricStrategyCombined2, {"riskmetric": riskmetric}],
-        # [RiskMetricStrategyCombined3, {"riskmetric": riskmetric}],
-        # [RebalanceStrategy],
-        # [RebalanceStrategy, {"rebalance_interval": 5}],
-        # [RebalanceStrategy, {"rebalance_interval": 10}],
-        [DCARiskMetricStrategy7to0, {"riskmetric": riskmetric}],
-        [DCARiskMetricStrategyFibonacci, {"riskmetric": riskmetric}],
-        [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
+        # [DCAStrategy],
+        # [RebalanceStrategy, {'interval': 1}],
+        # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric}],
+        # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_dim}],
+        # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_market_cap}],
+        # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_dim_market_cap}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_market_cap}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol_market_cap}],
     ]
-    portfolio = create_portfolio_from_data(trading_data, cash=0)
-    # portfolio = create_portfolio_from_data(
-    # trading_data, cash=1000
-    # )
+
+    # portfolio = create_portfolio_from_data(trading_data, cash=0)
+    portfolio = create_portfolio_from_data(
+        trading_data, cash=trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
+    )
 
     simgen = StrategyGenerator(strategy_list, trading_data, portfolio)
     simgen.run()
     results = simgen.get_results()
 
-    simgen.strategies[0].total_usd_invested / (len(trading_data.dates))
-    strategy_list2 = [
-        [DCAStrategy, {"base": 5}],
-        # [DCAStrategy, {"base": simgen.strategies[1].total_usd_invested / ((len(trading_data.dates)) / simgen.strategies[1].dca_interval), "dca_interval": simgen.strategies[1].dca_interval}],
-    ]
-
-    simgen2 = StrategyGenerator(strategy_list2, trading_data, portfolio)
-    simgen2.run()
-    results.extend(simgen2.get_results())
-
-    for result in results:
-        if result.name == RiskMetricStrategy.__name__:
-            if optimizations.diminishing_returns:
-                result.name += " + dim returns"
-            if optimizations.daily_volume_correlation:
-                result.name += " + 24h volume correlation"
-            if not optimizations.diminishing_returns and not optimizations.daily_volume_correlation:
-                result.name = "RiskMetricStrategy - no optimizations"
-            if historical_data_used is trading_data.global_metrics:
-                result.name += " | total marketcap"
-            else:
-                ...
+    # results[1].name = "FibDCA + dim returns"
+    # results[2].name = "FibDCA + dim returns + 24h vol correlation"
+    # results[3].name = "FibDCA + dim returns | market cap"
+    # results[4].name = "FibDCA + dim returns + 24h vol corr | market cap"
 
     annotation_text = (
         f"Data Range: {trading_data.dates[0].strftime(TIME_FORMAT)}--"
@@ -131,36 +159,19 @@ def simulate(trading_data: TradingData):
         trading_data,
         results,
         x_title=f"{trading_data.variables.interval_str} steps",
-        y_title="Return of investment (x times)",
+        # y_title="Profit in $USD",
+        y_title="Price in $USD",
+        # y_title="Return of investment (x times)",
         # title_text=f"Strategy Experiments ({annotation_text})",
-        title_text=f"",
+        title_text="",
     )
 
-    portfolio = create_portfolio_from_data(
-        trading_data, cash=trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
+    hodl_profit = (
+        trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[-1]), "close"]
+        / trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
     )
-    logging.info(
-        f'HODL strategy profit: {trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[-1]), "close"] / trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]}'
-    )
+    logging.info(f"HODL strategy profit: {hodl_profit}")
 
-    # plotter.plot_all_symbols()
-
-    plotter.plot_riskmetric_on_second_scale(riskmetric)
-    # plotter.plot_riskmetric_on_second_scale(riskmetric_dim, name="risk metric + diminishing returns")
-    # plotter.plot_riskmetric_on_second_scale(riskmetric_dim_vol, name="risk metric + dim returns and 24h vol corr")
-    # plotter.plot_colorcoded_riskmetric(riskmetric)
-    # plotter.plot_riskmetric_maxima_minima_on_second_scale(riskmetric)
-
-    # for i in range(len(simgen.strategies)):
-    # results[i].profits /= simgen.strategies[i].total_usd_invested
-    # results[3].profits /= simgen2.strategies[0].total_usd_invested
-
-    plotter.plot_strategies()
-
-    # plotter.plot_bought_dates()
-    # plotter.plot_sold_dates()
-
-    # plotter.plot_log_y_first_axis()
     plotter.show()
     plotter.save("pdf")
 

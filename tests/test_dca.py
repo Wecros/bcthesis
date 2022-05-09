@@ -6,13 +6,7 @@ import pytest
 from utils import get_data_from_dict, update_close_values
 
 from backtester.dca_strategy import DCAStrategy
-from backtester.utils import (
-    BTC_SYMBOL,
-    Portfolio,
-    TradingData,
-    create_portfolio_from_data,
-    set_index_for_data,
-)
+from backtester.utils import BTC_SYMBOL, create_portfolio_from_data
 
 
 @pytest.fixture

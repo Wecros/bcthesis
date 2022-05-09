@@ -183,7 +183,7 @@ def set_index_for_data(data: pd.DataFrame):
     return data.set_index(["pair", "open_time"]).sort_index()
 
 
-def create_portfolio_from_data(data: TradingData, cash: float = 40000):
+def create_portfolio_from_data(data: TradingData, cash: float = 10000):
     """Create portfolio for usd and coins. Cash parameter is used to denote dollar capital."""
     return Portfolio(usd=cash, coins={coin: 0 for coin in data.symbols})
 

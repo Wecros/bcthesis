@@ -93,22 +93,6 @@ class RiskMetricStrategy(Strategy):
         self.bought_state = False
         return self.states
 
-    def buy_if_not_bought(self):
-        print(self.riskmetric.loc[self.current_step]["riskmetric"])
-        print(self.current_step)
-        print(self.portfolio.usd)
-        print(self.portfolio.coins)
-        # if self.portfolio.usd == 0:
-        # # Already bought
-        # return
-        self.buy()
-
-        print("AFTER BUY")
-        print(self.current_step)
-        print(self.portfolio.usd)
-        print(self.portfolio.coins)
-        print()
-
 
 class RiskMetricStrategyRiskLogic(RiskMetricStrategy):
     def execute_step(self):
