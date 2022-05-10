@@ -14,6 +14,7 @@ from .dca_strategy import DCAStrategy
 from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
 from .rebalance_strategy import RebalanceStrategy
+from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
 from .riskmetric_strategy import (
     RiskMetricStrategy,
     RiskMetricStrategyCombined,
@@ -59,11 +60,11 @@ def simulate(trading_data: TradingData):
 
     trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
 
-    trading_data.btc_historical
+    historical_data_used = trading_data.btc_historical
 
-    # optimizations = RiskMetricOptimizations(
-    # diminishing_returns=False, daily_volume_correlation=False
-    # )
+    optimizations = RiskMetricOptimizations(
+        diminishing_returns=False, daily_volume_correlation=False
+    )
     # optimizations_dim = RiskMetricOptimizations(
     # diminishing_returns=True, daily_volume_correlation=False
     # )
@@ -74,9 +75,9 @@ def simulate(trading_data: TradingData):
     # diminishing_returns=False, daily_volume_correlation=True
     # )
 
-    # riskmetric = get_risk_metric(
-    # historical_data_used, optimizations, trading_data.dates[0], trading_data.dates[-1]
-    # )
+    riskmetric = get_risk_metric(
+        historical_data_used, optimizations, trading_data.dates[0], trading_data.dates[-1]
+    )
     # riskmetric_dim = get_risk_metric(
     # historical_data_used, optimizations_dim, trading_data.dates[0], trading_data.dates[-1]
     # )
@@ -132,6 +133,9 @@ def simulate(trading_data: TradingData):
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol}],
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_market_cap}],
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol_market_cap}],
+        [DCAStrategy],
+        [DCARiskMetricStrategyFibonacci, {"riskmetric": riskmetric}],
+        [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
     ]
 
     # portfolio = create_portfolio_from_data(trading_data, cash=0)
@@ -171,6 +175,9 @@ def simulate(trading_data: TradingData):
         / trading_data.data.loc[(BTC_SYMBOL, trading_data.dates[0]), "close"]
     )
     logging.info(f"HODL strategy profit: {hodl_profit}")
+
+    plotter.plot_all_symbols()
+    plotter.plot_strategies()
 
     plotter.show()
     plotter.save("pdf")
