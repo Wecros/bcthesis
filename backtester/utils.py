@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
-from schema import Schema
+from schema import Optional, Or, Schema
 
 ROOT_PATH = Path(sys.argv[0]).parents[1]
 DATA_PATH = ROOT_PATH / "data"
@@ -36,6 +36,7 @@ YAML_FILE_SCHEMA = Schema(
         "start_date": lambda date: pd.Timestamp(date),
         "end_date": lambda date: pd.Timestamp(date),
         "interval": str,
+        Optional("debug_level"): Schema(Or("WARNING", "DEBUG", "INFO", "ERROR", "CRITICAL")),
     }
 )
 

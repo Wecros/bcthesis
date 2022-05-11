@@ -21,6 +21,19 @@ pairs:
 #- SOLUSDT
 
 
-start_date: '2017-01-01'
+#start_date: '2021-11-09'
+#end_date: '2021-11-25'
+
+#start_date: '2021-09-27'
+#end_date: '2021-10-10'
+
+#start_date: '2022-02-26'
+#end_date: '2022-03-06'
+
+start_date: '2022-02-01'
 end_date: '2022-05-01'
-interval: 1d
+
+
+
+interval: 5m
+#debug_level: DEBUG

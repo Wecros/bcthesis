@@ -26,10 +26,25 @@ class RiskMetricStrategy(Strategy):
             0.2: False,
             0.1: False,
         }
+
         self.buy()
+
+    def set_states(self, state_to_set):
+        self.states = {k: False for k in self.states}
+        self.states[state_to_set] = True
+        self.sold_state = False
+        self.bought_state = False
+        return self.states
 
     def execute_step(self):
         super().execute_step()
+        return self.states
+
+
+class RiskMetricStrategyRiskLogic(RiskMetricStrategy):
+    def execute_step(self):
+        super(RiskMetricStrategy, self).execute_step()
+        self.execute_risk_logic()
 
     def execute_risk_logic(self):
         risk = self.riskmetric.loc[self.current_step]["riskmetric"]
@@ -75,6 +90,12 @@ class RiskMetricStrategy(Strategy):
                 self.states = self.set_states("sell")
                 self.sell()
 
+
+class RiskMetricStrategyIdealExtrema(RiskMetricStrategy):
+    def execute_step(self):
+        super(RiskMetricStrategy, self).execute_step()
+        self.execute_extrema_logic()
+
     def execute_extrema_logic(self):
         local_min = self.riskmetric.loc[self.current_step]["min"]
         local_max = self.riskmetric.loc[self.current_step]["max"]
@@ -86,32 +107,30 @@ class RiskMetricStrategy(Strategy):
         elif not pd.isnull(local_max):
             self.sell()
 
-    def set_states(self, state_to_set):
-        self.states = {k: False for k in self.states}
-        self.states[state_to_set] = True
-        self.sold_state = False
-        self.bought_state = False
-        return self.states
 
-
-class RiskMetricStrategyRiskLogic(RiskMetricStrategy):
-    def execute_step(self):
-        super(RiskMetricStrategy, self).execute_step()
-        self.execute_risk_logic()
-
-
-class RiskMetricStrategyExtremaLogic(RiskMetricStrategy):
+class RiskMetricStrategyRealExtrema(RiskMetricStrategy):
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
         self.execute_extrema_logic()
+
+    def execute_extrema_logic(self):
+        local_min = self.riskmetric.loc[self.current_step]["min_real"]
+        local_max = self.riskmetric.loc[self.current_step]["max_real"]
+
+        # We are at local minimum
+        if not pd.isnull(local_min):
+            self.buy()
+        # We are at local maximum
+        elif not pd.isnull(local_max):
+            self.sell()
 
 
 class RiskMetricStrategyCombined(RiskMetricStrategy):
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
 
-        local_min = self.riskmetric.loc[self.current_step]["min"]
-        local_max = self.riskmetric.loc[self.current_step]["max"]
+        local_min = self.riskmetric.loc[self.current_step]["min_real"]
+        local_max = self.riskmetric.loc[self.current_step]["max_real"]
 
         # We are at local minimum
         if not pd.isnull(local_min):

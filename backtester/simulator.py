@@ -5,23 +5,8 @@ File for orchestrating the various strategies in play.
 import logging
 from copy import deepcopy
 
-from .dca_riskmetric_strategy import (
-    DCARiskMetricStrategy7to0,
-    DCARiskMetricStrategyFibonacci,
-    DCARiskMetricStrategyFibonacciAdjusted,
-)
-from .dca_strategy import DCAStrategy
-from .hodl_strategy import HodlStrategy
 from .plotter import Plotter
-from .rebalance_strategy import RebalanceStrategy
 from .riskmetric_calculator import RiskMetricOptimizations, get_risk_metric
-from .riskmetric_strategy import (
-    RiskMetricStrategy,
-    RiskMetricStrategyCombined,
-    RiskMetricStrategyExtremaLogic,
-    RiskMetricStrategyRiskLogic,
-)
-from .short_term_strategy import ShortTermStrategy
 from .strategy import Strategy
 from .utils import (
     BTC_SYMBOL,
@@ -37,28 +22,16 @@ from .utils import (
     set_index_for_data,
 )
 
-# HACK: Imports will not be removed automatically by formatter.
-HodlStrategy
-RebalanceStrategy
-RiskMetricStrategy
-RiskMetricStrategyExtremaLogic
-RiskMetricStrategyRiskLogic
-RiskMetricStrategyCombined
-DCARiskMetricStrategyFibonacciAdjusted
-DCARiskMetricStrategy7to0
-DCARiskMetricStrategyFibonacci
-DCAStrategy
-ShortTermStrategy
-BTC_SYMBOL
-ensure_same_dates_between_dataframes
 set_index_for_data
+get_historical_data_if_btc_is_only_coin_considered
+ensure_same_dates_between_dataframes
 get_dates_from_index
 
 
 def simulate(trading_data: TradingData):
     logging.info("Running simulation")
 
-    trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
+    # trading_data = get_historical_data_if_btc_is_only_coin_considered(trading_data)
 
     historical_data_used = trading_data.btc_historical
 
@@ -122,9 +95,17 @@ def simulate(trading_data: TradingData):
     # trading_data.dates = get_dates_from_index(trading_data.data)
 
     strategy_list = [
+        # [ShortTermStrategyIdeal],
+        # [ShortTermStrategyReal],
+        # [ShortTermStrategyAdjusted, {"riskmetric": riskmetric}],
+        # [HodlStrategy],
+        # [RebalanceStrategy],
+        # [RiskMetricStrategyRealExtrema, {"riskmetric": riskmetric}],
+        # [RiskMetricStrategyRealExtrema, {"riskmetric": riskmetric_dim}],
+        # [RiskMetricStrategyRealExtrema, {"riskmetric": riskmetric_market_cap}],
+        # [RiskMetricStrategyRealExtrema, {"riskmetric": riskmetric_dim_market_cap}],
         # [DCAStrategy],
         # [RebalanceStrategy, {'interval': 1}],
-        # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric}],
         # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_dim}],
         # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_market_cap}],
         # [RiskMetricStrategyExtremaLogic, {'riskmetric': riskmetric_dim_market_cap}],
@@ -133,9 +114,9 @@ def simulate(trading_data: TradingData):
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol}],
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_market_cap}],
         # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric_dim_vol_market_cap}],
-        [DCAStrategy],
-        [DCARiskMetricStrategyFibonacci, {"riskmetric": riskmetric}],
-        [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
+        # [DCAStrategy],
+        # [DCARiskMetricStrategyFibonacci, {"riskmetric": riskmetric}],
+        # [DCARiskMetricStrategyFibonacciAdjusted, {"riskmetric": riskmetric}],
     ]
 
     # portfolio = create_portfolio_from_data(trading_data, cash=0)
@@ -147,10 +128,10 @@ def simulate(trading_data: TradingData):
     simgen.run()
     results = simgen.get_results()
 
-    # results[1].name = "FibDCA + dim returns"
-    # results[2].name = "FibDCA + dim returns + 24h vol correlation"
-    # results[3].name = "FibDCA + dim returns | market cap"
-    # results[4].name = "FibDCA + dim returns + 24h vol corr | market cap"
+    # results[2].name = "Extrema - no optimizations"
+    # results[3].name = "Extrema + diminishing returns"
+    # results[4].name = "Extrema - no optimizations | market cap"
+    # results[5].name = "Extrema + dim returns | market cap"
 
     annotation_text = (
         f"Data Range: {trading_data.dates[0].strftime(TIME_FORMAT)}--"
@@ -158,13 +139,14 @@ def simulate(trading_data: TradingData):
         f"Data Interval: {trading_data.variables.interval_str}"
     )
     annotation_text
+    riskmetric
 
     plotter = Plotter(
         trading_data,
         results,
         x_title=f"{trading_data.variables.interval_str} steps",
         # y_title="Profit in $USD",
-        y_title="Price in $USD",
+        y_title="Profits in $USD",
         # y_title="Return of investment (x times)",
         # title_text=f"Strategy Experiments ({annotation_text})",
         title_text="",
@@ -177,8 +159,24 @@ def simulate(trading_data: TradingData):
     logging.info(f"HODL strategy profit: {hodl_profit}")
 
     plotter.plot_all_symbols()
+
+    # plotter.plot_riskmetric_on_second_scale(riskmetric)
+    # plotter.plot_riskmetric_maxima_minima_on_second_scale(riskmetric)
+    # short_strat_riskmetric = ShortTermStrategyIdeal(trading_data).riskmetric
+    # plotter.plot_riskmetric_on_second_scale(
+    # short_strat_riskmetric,
+    # riskmetric_col="risk",
+    # name="Bitcoin moving average",
+    # title="Bitcoin Moving Average",
+    # )
+
     plotter.plot_strategies()
 
+    # plotter.plot_bought_dates()
+    # plotter.plot_sold_dates()
+    # plotter.plot_riskmetric_maxima_minima_on_second_scale(short_strat_riskmetric)
+
+    # plotter.plot_log_y_first_axis()
     plotter.show()
     plotter.save("pdf")
 

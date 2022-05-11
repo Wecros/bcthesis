@@ -3,11 +3,12 @@
 
 \chapter{Introduction}
 
-The cryptocurrency market is very lucrative for people that want to turn a profit in cryptocurrency trading, constantly coming up with new methods of doing so. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That is why there is a need for adaptive strategies that can prosper through both of them.
+The cryptocurrency market is very lucrative for people that want to turn a profit in cryptocurrency trading, constantly coming up with new methods of doing so. There are many trading strategies for cryptocurrencies available, but no such strategy survives both rising (bull) and falling (bear) market. That is why there is a need for adaptive strategies that can prosper through both of them. That is why there is a need for adaptive strategies that can adjust and react to the market changes, keeping its value in a bear market and creating profit in bull runs.
 
 I~will explore the idea of the adaptive trading strategies for cryptocurrencies in this thesis. Firstly, we need to find a way how to predict if the market will go up or down. Then we need to apply sufficient trading strategies based on the percentage probability of trends rising or falling. That is the high-level overview of the idea presented in this thesis.
 
 To address the problems outlined above, I~will explore the current trading strategies that are used for trading cryptocurrencies. Research current simulation tools available today and analyze the historic trading data to find some patterns. Looking at current state of adaptive strategies for cryptocurrencies is also necessary.
+
 
 \subsection*{Organization}
 
@@ -61,7 +62,7 @@ A~\emph{stablecoin} is another important type of cryptocurrency. It aims to offe
 \label{blockchain}
 A~blockchain, or a distributed ledger,\footnote{\url{https://www.investopedia.com/terms/d/distributed-ledger-technology-dlt.asp}} is a digital database that is shared and synchronized across a distributed network consisting of a very large number of computers~\cite{investopedia-blockchain}. Distributed networks eliminate the need for central authority to keep a check against manipulation. You can see the blockchain's basic structure in Figure~\ref{blockchain-figure}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/Bitcoin_Block_Data.png}
     \caption{Blockchain structure, attribution: Wikimedia Commons~\cite{wikimedia:blockchain}.}
@@ -118,7 +119,7 @@ There are many types of rebalancing strategies. We will look at some of them now
 \subsection*{Periodic Rebalancing}
 This is the simplest rebalancing to use. The rebalance happens after a fixed amount of time. For cryptocurrencies, it makes sense to set shorter time due to rapid price fluctuations, something like 1 day. An example of periodic rebalancing can be seen in Figure~\ref{periodic-rebalance-figure}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/periodic-rebalance.png}
     \caption{Periodic rebalance visualization, attribution: Shrimpy~\cite{portfolio-rebalancing}.}
@@ -132,7 +133,7 @@ Let's say we once again have 50/50 BTC/ETH allocations. Let's set the threshold 
 
 An example of threshold rebalancing can be seen in Figure~\ref{threshold-rebalance-figure}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/threshold-rebalance.png}
     \caption{Threshold rebalance visualization, attribution: Shrimpy~\cite{portfolio-rebalancing}.}
@@ -165,14 +166,14 @@ Day trading are the investors that buy and sell the same asset over the span of 
 \label{section-range-trading}
 Asset move in certain ranges, as you can see in Figure~\ref{trading-range-figure}. Range trading assumes that and tries to take guesses where are the limits using candlestick charts and support and resistance levels. Investors want to buy when prices reach the support level and sell when they reach the resistance level~\cite{5types-of-daytrading}. The support and resistance levels can be seen in Figure~\ref{sup-and-res-levels}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/trading-range.png}
     \caption{Trading range visualization, attribution: Investopedia~\cite{investopedia:trading-range}.}
     \label{trading-range-figure}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/dotdash-final-trading-range.png}
     \caption{Support and resistance levels, attribution: Investopedia~\cite{investopedia:trading-range}.}
@@ -187,7 +188,7 @@ A~large bankroll is required for effective use of this strategy. Since the retur
 
 In Figure~\ref{scalping-figure} it can be seen how scalping can take quick and short advantages of the market.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/scalping.png}
     \caption{Scalping visualization, attribution: Quora~\cite{best-crypto-daytrading}.}
@@ -209,7 +210,7 @@ There are two types of arbitrage when it comes to cryptocurrencies. The first on
 
 Regarding the second type of exchange. In January, a legendary \emph{kimchi premium}\footnote{\url{https://www.investopedia.com/terms/k/kimchi-premium.asp}} happened. Bitcoin traded almost 40\% higher on the Korean exchanges than the US exchanges. This lead to arbitrage investors taking advantage of this fact, buying Bitcoin on US exchanges and selling it on the Korean ones for profit~\cite{hodlbot:day-trading-cryptocurrency}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/arbitrage.png}
     \caption{Arbitrage execution via multiple trading pairs, attribution: HodlBot~\cite{hodlbot:day-trading-cryptocurrency}.}
@@ -256,7 +257,7 @@ The trader will set a strategy in place, then he will press the replay button (s
 
 Manual testing is a great way to control trader's emotions since they may feel the same emotions as in live environment. The disadvantage is that it is quite time-consuming. A~trader may run a test for hours only to find out it was not a good strategy (though this result is also valuable). Secondly, the amount of data the trader can test the strategy on is limited.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/tradingview-replay.png}
     \caption{TradingView replay functionality, attribution: TradingView~\cite{backtesting-crypto-trading-strategies}.}
@@ -400,20 +401,20 @@ Fundamental analysis takes its merits from the fundamental, intrinsic value of a
 Sentiment analysis is the use of market sentiment to predict the price movements. Market sentiment represents the feelings and mood of investors towards an asset. These are typically categorized into bullish and bearish sentiments. A~significant increase in google searches about purchasing some cryptocurrency may suggest a market sentiment.
 
 \section{Bitcoin Price Analysis}
-This section was inspired by the Binance Academy article about Bitcoin's price history~\cite{binance:bitcoin-price-history} and Investopedia's article on Bitcoin's price history~\cite{investopedia:bitcoin-price-history}.
+This Section was inspired by the Binance Academy article about Bitcoin's price history~\cite{binance:bitcoin-price-history} and Investopedia's article on Bitcoin's price history~\cite{investopedia:bitcoin-price-history}.
 
 First thing to analyze is Bitcoin in particular. No other cryptocurrency has such an impact on the cryptocurrency market, something which it continues to do to this day. Since bitcoin is the original cryptocurrency that started this all, it is only appropriate to begin our analysis with it. We can see the linear and logarithmic graphs in Figures~\ref{btc-linear-figure} and~\ref{btc-log-figure} respectively.
 
 While the linear graph shows us the actual price changes, the logarithmic graph is also useful to us. It shows us relative price increases of the Bitcoin. It represents a percentage increase in price, the change from \$10 to \$20 is the same as \$1000 to \$2000 since the investor will in both cases gain a profit of 100\%. Because of this, logarithmic scale is usually often used for technical analysis.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_linear.png}
     \caption{Bitcoin linear price graph, attribution: CoinMarketCap~\cite{coinmarketcap}.}
     \label{btc-linear-figure}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/BTC_ALL_log.png}
     \caption{Bitcoin logarithmic price graph, attribution: CoinMarketCap~\cite{coinmarketcap}.}
@@ -432,7 +433,7 @@ By the Summer, prices went down by 50\%, hitting just under \$30,000 in July. An
 
 From the observed events, we can see that media coverage drives the price upwards. And that Bitcoin is susceptible to economic circumstances, as seen during the COVID-19 pandemic. One other interesting fact is that on June 9, 2021, El Salvador made Bitcoin legal tender---meaning it can be used for any transaction where business accept it. It is the first country to do this to this day.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/investopedia-bitcoin-price-history.png}
     \caption{Bitcoin's price history in detail, attribution: Investopedia~\cite{investopedia:bitcoin-price-history}.}
@@ -440,13 +441,13 @@ From the observed events, we can see that media coverage drives the price upward
 \end{figure}
 
 \subsection*{Elon Musk Tweets}
-This section has been inspired by the Vox article~\cite{vox:elon} and the CoinDesk article~\cite{coindesk:elon}
+This Section has been inspired by the Vox article~\cite{vox:elon} and the CoinDesk article~\cite{coindesk:elon}
 
 One of the most influential figure when it comes to his tweets is Elon Musk, and when it comes to the cryptocurrency market, it applies in double. The price roller coaster of 2021 started when Elon Musk tweeted that Tesla would no longer accept Bitcoin as payment due to environmental concerns. In a result, the price of Bitcoin dropped by 15\%. After suggesting that Tesla is selling Bitcoin, the price continued to plummet down. The next tweet stabilized the market for a bit, Musk ensured that Tesla has not sold any Bitcoin. A~broken heart emoji with the \#Bitcoin hashtag ensured another fall. A~price has however begun to rise once again, when Mush had tweeted that Tesla would once again start accepting Bitcoin.
 
 The whole event can be seen in Figure~\ref{figure-vox-elon}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/vox-elon.png}
     \caption{Bitcoin's price correlation with Elon Musk's tweets, attribution: Vox~\cite{vox:elon}.}
@@ -455,7 +456,7 @@ The whole event can be seen in Figure~\ref{figure-vox-elon}.
 
 Similar events transpired, but with the Dogecoin\footnote{\url{https://coinmarketcap.com/currencies/dogecoin/}} cryptocurrency in mind. The observed events can be seen in Figure~\ref{figure-coindesk-elon}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/coindesk-elon.png}
     \caption{Dogecoin's price correlation with Elon Musk's tweets, attribution: CoinDesk~\cite{coindesk:elon}.}
@@ -477,7 +478,7 @@ As described above, media coverage, regulation and other world news can easily i
 
 Before we get to the strategy proposals, the design and implementation of the backtester program, used to test and analyze the strategies, needs to be discussed. The strategy proposals are immediately supported by implementation and useful Figures in this way. And it is more logically presented in this way, since the implementation is tied to the proposals themselves.
 
-\section{Design}
+\section{Solutoin Design}
 During my reserach, I~initially tinkered with several frameworks to test out their capabilities. The basic idea was that if a framework would prove \emph{satisfactory}, I~would use it and tweak it to my needs, so I~do not reinvent the wheel again. A~satisfactory framework in my definition would be easy to work with, easy to learn, and matched to the needs of the proposed adaptive strategies.
 
 Unfortunately, during my tinker with Python frameworks as \emph{PyAlgoTrade}, \emph{backtrader} or \emph{zipline}, the frameworks were either outdated or they did not meet my needs of adaptive strategies.
@@ -488,7 +489,7 @@ One of the more promising frameworks was the \emph{vectorbt} library. I~did a fe
 \subsection*{General Design}
 The general idea is to build a backtesting command line interface (CLI) application. It takes input arguments from the CLI or a configuration file and passes it to the argument parser. The parser parses the arguments, it then gets all the requested data either via API calls, or if the data already exists, fetch them from the local filesystem. All the arguments, data range and data itself is then converted to a trading data data-structure and passed to the simulator. The simulator calls several strategies and aggregates the results into a strategy result data structure. That is then passed to the Plotter class. Plotter plots the results and optionally prints out the strategies stats. The visualization can be seen in Figure~\ref{structure-diagram}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/structure-diagram.pdf}
     \caption{General design structure of the backtester.}
@@ -502,7 +503,7 @@ One interesting strategy in particular is the StrategyMerger class that allows m
 
 Strategy classes with their most important attributes are shown in Figure~\ref{figure-strategy-class-diagram}. There are many prepared classes that the user can simulate with.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/strategy-class-diagram.pdf}
     \caption{Class diagram of strategies of the backtester.}
@@ -510,7 +511,7 @@ Strategy classes with their most important attributes are shown in Figure~\ref{f
 \end{figure}
 
 
-\section{Fetch of Trading Data}
+\section{Trading Data}
 Initial trading data that was used for the experiments were initially provided by the supervisor. Due to their incompleteness and due to them being out-of-date, there was a need for more complete data.
 
 I~designed the data fetch into a few categories. I~then researched each category and chose the best suited API provider for the thesis.
@@ -546,7 +547,7 @@ Due to a possible long list of argument values, the arguments can be saved into 
 
 Among optional arguments belongs the logging level. It defines the logging level used for logging that informs the users of filesystem manipulations, simulation progress and results, or errors and debug information. By default, it is set to level INFO.
 
-\section{Other Helpful Modules}
+\section{Other Auxiliary Modules}
 
 \subsection*{Plotter}
 \texttt{plotly}\footnote{\url{https://pypi.org/project/plotly/}} is used for plotting the final graphs. It works natively with the data frame data used in \texttt{pandas}.
@@ -588,7 +589,7 @@ Simple testing was set up using the pytest framework\footnote{\url{https://docs.
 
 Before we can dive into the individual adaptive strategy experiments, we need some traditional strategies that we can compare the adaptive results against. HODL and rebalance will serve as such strategies. Both are very simple to implement and highly used. That makes them the perfect candidate for this purpose.
 
-All the graphs depicted in the section have been produced by the implemented backtester program, proving its usefulness.
+All the graphs depicted in the Section have been produced by the implemented backtester program, proving its usefulness.
 
 \section{Evaluation Strategy}
 Before we get to the individual experiments, the main process for evaluating the experiments must be described. There are 2 caveats to this process. Firstly we need to define the strategy that tells the probability of the market going up or down, let us call it the risk metric. And secondly we need to find the optimal strategy that works with this metric---that means an algorithm that decides what to do when the metric is at such level and what to do if it is in a different level---acting as a finite state machine.
@@ -637,7 +638,7 @@ Our benchmark strategies are going to be HODL and periodic Rebalance. Periodic r
 
 Performance of the strategies against Bitcoin and Ethereum portfolio can be seen in Figure~\ref{figure-benchmark}, in logarithmic scale. We can see that the periodic rebalance interval matters, although only a bit. We will use the shortest interval, as suggested by the assumptions in Section~\ref{rebalance-assumptions}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/benchmark.pdf}
     \caption{HODL and rebalance strategies' performance against the Bitcoin and Ethereum portfolio.}
@@ -660,14 +661,14 @@ The results look quite similar to the metrics used by Benjamin Cowen. So far it 
 
 Here are the results projected on historical price of Bitcoin. Results are shown in Figures~\ref{figure-50week-scale} and~\ref{figure-50week-colorcoded} as 0-1 scale and color-coded graph respectively. As can be seen, the metric's beginning does not make much sense. It does well during the December 2017 peak. During the later peaks it performs okay, but the risk is not as high as it should be during the peak of April 2021. This tells us that we should not only look at the overall risk, but probably also at how quickly the risk changes.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-scale.pdf}
     \caption{Historical Price (logarithmic) of Bitcoin with Risk Metric Scale.}
     \label{figure-50week-scale}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/50week-colorcoded.pdf}
     \caption{Color-coded Risk Metric, logarithmic scale.}
@@ -693,7 +694,7 @@ $$risk = \frac{\mathit{SMA}_{50 days}}{\mathit{SMA}_{50 weeks}} * \log_{10}(d)$$
 
 The $\log$ part could be further tweaked with, but I~have found that it works quite nicely. In Figure~\ref{figure-dim-riskmetric} you can see the optimized risk metric against the original.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/riskmetric-dim-returns.pdf}
     \caption{Comparison of the diminishing returns optimization against the standard version, an expected price of Bitcoin according to the aforementioned formula.}
@@ -706,7 +707,7 @@ Other thing considered is using the total market capitalization data instead of 
 
 In Figure~\ref{figure-total-marketcap-riskmetric}, comparison of the previous findings with the Bitcoin risk metric can be seen. The metrics are quite similar, the bigger difference is that the total market capitalization metric gives more importance to the jump of July 2017. The diminishing returns optimization alter the metrics, but no other change is observed.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/totalmarketcap-metric.pdf}
     \caption{Comparison of Bitcoin data use against total market capitalization data for the risk metric. Diminishing returns optimization is represented by dash lines.}
@@ -716,27 +717,27 @@ In Figure~\ref{figure-total-marketcap-riskmetric}, comparison of the previous fi
 
 \subsection*{Correlation With 24h Volume Data}
 \label{subsection-24hvolume-correlation}
-When using a strategy like the risk metric we have implemented, we are betting on one horse, so to speak. Some unexpected turn can make us lose a lot of money. That is why it is sometimes more efficient to use a correlation with a different strategy to make the original strategy less error-prone. That is the motivation for this section.
+When using a strategy like the risk metric we have implemented, we are betting on one horse, so to speak. Some unexpected turn can make us lose a lot of money. That is why it is sometimes more efficient to use a correlation with a different strategy to make the original strategy less error-prone. That is the motivation for this Section.
 
 Correlation with the volume in \$USD traded in one day has been chosen for our strategy. It is a sensible metric. When more people trade the asset, the price can be expected to fluctuate a lot---usually up---and vice versa.
 
 The data correlation between the two series is approximately $0.73$, with $1$ being the best positive correlation. The computed correlation is not perfect, but it gives us a good basis to work upon. Comparison can be seen in Figures~\ref{figure-24volume-ols},~\ref{figure-24volume-lin} and~\ref{figure-24volume-log}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-ols.pdf}
     \caption{Ordinary Least Squares method~\cite{wikipedia:ols} visualizing the correlation.}
     \label{figure-24volume-ols}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-lin.pdf}
     \caption{Linear graph comparison between Bitcoin price and its daily volume traded in \$USD.}
     \label{figure-24volume-lin}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-log.pdf}
     \caption{Log-log graph comparing the Bitcoin price and its daily volume traded in \$USD.}
@@ -755,14 +756,14 @@ $$risk = \left[\frac{\mathit{BTC\_SMA}_{50 days}}{\mathit{BTC\_SMA}_{50 weeks}} 
 
 In Figure~\ref{figure-24volume-7sma} the 7 days moving average of trading volume can be seen. In Figure~\ref{figure-24volume-riskmetric} the base metric is benchmarked against the correlated risk metric, dashed line denote the diminishing returns optimizations.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-7sma.pdf}
     \caption{Visualization of the 7 days moving average of the daily traded volume on top of the risk metric. The volume was limited between values 0 and 1.}
     \label{figure-24volume-7sma}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/24volume-riskmetric.pdf}
     \caption{Logarithmic graph benchmarking the base risk metric against the correlated metric with daily volume.}
@@ -773,14 +774,14 @@ In Figure~\ref{figure-24volume-7sma} the 7 days moving average of trading volume
 \subsection*{Machine Learning Optimization}
 \label{subsection-ml-optimization}
 
-In this section, the last optimization is touched upon. Machine Learning is a very vast subject. For the thesis's purpose, the time series prediction is our subject. Predictions of these types require a good model to learn upon to work well, otherwise the results are questionable at best. In this section, the time series prediction is used to predict the price of Bitcoin. This result could be later correlated with the previous achieved findings.
+In this Section, the last optimization is touched upon. Machine Learning is a very vast subject. For the thesis's purpose, the time series prediction is our subject. Predictions of these types require a good model to learn upon to work well, otherwise the results are questionable at best. In this Section, the time series prediction is used to predict the price of Bitcoin. This result could be later correlated with the previous achieved findings.
 
 The \texttt{AutoTS} Python library~\cite{autots} is used to make the predictions. One of the ways that the machine learning optimization could be incorporated to the other tactics is the following. Every day it would predict the price for the following X (e.g., 10) days. Depending on how well the prediction is, it would either make the risk bigger or smaller.
 
 The forecasts got are too linear and usually too optimistic to be of any bigger use. Some forecast can be seen in Figure~\ref{figure-autots-prediction}
 Since the results got are not reliable, the machine learning optimization is not evaluated. Further investigation of the machine learning algorithm would be needed.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/autots-prediction.png}
     \caption{AutoTS~\cite{autots} prediction.}
@@ -788,9 +789,9 @@ Since the results got are not reliable, the machine learning optimization is not
 \end{figure}
 
 \section{Evaluating Strategies}
-Let us put the implemented strategies to use. In this section the correct evaluation strategy is found and discussed strategies of Section~\ref{section-strategies} evaluated.
+Let us put the implemented strategies to use. In this Section the correct evaluation strategy is found and discussed strategies of Section~\ref{section-strategies} evaluated.
 
-Some of the strategies, like machine learning optimization~\ref{subsection-ml-optimization}, is not evaluated since its usefulness has not been proved in the previous section.
+Some of the strategies, like machine learning optimization~\ref{subsection-ml-optimization}, is not evaluated since its usefulness has not been proved in the previous Section.
 
 \subsection*{Finding the Optimal Evaluation Strategy}
 One interesting discovery during the testing was that transferring coins to stablecoins when risk gets higher may not be beneficial at all. If the risk keeps on rising, we will lose on the precious gains that come from the rising effect. We will still keep some gains, but not the entirety of it because we transferred a considerable amount of our coins to stablecoins. That is why I~started to consider the fact that we should not only focus on the risk itself, but also on the nature of the direction itself---finding local maxima and minima and minding the slope.
@@ -810,20 +811,24 @@ When playing around with the risk values, I~have found good results when using t
     \item $Risk < 0.1$: Capital is in coins only.
 \end{itemize}
 
-The results can be seen in the joint Figure~\ref{figure-combined-riskmetric} of all the evaluation strategies under the name "RiskMetricStrategyRisLogic". It did better than HODLing, but only barely finishing at $\$41,700$ compared to HODL's $\$37,600$.
+The results can be seen in the joint Figure~\ref{figure-combined-riskmetric} of all the evaluation strategies under the name "RiskMetricStrategyRiskLogic". It did better than HODLing, but only barely, finishing at $\$41,700$ compared to HODL's $\$37,600$.
 
 \subsection*{Evaluation Strategy -- Local Extrema Only}
 \label{subsection-local-extrema}
-When looking at the extrema, we look at the nature of the risk's direction. When we encounter a local maximum, we transfer all the coins to stablecoins, and when we encounter a minimum, we transfer those stablecoins back to coins---selling high, buying low. The results are again seen in the joint Figure~\ref{figure-combined-riskmetric}. The strategy did very well. At the end the investor has around $\$127,000$ compared to the HODL's $\$37,600$. That is more than 3 times higher turn out!
+When looking at the extrema, we look at the nature of the risk's direction. When we encounter a local maximum, we transfer all the coins to stablecoins, and when we encounter a minimum, we transfer those stablecoins back to coins---selling high, buying low.
+
+Of course, the extremes itself cannot be determined on the particular day, we never know if the metric is going to go up or down. That is an ideal situation that can never occur. For the calculation, five points from each side are taken into the consideration---this prevents too many extrema next to each other, which would not be useful. Because of this, we can only be certain of the extrema after 5 days have passed since the extreme occured. As an example, for a local minimum that occured on 15th January, we would actually put the buy order in on 20th January.
+
+The results are again seen in the joint Figure~\ref{figure-combined-riskmetric} as the "RiskMetricStrategyRealExtrema" line. The strategy did quite well. At the end the investor has around $\$98,400$ compared to the HODL's $\$37,600$. That is approximately 2.6 times higher turn out!
 
 \subsection*{Evaluation Strategy -- Risk And Extrema Combination}
 Even though the results of the local extrema look very good, I~cannot wonder if the two indicators cannot be somehow combined. The combination works as follows. When a local maximum is encountered, we sell, and when we encounter a local minimum, we buy. That is the same behavior as previously. The twist is that when we buy, we check the risk metric. If the risk is high, we only buy so much and when it is low, we sell less.
 
 I~have prepared 3 combined strategies, the first checks the risk both when selling and buying, the second focuses on optimizing selling only, and the third on the buy only. Results can again be seen in the aforementioned Figure~\ref{figure-combined-riskmetric}.
 
-The first combined strategy performed the worst out of the three. The second one is the average, and the third performed the best, still not outperforming the local extrema strategy, ending at around $\$113,000$. We must keep in mind, that even though the third strategy was the best out of the three, that does not mean that optimizing for buy only is a profitable strategy, it just means that it is less damaging to the portfolio profit. That being said, all of the combined strategies outperformed the risk-only strategy.
+The first combined strategy performed the worst out of the three. The second one is the average, and the third performed the best, still not outperforming the local extrema strategy, ending at around $\$90,660$. We must keep in mind, that even though the third strategy was the best out of the three, that does not mean that optimizing for buy only is a profitable strategy, it just means that it is less damaging to the portfolio profit. That being said, all of the combined strategies outperformed the risk-only strategy.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/combined-riskmetric.pdf}
     \caption{Showcase of evaluation strategies for the same risk metric.}
@@ -832,7 +837,7 @@ The first combined strategy performed the worst out of the three. The second one
 
 \subsection*{Evaluation Strategy -- DCA}
 \label{subsection-eval-dca}
-We have traded the coins to stablecoins and back, when we simulated the strategies so far. The other option is to never sell the coins we have, but rather buy additional coins when the opportunity presents itself. That is the point of the DCA (dollar cost averaging) strategy, explained in detail in section~\ref{section-dca}.
+We have traded the coins to stablecoins and back, when we simulated the strategies so far. The other option is to never sell the coins we have, but rather buy additional coins when the opportunity presents itself. That is the point of the DCA (dollar cost averaging) strategy, explained in detail in Section~\ref{section-dca}.
 
 Depending on the risk's value, we will change our DCA investments accordingly. When the risk is high, less money or no money is invested, and when the risk is low, we try to invest the most money we have. To benchmark this strategy in a reasonable fashion, there will be no portfolio limit to what we can invest. To benchmark against regular DCA, we will take the overall \$USD invested and invest it over regular DCA, which invests the same amount of money each day. The real life scenario, where a portfolio could use the variable strategy, would be a portfolio that is dynamic and can offer to take money from other assets. Alternatively, a person that invests once in a while may look at the current risk and adjust his investment accordingly.
 
@@ -878,7 +883,7 @@ I~tried to optimize the sequence once more, restricting the investment only unde
     \item $Risk < 0.1$: Invest sum x21.
 \end{itemize}
 
-This strategy is better to the general investing, since a multiple of 21 is less demanding than a multiple of 34. The strategy performed better, but only a hair. It is 0.4\% percent better than the previous optimizations. A~really minor improvement.
+This strategy is better to the general investing, since a multiple of 21 is less demanding than a multiple of 34. The strategy performed better, but only by a hair. It is 0.4\% percent better than the previous optimizations. A~really minor improvement.
 
 All results can be seen in the joint Figure~\ref{figure-dca-investing}, the primary axis y scale follows the profitable ratio. You can see that the two last strategies overlap almost completely. An interesting observation is that the DCA strategies only get better overtime. That makes, since they need time to make advantage of the fluctuations in the market, and that cannot happen immediately.
 
@@ -894,7 +899,7 @@ The numbers represent the return of investment. When looking at the classic DCA 
 
 I~tried simulating the strategies with different time intervals for the DCA buy, but similar results were achieved, that is why there is no additional Figure displaying it.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/combined-dca-investing.pdf}
     \caption{Showcase of evaluation strategies for the DCA strategy.}
@@ -903,40 +908,40 @@ I~tried simulating the strategies with different time intervals for the DCA buy,
 
 \section{Simulating The Risk Metric Optimizations}
 \label{section-sim-optimizations}
-So far we have defined the possible strategies for calculating risk and found the optimal evaluation strategies. But we only used the default risk metric defined in Section~\ref{subsection-50week50days} without any optimizations. In this section, optimizations are simulated with the evaluation strategies. Local extrema are chosen for coin to stablecoin transfer, and the adjusted Fibonacci sequence strategy is chosen for the DCA investing.
+So far we have defined the possible strategies for calculating risk and found the optimal evaluation strategies. But we only used the default risk metric defined in Section~\ref{subsection-50week50days} without any optimizations. In this Section, optimizations are simulated with the evaluation strategies. Local extrema are chosen for coin to stablecoin transfer, and the adjusted Fibonacci sequence strategy is chosen for the DCA investing.
 
 \subsection*{Local Extrema Evaluation Strategy}
 Used evaluation strategy was defined in Section~\ref{subsection-local-extrema}. I~used Bitcoin data beginning from the year 2014 and 2017 for comparison, to see if the newer data experience different phenomena. The results can be seen in Figures~\ref{figure-optimization-longer} and~\ref{figure-optimization-shorter} respectively.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/evaluation-optimization-longer.pdf}
     \caption{Comparison of risk optimizations used with the local extrema evaluation strategy, dates: Jan 2014--May 2022.}
     \label{figure-optimization-longer}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/evaluation-optimization-shorter.pdf}
     \caption{Comparison of risk optimizations used with the local extrema evaluation strategy. Dates: July 2017--May 2022.}
     \label{figure-optimization-shorter}
 \end{figure}
 
-It can be seen that the using the historical Bitcoin data is much preferable to the total market capitalization data. This was to be expected, since the coin in being simulated is Bitcoin itself. Regarding the individual optimizations, using no optimizations and using diminishing returns constantly compete for the first place of best profit. Since diminishing returns prevailed with the newer data, it could mean that this optimization may be more profitable as time goes on. The correlation with the daily volume is not much successful here, taking big loss at the peak of January 2018.
+It can be seen that the using the historical Bitcoin data is much preferable to the total market capitalization data. This was to be expected, since the coin in being simulated is Bitcoin itself. Regarding the individual optimizations, using no optimizations and using diminishing returns constantly compete for the first place of best profit. Since diminishing returns prevailed with the newer data, it could mean that this optimization may be more profitable as time goes on. The correlation with the daily volume really underperforms here, taking big loss at the peak of January 2018.
 
-The result is clear. Either use the diminishing returns optimization or none when working with the local extrema evaluation strategy. Bitcoin data should be used for the calculation if working with Bitcoin only. For comparison with the previous DCA return of investment mentioned in section~\ref{subsection-eval-dca}, the return of investment of the best strategy ranging from the year 2014 is a multiple of 782, starting at \$849.14 in 2014 and ending with the profit of \$588,213 in 2022. That is 17 times better than the present HODL strategy.
+The result is clear. Use the diminishing returns when working with the local extrema evaluation strategy. Bitcoin data should be used for the calculation if working with Bitcoin only. In the results strating in year 2017, the diminishing returns optimizations achieved result of almost \$114,00 compared previous \$98,400. For comparison with the previous DCA return of investment mentioned in Section~\ref{subsection-eval-dca}, the return of investment of the best strategy ranging from the year 2014 is a multiple of 68.6, starting at \$849.14 in 2014 and ending with the profit of \$58,280 in 2022.
 
 \subsection*{Adjusted Fibonacci Sequence DCA Strategy}
 Adjusted Fibonacci sequence strategy was defined in Section~\ref{subsection-eval-dca}. Once again, the Bitcoin data used are of dual character, ranging from the year 2014 and 2017. The results can be seen in Figures~\ref{figure-dca-optimization-longer} and~\ref{figure-dca-optimization-shorter}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/evaluation-dca-optimization-longer.pdf}
     \caption{Comparison of risk optimizations used with the adjusted Fibonacci sequence DCA strategy, dates: Jan 2014--May 2022.}
     \label{figure-dca-optimization-longer}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/evaluation-dca-optimization-shorter.pdf}
     \caption{Comparison of risk optimizations used with the adjusted Fibonacci sequence DCA strategy. Dates: July 2017--May 2022.}
@@ -947,10 +952,10 @@ Firstly, in contrast with the previous results, the daily volume correlation see
 
 If an optimal combination should be chosen, the diminishing returns optimization together with daily volume correlation applied on total market capitalization data seem to be the most consistent. When only looking at the historical Bitcoin data, diminishing returns optimization seems to be the one that is the most consistent.
 
-If the results from the previous DCA return of investment, mentioned in Section~\ref{subsection-eval-dca}, should be compared with the new optimizations, the results would be as follows. The diminishing returns optimization paired together with daily volume correlation, and applied on total market capitalization has return of investment of $59.6$. That is just over 5\% better than the previous DCA results.
+If the results from the previous DCA return of investment, mentioned in Section~\ref{subsection-eval-dca}, should be compared with the new optimizations, the results would be as follows. The diminishing returns optimization paired together with daily volume correlation, and applied on total market capitalization has return of investment of $59.6$ times the original. That is just over 8\% better than the previous DCA results.
 
 \section{Working With Portfolios of Many Coins}
-We implemented the adaptive strategies. We defined the optimal evaluation strategies. We found the perfect risk combinations to go with these strategies. But all these simulated only one cryptocurrency---Bitcoin. This section focuses on simulating many coins, how are the results compared to previous findings and the traditional rebalance approach described in Section~\ref{section-rebalance}.
+We implemented the adaptive strategies. We defined the optimal evaluation strategies. We found the perfect risk combinations to go with these strategies. But all these simulated only one cryptocurrency---Bitcoin. This Section focuses on simulating many coins, how are the results compared to previous findings and the traditional rebalance approach described in Section~\ref{section-rebalance}.
 
 \subsection*{Choosing the Coins}
 Two portfolios are used for the evaluation. Portfolio A~is using only the Bitcoin and Ethereum, these two assets show promising and stable growth and have been the 2 biggest contributors to total market capitalization. As of May 1st 2022, the two cryptocurrencies contribute to almost 62\% of total market capitalization~\cite{coinmarketcap:globalmetrics}. Both cryptocurrencies of the portfolio date back to the earliest Binance data point, 17th August 2017.
@@ -991,18 +996,18 @@ Longest possible date range of portfolio B: 14th October 2020--today (limited by
 \subsection*{Local Extrema Evaluation Strategy}
 Like in the previous Section~\ref{section-sim-optimizations} we use the local extrema evaluation strategy. The diminishing returns optimization is simulated together with the market capitalization data option. Results for the portfolio A~are shown in Figure~\ref{figure-extrema-portfolio-A}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/extrema-portfolio-A.pdf}
     \caption{Local extrema evaluation strategy against portfolio A.}
     \label{figure-extrema-portfolio-A}
 \end{figure}
 
-The results look similar as when testing with Bitcoin only. Diminishing returns optimization seems to do a bit better, and using total market capitalization data does not seem to bear any importance. When looking at the performance, the best strategy was more than 3 times more performant than HODL and little bit less than 3 times as Rebalance.
+The results look similar as when testing with Bitcoin only. Diminishing returns optimization seems to dominate the charts again, and using total market capitalization data does not seem to bear any importance. The best strategy ended up with a bit over \$120,000. That is actual \$7,000 more than we ended up when testing the strategy on Bitcoin only. When looking at the performance, the best strategy was more than 3 times more performant than HODL and little bit less than 3 times performant than rebalance.
 
-The results for portfolio B, shown in figure~\ref{figure-extrema-portfolio-B}, look very underperforming. Interestingly, even rebalance performs worse than HODL. HODL's profit si more than double compared to the other strategies. It looks like the strategy does not have enough time to relaly get accustomed to the market. Some shorter-term strategy may be more interesting in this case.
+The results for portfolio B, shown in figure~\ref{figure-extrema-portfolio-B}, look very underperforming. Interestingly, even rebalance performs worse than HODL. HODL's profit si more than double compared to the other strategies. It looks like the strategy does not have enough time to really get accustomed to the market. Some shorter-term strategy may be more interesting in this case.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/extrema-portfolio-B.pdf}
     \caption{Local extrema evaluation strategy against portfolio B.}
@@ -1013,7 +1018,7 @@ The results for portfolio B, shown in figure~\ref{figure-extrema-portfolio-B}, l
 \subsection*{Adjusted Fibonacci Sequence DCA Strategy}
 Similarly, as in the previous Section~\ref{section-sim-optimizations} we use the adjusted Fibonacci sequence DCA (dollar-cost averaging) strategy. The diminishing returns optimization and daily volume correlation is simulated together with the market capitalization data option. Results for portfolio A~are shown in Figure~\ref{figure-fibseq-portfolio-A}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/fibseq-portfolio-A.pdf}
     \caption{Adjusted Fibonacci sequence DCA strategy against portfolio A.}
@@ -1024,20 +1029,20 @@ Using market capitalization data for the DCA here looks to be beneficial as befo
 
 The results for portfolio B can be seen in figure~\ref{figure-fibseq-portfolio-B}. Here an interesting phenomenon occurs. The risk-adjusted strategies gain a huge profit from March to May 2021, but then they slowly begin to lose it all the way until the classic DCA outperforms by the end of April 2022. This shows that more extensive research should be done when trading with many coins with the proposed strategies.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/fibseq-portfolio-B.pdf}
     \caption{Adjusted Fibonacci sequence DCA strategy against portfolio B.}
     \label{figure-fibseq-portfolio-B}
 \end{figure}
 
-\section{Simulating Short-term Trading}
+\section{Simulating Short-Term Trading}
 \label{section-testing-day-trading}
 When focusing on short-term trading, range trading and scalping discussed in Sections~\ref{section-range-trading} and~\ref{section-scalping} respectively. We try to guess the support and resistance levels.
 
 When talking about technical analysis, we need to make support and resistance levels into an account. They can be predicted in several ways. Round numbers are taken into account, like \$50 and \$100, since investors usually put stop orders at such whole number points. These points then serve as resistance levels, since it takes a very large number of purchases to absorb the sales. Moving average can be used to estimate the levels, too, as you can see in the Figure~\ref{figure-ma-support-resistance}. Other indicators include the golden ratio, number of touches and others. This paragraph has been inspired by the Investopedia article~\cite{investopedia:support-and-resistance}, where more detailed information can be found.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/ma-support-resistance.png}
     \caption{Expected support and resistance levels computed by a moving average. Attribution: Investopedia~\cite{investopedia:support-and-resistance}.}
@@ -1052,36 +1057,40 @@ Instead of looking for long moving averages of 50 weeks and days as before, we w
 \subsection*{Strategy Evaluation}
 The strategy is simulated on Bitcoin only. It does not make much sense to test the strategies with many cryptocurrencies, because the strategy is tailored to one asset only. Theoretically, a portfolio with many cryptocurrencies can run this strategy individually per every currency.
 
-The basic evaluation strategy is to sell at the local maxima of the moving average and buy at the local minima. Thus trying to buy low and sell high. The local maxima and minima take the 5 points from each side into consideration---this prevents too many extrema next to each other, which would not be useful.
+The basic evaluation strategy is to sell at the local maxima of the moving average and buy at the local minima. Thus trying to buy low and sell high. The local maxima and minima take the 5 points from each side into consideration---this prevents too many extrema next to each other, which would not be useful. As before in Section \ref{subsection-local-extrema}, we need to readjust from the ideal point by several ticks, the drawback may be more significant here, as the data is much more volatile.
 
 Three date range have been chosen to evaluate the results. A~date range with a falling, rising and changing trend. The results can be seen in Figures~\ref{figure-short-term-rising},~\ref{figure-short-term-falling} and~\ref{figure-short-term-changing}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/short-term-rising.pdf}
     \caption{27th Sep--10th Oct 2021 rising trend that registered rise from \$43000 to \$55000.}
     \label{figure-short-term-rising}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/short-term-falling.pdf}
     \caption{9th Nov--25th Nov 2021 falling trend that registered fall from \$65000 to \$55000.}
     \label{figure-short-term-falling}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/short-term-changing.pdf}
-    \caption{6th Feb--26th Mar 2022 changing trend.}
+    \caption{26th Feb--6th Mar 2022 changing trend.}
     \label{figure-short-term-changing}
 \end{figure}
 
-Surprisingly, all the date ranges experienced somewhat constant profits, with the falling date range's difference against HODL being most noticeable, having almost 50\% edge against HODL in a span of just two weeks. Here it must be said that no exchange fees are taken into the account. Most of the individual trades generate a little profit that only accumulates over time---meaning that exchange fees would diminish the results noticeable and must be taken into the account when considering using the strategy. Nevertheless, the resulting strategy performs really well.
+As you can see, if the strategy was optimal and idealized, the profits would be very, very high. That is not the real case and we must take the current day into consideration. The "ShortStrategyIdeal" show us idealized data, "ShortStrategyReal" show how that same metric would turn out with realistic extremes, and finally "ShortStrategyAdjusted" further plays with the previous strategy, disallowing sells that are too near of each other on the moving average.
 
-Let us see how the strategy fares when applied over several months. The date range chosen is February until April of the year 2022. The results can be seen in~\ref{figure-short-term-long}. The profits trend upwards in an almost linear fashion. The strategy simulation managed to quadruple its profits in the span of 3 months.
+The non-ideal strategies perform very poorly compared to the ideal one. We can see that the falling date range experiences the most profits. One things must be mentioned, that would diminish even the ideal strategy a bit. Most of the individual trades generate a little profit that only accumulates over time--meaning that exchange fees would diminish the results by a noticable amount, and should be taken into account when considering using the strategies. Slippage and spread can also influence the results, since market orders are not instantaneous, a disadvantage of short-term trading.
 
-\begin{figure}[!hbt]
+In all of the Figures we can see a steady rise of the ideal strategy. In the rising trend, we see that the realistic strategies underperform by a few thousands dollars. In the falling trend the performance is similar to HODL, and in the changing trend the strategies outperform HODL by up to \$2,500. The results so far do not tell us too much reliable information.
+
+Let us see how the strategy fares when applied over several months. The date range chosen is February until April of the year 2022. The results can be seen in~\ref{figure-short-term-long}. The profits here have accumulated a bit in the adjusted strategy, generating a profit of \$42,000 against HODL's \$38,200. A profit of almost 10\%. That is not much when we take into account the possible drawbacks and questionable realibility of the method. The ideal strategy trends upwards in an almost linear fashion, quadrupling its value over the span of 3 months. In contrast to that, the strategy that would be used in practice instead of the ideal one, made worse profits than HODL, ending up at \$37,230.
+
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/short-term-long.pdf}
     \caption{1st Feb--30th Apr 2022 long date range.}
@@ -1096,11 +1105,11 @@ Firstly, we proposed and showcased some adaptive strategy. One was a risk metric
 
 Next, a second part of strategy was researched. We needed an evaluation strategy that could use the computed risk metric. In this way, several options were considered and two major branches of evaluating the proposed strategies discovered. The first branch focuses on trading coins to stablecoins, and back. The other branch focuses on the dollar-cost averaging (DCA), a helpful tool for many investors. Finding local extrema on the risk function proved to be crucial to the first branch. The DCA focused more closely on how it can adjust its investments according to the risk. A~solution based on the Fibonacci sequence was found with great results.
 
-With the adaptive strategy and evaluation strategy prepared, the testing of different combinations of the aforementioned optimizations was started. Some more popular trends have been observed, but the results were sometimes too inconsistent to make definite conclusions. During this stage, strategies have been compared to the HODL and the periodic DCA strategies. The proposed strategies outperformed the traditional approaches quite consistently, in some cases showing surprisingly good results.
+With the adaptive strategy and evaluation strategy prepared, the testing of different combinations of the aforementioned optimizations was started. Some more popular trends have been observed, but the results were sometimes too inconsistent to make definite conclusions. During this stage, strategies have been compared to the HODL, and the periodic DCA strategies. The proposed strategies outperformed the traditional approaches quite consistently, in some cases showing very good results.
 
 In the next step, the strategies were put to test against the two portfolios featuring multiple coins. The portfolio with Bitcoin and Ethereum performed comparably well to the previous results, easily outperforming rebalance, another traditional approach. The second portfolio, which featured 18 different coins, showed underperforming results. This showed that a more extensive research should be made when trying to invest with diverse portfolios, such as was this one.
 
-Finally, short-term trading options were explored. So far, we only spoke of long-term trading with 1 day data frequency. 5 minute OHLCV data was used for the purpose of short-term simulation. The moving average of 6 hours was used to anticipate the support and resistance levels. The strategy was tested against a few different date ranges, falling trend, rising trend and changing trend. In all of the occasions, the strategy showed more than promising results. It could double the profits over the course of a few weeks. One thing must be noted here, none of the trades include the exchange fees, so it is possible that the profits would be somehow diminished. Nevertheless, the short-term strategy showed great results and definitely caught my attention.
+Finally, short-term trading options were explored. So far, we only spoke of long-term trading with 1 day data frequency. 5 minute OHLCV data was used for the purpose of short-term simulation. The moving average of 6 hours was used to anticipate the support and resistance levels. The strategy was tested against a few different date ranges, falling trend, rising trend and changing trend. The results of the strategies were questionable at best, performing well in some sections and underperforming in others. More detailed reasearch is needed to use the strategies reliantly. When it comes to the idealized strategy---the knows when it hit extreme on the same day---it naturally performed extremly well, quadrupling its profits in 3 months.
 
 \chapter{Limitations and Further Improvements of Practical Deployment}
 \label{chapter-limitations-and-improvements}
@@ -1123,14 +1132,14 @@ When comparing a screenshot from the latest video~\cite{youtube:bitcoin-risk-met
 
 I~can say that both metrics come from the same background, but the one Benjamin Cowen uses other types of optimizations or indicators that aren't used in this thesis. The results you can get with both metrics should be quite similar, though.
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/cowen-riskmetric-screenshot.png}
     \caption{Screenshot of Benjamin Cowen's Bitcoin risk metric from video~\cite{youtube:bitcoin-risk-metric-latest}. Attribution: Benjamin Cowen~\cite{youtube:cowen-yt-channel}.}
     \label{figure-cowen-screenshot}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!t]
     \centering
     \includegraphics[width=\columnwidth]{figures/combined-bitcoin-metrics.pdf}
     \caption{Showcase of the thesis's Bitcoin risk metrics.}
@@ -1175,7 +1184,7 @@ The goal of the thesis was to propose and implement adaptive trading strategies 
 
 Regarding the thesis formal specification. Existing trading strategies were studied and achieved results analyzed and assumptions summarized. Existing simulation tools were described. Cryptocurrency trading data was analyzed and events of interests were summarized. Adaptive trading strategies were proposed, implemented in the form of a backtester and evaluated against traditional approaches. Both 5 minute OHLCV and 1 day OHLCV data were used during the thesis. Finally, further improvements and limitations of the practical deployment were described.
 
-It was found that the Bitcoin risk metric, can be used as a form of adaptive trading strategy for long-term investing. It was shown how different approaches can optimize such metrics, such as using the total market capitalization price instead of Bitcoin price, or correlating the metric with the daily traded volume, can lead to better results under certain conditions. Regarding the short-term strategy, buying and selling at local extrema of price's smooth moving average was found to be really beneficial to the overall profits. All results were compared to traditional approaches like HODL and rebalance, under the right criteria, the performance was multiplied several times.
+It was found that the Bitcoin risk metric, can be used as a form of adaptive trading strategy for long-term investing. It was shown how different approaches can optimize such metrics, such as using the total market capitalization price instead of Bitcoin price, or correlating the metric with the daily traded volume, can lead to better results under certain conditions. Regarding the short-term strategy, buying and selling at local extrema of price's smooth moving average was explored. All strategy results were compared to traditional approaches like HODL and rebalance. Under the right criteria, the performance was multiplied several times.
 
 I~learned in great detail about economics of the market trading and cryptocurrencies in general. I~understand how a backtester can be built now and how should a trading strategy be implemented.
 

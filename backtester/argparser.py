@@ -26,6 +26,7 @@ from .utils import (
 def get_trading_data_from_args():
     """Get trading data ready for simulation."""
     args = get_parsed_args()
+    set_logging_level(args)
     trading_vars = convert_args_to_trading_variables(args)
     data_df = get_data_dataframe(trading_vars)
 
@@ -56,8 +57,6 @@ def get_parsed_args():
     if not args.file and not (args.interval and args.pairs and args.start_date and args.end_date):
         parser.error("Incomplete arguments or no argument file defined!")
 
-    set_logging_level(args)
-
     if args.file:
         return parse_yaml(args)
     return {
@@ -65,6 +64,7 @@ def get_parsed_args():
         "start_date": args.start_date,
         "end_date": args.end_date,
         "interval": args.interval,
+        "debug_level": args.debug_level,
     }
 
 
@@ -100,7 +100,7 @@ def get_argument_parser():
 
 
 def set_logging_level(args):
-    logging.getLogger().setLevel(getattr(logging, args.debug_level))
+    logging.getLogger().setLevel(getattr(logging, args["debug_level"]))
 
 
 def parse_yaml(args):
@@ -111,7 +111,8 @@ def parse_yaml(args):
         except SchemaError as se:
             logging.error(f"{args.file} configuration file does not conform to the schema. {se}")
             sys.exit(1)
-
+        if "debug_level" not in yaml_args:
+            yaml_args["debug_level"] = "INFO"
         return yaml_args
 
 

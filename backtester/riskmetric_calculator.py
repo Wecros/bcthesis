@@ -64,8 +64,10 @@ def _calculate_risk_metric(df: pd.DataFrame, optimizations: RiskMetricOptimizati
     df["max"] = df.iloc[
         argrelextrema(df.riskmetric.values, np.greater_equal, order=checked_values_after_before)[0]
     ]["riskmetric"]
+    df["min_real"] = df["min"].shift(checked_values_after_before)
+    df["max_real"] = df["max"].shift(checked_values_after_before)
 
-    df = df[["riskmetric", "price", "min", "max"]]
+    df = df[["riskmetric", "price", "min", "max", "min_real", "max_real"]]
     riskmetric_df = df[df["riskmetric"].notna()]
     return riskmetric_df
 

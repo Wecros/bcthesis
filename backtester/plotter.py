@@ -134,14 +134,22 @@ class Plotter:
             )
         )
 
-    def plot_riskmetric_on_second_scale(self, riskmetric, name="risk metric", dash=False, **kwargs):
+    def plot_riskmetric_on_second_scale(
+        self,
+        riskmetric,
+        name="risk metric",
+        dash=False,
+        title="Risk Metric Scale",
+        riskmetric_col="riskmetric",
+        **kwargs,
+    ):
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
-        self.figure.update_yaxes(title_text="Risk Metric Scale", secondary_y=True)
+        self.figure.update_yaxes(title_text=title, secondary_y=True)
         if dash:
             self.figure.add_trace(
                 go.Scatter(
                     x=riskmetric.index,
-                    y=riskmetric["riskmetric"],
+                    y=riskmetric[riskmetric_col],
                     name=name,
                     line_dash="dash",
                     **kwargs,
@@ -150,7 +158,7 @@ class Plotter:
             )
         else:
             self.figure.add_trace(
-                go.Scatter(x=riskmetric.index, y=riskmetric["riskmetric"], name=name, **kwargs),
+                go.Scatter(x=riskmetric.index, y=riskmetric[riskmetric_col], name=name, **kwargs),
                 secondary_y=True,
             )
 
@@ -165,7 +173,7 @@ class Plotter:
     def _min_scatter(self, riskmetric):
         return go.Scatter(
             x=self.dates,
-            y=riskmetric["min"],
+            y=riskmetric["min_plot"],
             mode="markers",
             name="local min",
             marker=dict(size=10, color="blue"),
@@ -174,7 +182,7 @@ class Plotter:
     def _max_scatter(self, riskmetric):
         return go.Scatter(
             x=self.dates,
-            y=riskmetric["max"],
+            y=riskmetric["max_plot"],
             mode="markers",
             name="local max",
             marker=dict(size=10, color="red"),
