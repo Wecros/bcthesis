@@ -6,19 +6,21 @@
 
 \chapter{Contents of the included storage media}
 \begin{verbatim}
+.
+├── .flake8
+├── docker-compose.yml
 ├── Dockerfile
 ├── LICENSE
 ├── Makefile
 ├── README.md
-├── backtester
-├── presentation
 ├── pyproject.toml
 ├── requirements-lint.txt
 ├── requirements.txt
-├── tests
-├── text
-├── xfilip46-thesis-presentation.pdf
-└── xfilip46-thesis.pdf
+├── requirements-freeze.txt (Dependcies with specified versions.)
+├── text (Thesis Latex folder.)
+├── tests (Backtester test files.)
+├── backtester (Backtester source codes.)
+└── xfilip46-thesis.pdf (Thesis text output.)
 \end{verbatim}
 
 
@@ -45,7 +47,7 @@ Containerized development:
 make docker-build  # docker-compose build
 \end{minted}
 
-\subsection*{How to run the project}
+\subsection*{How to Run the Project}
 There are a few ways to run the project.
 
 Via Makefile:
@@ -64,3 +66,9 @@ make docker-up  # docker-compose up
 \end{minted}
 
 The \texttt{args.yaml} configuration file should be edited to change the backtester behaviour. After that, the \texttt{simulate()} function found in the file \texttt{simulator.py} can be edited to make other strategies and plotting available.
+
+\subsection*{How to Develop New Strategies}
+To create new strategies, you can create any valid Python file and import the \texttt{Strategy} base class defined in strategy.py.
+You can then include the created strategy inside the \texttt{simulator.py} file, where you can also define what shoudl the Plotter class plot.
+There are several showcase functions inside the \texttt{simulate()} function for new devoleprs to play around with.
+Finally, changing \texttt{args.yaml} may be necessarry to adjust the input variables if you plan on running the program by \texttt{make run}.
