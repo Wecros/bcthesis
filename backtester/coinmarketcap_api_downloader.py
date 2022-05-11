@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File for getting dataframe data from Coinmarketcap API.
 
 For Coinmarket API see: https://coinmarketcap.com/api/
@@ -22,7 +24,12 @@ from .utils import (
 )
 
 
-def get_global_metrics_from_coinmarketcap(start_date: pd.Timestamp, end_date: pd.Timestamp):
+def get_global_metrics_from_coinmarketcap(
+    start_date: pd.Timestamp, end_date: pd.Timestamp
+) -> pd.DataFrame:
+    """Get global metrics in form of a Pandas data frame, including Bitcoin and Ethereum dominance,
+    total market capitalization and volume and some altcoin information. CoinMarketCap API is used.
+    """
     # Make start_date go historical because of riskmetric calculations
     start_date = pd.Timestamp("2013-04-29")
 

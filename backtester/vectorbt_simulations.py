@@ -1,9 +1,12 @@
 """
+Author: Marek Filip 2022
+
 File that contains sample vectorbt strategies.
 """
 
 import vectorbt as vbt
-from utils import TradingData
+
+from .utils import TradingData
 
 
 def run_simulation_vectorbt_hodl(trading_data: TradingData):
@@ -27,5 +30,5 @@ def run_simulation_vectorbt_msa(trading_data: TradingData):
 
         pf = vbt.Portfolio.from_signals(price, entries, exits, init_cash=100)
         print(pf.total_profit())
-        # print(pf.stats())
+        print(pf.stats())
         pf.plot().show()

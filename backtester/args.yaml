@@ -20,20 +20,22 @@ pairs:
 #- MATICUSDT
 #- SOLUSDT
 
+# Longest BTCUSDT data possible
+start_date: '2017-08-17'
+end_date: '2022-05-01'
 
-#start_date: '2021-11-09'
-#end_date: '2021-11-25'
+# 2 year span
+#start_date: '2020-01-01'
+#end_date: '2022-01-01'
 
-#start_date: '2021-09-27'
-#end_date: '2021-10-10'
-
+# Short-term data range
 #start_date: '2022-02-26'
 #end_date: '2022-03-06'
 
-start_date: '2022-02-01'
-end_date: '2022-05-01'
+# Long-term interval
+interval: 1d
 
+# Short-term interval
+#interval: 5m
 
-
-interval: 5m
-#debug_level: DEBUG
+debug_level: INFO

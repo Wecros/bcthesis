@@ -1,6 +1,10 @@
 """
+Author: Marek Filip 2022
+
 Module defining the plotter class used for plotting graphs.
 """
+
+import logging
 
 import numpy as np
 import numpy.typing as npt
@@ -20,11 +24,13 @@ from .utils import (
     map_values_to_specific_dates,
 )
 
-COLORBAR_CONFIG = dict(thickness=12, outlinewidth=1, dtick=0.2, tickformat=".0%")
-
 
 class Plotter:
-    """Plotter class.
+    """Plotter class that primarily serves to plot coin prices, strategy profits and
+    changing risk metrics.
+
+    Class takes list of strategy results and trading data as its input. Further titles
+    can be specified.
 
     plot_* functions serve to customize the self.figure object.
     """
@@ -37,7 +43,6 @@ class Plotter:
         y_title="",
         title_text="",
     ):
-        # self.figure = make_subplots(*args, **kwargs)
         self.figure = go.Figure()
         self.data = data.data
         self.historical_btc = data.btc_historical
@@ -52,13 +57,16 @@ class Plotter:
         self.figure.update_yaxes(title_text=y_title)
 
     def plot_line(self, x, y, name):
+        """Plot a simple line specifying the x and y values, and the name."""
         self.figure.add_trace(go.Scatter(x=x, y=y, mode="lines", name=name))
 
     def plot_strategies_with_data(self):
+        """Plot both strategies and data."""
         self.plot_all_symbols()
         self.plot_strategies()
 
     def plot_all_symbols(self, visible=True):
+        """Plot all cryptocurrency prices of the portfolio."""
         for symbol in self.symbols:
             self._plot_symbol(symbol, visible=visible)
 
@@ -68,7 +76,7 @@ class Plotter:
         )
 
     def plot_all_symbols_as_percentages(self):
-        """Percentages are represented as P&L from the first value"""
+        """Percentages are represented as P&L from the first value."""
         for symbol in self.symbols:
             self._plot_symbol_as_percentages(symbol)
 
@@ -81,6 +89,7 @@ class Plotter:
         self.figure.add_trace(go.Scatter(x=self.dates, y=percentages, name=symbol))
 
     def plot_specific_symbols(self, symbol_list):
+        """Prices of cryptocurrency symbols defined in the symbol_list are plotted."""
         for symbol in symbol_list:
             self._plot_symbol(symbol)
 
@@ -90,6 +99,7 @@ class Plotter:
             self._plot_symbol_as_percentages(symbol)
 
     def plot_strategies(self):
+        """Plot results of all strategies in time."""
         for strategy in self.strategies:
             self._plot_strategy(strategy)
 
@@ -115,11 +125,20 @@ class Plotter:
         )
 
     def plot_btc(self):
+        """Specifically plot Bitcoin."""
         self.figure.add_trace(
             go.Scatter(x=self.dates, y=self.data.loc[BTC_SYMBOL, "close"], name=BTC_SYMBOL)
         )
 
+    def plot_historical_btc(self):
+        """Plot the historic price of Bitcoin dating to 2013."""
+        self.figure.add_trace(
+            go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
+        )
+
     def plot_colorcoded_riskmetric(self, riskmetric, name="Colordcoded Riskmetric (BTC)"):
+        """Plot riskmetric given as input in colorcoded way."""
+        COLORBAR_CONFIG = dict(thickness=12, outlinewidth=1, dtick=0.2, tickformat=".0%")
         self.figure.add_trace(
             go.Scatter(
                 x=riskmetric.index,
@@ -141,8 +160,12 @@ class Plotter:
         dash=False,
         title="Risk Metric Scale",
         riskmetric_col="riskmetric",
+        *args,
         **kwargs,
     ):
+        """Plot given risk metric on the second y scale. Other arguments can be used to
+        alter the look of the metric and its titles.
+        """
         self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
         self.figure.update_yaxes(title_text=title, secondary_y=True)
         if dash:
@@ -163,10 +186,15 @@ class Plotter:
             )
 
     def plot_riskmetric_maxima_minima(self, riskmetric):
+        """Local minima and maxima of the given metric are plotted on the metric's risk values."""
         self.figure.add_trace(self._min_scatter(riskmetric))
         self.figure.add_trace(self._max_scatter(riskmetric))
 
     def plot_riskmetric_maxima_minima_on_second_scale(self, riskmetric):
+        """Local minima and maxima of the given metric are plotted on the metric's risk values.
+
+        Secondary y scale is used for the results.
+        """
         self.figure.add_trace(self._min_scatter(riskmetric), secondary_y=True)
         self.figure.add_trace(self._max_scatter(riskmetric), secondary_y=True)
 
@@ -188,11 +216,6 @@ class Plotter:
             marker=dict(size=10, color="red"),
         )
 
-    def plot_historical_btc(self):
-        self.figure.add_trace(
-            go.Scatter(x=self.historical_btc.index, y=self.historical_btc["price"], name="BTC-USD")
-        )
-
     def plot_total_market_cap(self):
         self.figure.add_trace(
             go.Scatter(
@@ -203,6 +226,7 @@ class Plotter:
         )
 
     def plot_trading_volume(self, second_scale=False):
+        """Daily traded volume is plottd from the historical price of Bitcoin."""
         if second_scale:
             self.figure = make_subplots(specs=[[{"secondary_y": True}]], figure=self.figure)
             self.figure.update_yaxes(title_text="Trading Volume", secondary_y=True)
@@ -227,13 +251,16 @@ class Plotter:
         df = self.historical_btc[self.dates[0] :].copy()
         df["BTC Price in $USD"] = df["price"]
         df["Daily traded volume in $USD"] = df["total_volume_24h"]
-        print(f'btc price to 24h volume correlation: {df["price"].corr(df["total_volume_24h"])}')
+        logging.info(
+            f'btc price to 24h volume correlation: {df["price"].corr(df["total_volume_24h"])}'
+        )
         self.figure = px.scatter(
             df, x="BTC Price in $USD", y="Daily traded volume in $USD", trendline="ols"
         )
         self.reupdate_layout()
 
     def plot_autots_prediction(self, data_to_use, forecast_length=21):
+        """Compute and plot the AutoTS machine-learned prediction of price data."""
         forecast_length = forecast_length
         forecast, up, low = calculate_autots_prediction(
             data_to_use,
@@ -253,6 +280,11 @@ class Plotter:
         self.figure.add_vline(x=value, *args, **kwargs)
 
     def plot_bought_dates(self, strategies=None, dash=False):
+        """Take the dates of strategies' buy orders and plot them using green triangle.
+
+        dash argument can be used to plot dashed horizontal line that can be helpful
+        in some use cases for visualizing, when the order happened in relation to some metric.
+        """
         if strategies is None:
             strategies = self.strategies
 
@@ -286,6 +318,11 @@ class Plotter:
                 self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="green")
 
     def plot_sold_dates(self, strategies=None, dash=False):
+        """Take the dates of strategies' sell orders and plot them using red triangle.
+
+        dash argument can be used to plot dashed horizontal line that can be helpful
+        in some use cases for visualizing, when the order happened in relation to some metric.
+        """
         if strategies is None:
             strategies = self.strategies
 
@@ -318,7 +355,7 @@ class Plotter:
             for date in strategy.sold_dates:
                 self.figure.add_vline(x=date, line_width=1, line_dash="dash", line_color="red")
 
-    def plot_diminishing_returns(self):
+    def plot_diminishing_returns_expected_btc_price(self):
         """Days for diminishing returns are counted from the first transaction
         recorded in Jan 12 2009.
         """
@@ -346,18 +383,25 @@ class Plotter:
         self.show()
 
     def plot_log_y(self):
+        """Make all y axes a logarithmic scale."""
         self.figure.update_yaxes(type="log")
 
     def plot_log_y_first_axis(self):
+        """Make the first y axis a logarithmic scale."""
         self.figure.update_layout(yaxis=dict(type="log"))
 
     def plot_unlog_y_first_axis(self):
+        """Make the first y axis a linear scale."""
         self.figure.update_layout(yaxis=dict(type="linear"))
 
     def plot_log_y_second_axis(self):
+        """Make the second y axis a logarithmic scale."""
         self.figure.update_layout(yaxis2=dict(type="log"))
 
     def plot_total_market_cap_capped_by_dates(self):
+        """Plot the total market capitalization got from global metrics capped by the
+        Plotter's trading data dates input.
+        """
         market_cap = self.global_metrics[self.dates[0] : self.dates[-1]]
         self.figure.add_trace(
             go.Scatter(
@@ -368,6 +412,7 @@ class Plotter:
         )
 
     def change_title(self, title: str):
+        """Dynamically change the title's name."""
         self.figure.update_layout(
             title={
                 "font": {
@@ -384,6 +429,10 @@ class Plotter:
         )
 
     def reupdate_layout(self):
+        """Redefine the needed layout, should it be needed for a situation.
+
+        e.g. in plot_linearfit_trad_vol()
+        """
         custom_layout = go.Layout(
             template="plotly_white",
             font={
@@ -397,7 +446,6 @@ class Plotter:
                 xanchor="left",
                 x=0.01,
                 font=dict(family="Courier", size=20, color="black"),
-                # bgcolor="LightSteelBlue",
                 bgcolor="rgba(149, 165, 166, 0.3)",
                 bordercolor="Black",
                 borderwidth=2,
@@ -411,25 +459,23 @@ class Plotter:
         self.figure.update_layout(custom_layout)
 
     def reset_traces(self):
+        """Reset all data of the figure."""
         self.figure.data = []
 
     def get_figure(self):
+        """Reset the object representaiton of the figure."""
         return self.figure
 
     def show(self):
+        """Show the figure in a localhost web environment."""
         return self.figure.show()
 
     def save(self, extension="pdf"):
+        """Save the figure into the output folder, pdf extension is chosen by default."""
         # HACK: plotly shenenigans: https://github.com/plotly/plotly.py/issues/3469
         import time
 
-        get_current_datetime_string
-
-        figure = "/tmp/some_figure.pdf"
-        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
-        fig.write_image(figure, format="pdf")
         time.sleep(1)
 
-        filename = "newplot"
         filename = get_current_datetime_string()
         return self.figure.write_image(OUTPUT_PATH / f"{filename}.{extension}")

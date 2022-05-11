@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  dev:
+    build: .
+    image: backtester_dev_image
+    container_name: 'backtester-dev'
+    volumes:
+      - ./backtester:/backtester/backtester:z
+      - ./logs:/backtester/logs:z
+      - ./data:/backtester/data:z
+      - ./output:/backtester/output:z
+    tty: true
+    stdin_open: true

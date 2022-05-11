@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File that provides common interface for all the api data.
 
 Useful if there is a need to change the API provider,

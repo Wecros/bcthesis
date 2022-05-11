@@ -4,13 +4,13 @@ PRESENTATION_DIR := ./presentation
 PRESENTATION_FILE := xfilip46-thesis-presentation.pdf
 CONTAINER_NAME = backtester-dev
 
-.PHONY: clean create-venv docker-build docker-detached-exec docker-detached-up docker-down docker-up format git installdeps latex lint presentation run test text thesis
+.PHONY: clean create-venv docker-build docker-detached-exec docker-detached-up docker-down docker-up format git installdeps latex lint presentation run test text thesis zip
 
 help:
 	@make -pRrq  -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 run:
-	python -m backtester -f ./backtester/args.yaml
+	python -m backtester -f ./args.yaml
 
 test:
 	python -m pytest tests
@@ -65,4 +65,7 @@ lint:
 	fd '^.*\.py$$' | xargs black --check
 	fd '^.*\.py$$' | xargs isort --check
 	fd '^.*\.py$$' | xargs flake8
-	# fd '^.*\.py$$' | xargs pylint
+
+
+zip:
+	zip -r xfilip46.zip $(THESIS_FILE) $(THESIS_DIR) .flake8 docker-compose.yml Dockerfile LICENSE Makefile README.md backtester pyproject.toml requirements-lint.txt requirements.txt requirements-freeze.txt tests backtester

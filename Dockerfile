@@ -2,6 +2,7 @@ FROM python:3.9
 
 WORKDIR /backtester
 
+COPY args.yaml .
 COPY backtester backtester
 COPY data data
 COPY output output

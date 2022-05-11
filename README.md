@@ -22,7 +22,7 @@ Containerized development:
 make docker-build  # docker-compose build
 ```
 
-## How to run
+## How to Run
 There are a few ways to run the project.
 
 Via Makefile:
@@ -39,3 +39,9 @@ Via Docker:
 ```
 make docker-up  # docker-compose up
 ```
+
+## How to Develop New Strategies
+To create new strategies, you can create any valid Python file and import the `Strategy` base class defined in strategy.py.
+You can then include the created strategy inside the `simulator.py` file, where you can also define what shoudl the Plotter class plot.
+There are several showcase functions inside the `simulate()` function for new devoleprs to play around with.
+Finally, changing `args.yaml` may be necessarry to adjust the input variables if you plan on running the program by `make run`.

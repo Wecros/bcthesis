@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File defining the abstract class that serves as a template for strategy simulations.
 """
 
@@ -13,7 +15,12 @@ from .utils import BTC_SYMBOL, Portfolio, TradingData, create_portfolio_from_dat
 
 
 class Strategy(ABC):
-    @abstractmethod
+    """Abstract class defining the strategy simulation interface.
+
+    Other strategy simulations are expected to inherit from this class,
+    having the most important functions already defined.
+    """
+
     def __init__(self, data: TradingData, portfolio: Portfolio = None):
         self.i = 0
         self.data = data.data
@@ -32,6 +39,7 @@ class Strategy(ABC):
         self.sold_dates: list[pd.Timestamp] = []
 
     def run_simulation(self):
+        """Run the simulation. This method should be run always once."""
         while self.i != self.steps.size:
             self.current_step = self.steps[self.i]
             self.execute_step()
@@ -39,12 +47,21 @@ class Strategy(ABC):
 
     @abstractmethod
     def execute_step(self):
+        """Abstract method that needs to be defined during class inheritance.
+        This should be the only function that needs to be redefined.
+
+        It specifies what should be done on every day of the portfolio.
+        Logging profits is very important for the plotting the results, but it takes
+        significant CPU time.
+        """
         self.log_profits()
 
     def log_profits(self):
+        """Determine how the profits should be logged. Profits are passed to Plotter module."""
         self.profits_in_time[self.i] = self.get_profit_in_usd()
 
     def buy(self):
+        """Buy, or transfer, all the stablecoins in portfolio to coins."""
         if self.portfolio.usd == 0:
             logging.debug(f"Tried to buy with 0 dollars, step: {self.current_step}")
             return -1
@@ -61,6 +78,7 @@ class Strategy(ABC):
         self.portfolio.usd = 0
 
     def sell(self):
+        """Sell, or transfer, all the coins in portfolio to stablecoins."""
         if all(value == 0 for value in self.portfolio.coins.values()):
             logging.debug(f"Tried to sell with 0 $USD in coins, step: {self.current_step}")
             return -1
@@ -125,7 +143,6 @@ class Strategy(ABC):
 
     def get_close_value(self, coin: str):
         """Get close value of a coin relevant to the current step."""
-        # return self.data.loc[[(self.current_step, coin)]].close[0]
         return self.data.loc[[(coin, self.current_step)]]["close"][0]
 
     def get_profit_in_usd(self):
@@ -133,6 +150,7 @@ class Strategy(ABC):
         return self.portfolio.usd + self.get_coins_value_in_usd()
 
     def get_coins_value_in_usd(self):
+        """Gain portfolio coins profit in USD relevant to the current step."""
         return sum(
             self.portfolio.coins[coin] * self.get_close_value(coin) for coin in self.portfolio.coins
         )
@@ -145,6 +163,7 @@ class Strategy(ABC):
         return profit / close
 
     def stats(self):
+        """Return useful stats about the metric, sholud be used once all profits were calculated."""
         profitInUSD = self.profits_in_time[-1]
         return (
             f"Strategy: {type(self).__name__}\n"

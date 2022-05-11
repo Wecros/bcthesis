@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File defining the short term strategy.
 """
 
@@ -13,6 +15,12 @@ from .utils import Portfolio, TradingData, get_symbols_from_index
 
 
 class ShortTermStrategyIdeal(Strategy):
+    """Class for Short-term strategy simulation. This class uses the ideal local extrema for
+    its evaluation, which are not realistic.
+
+    At the same time it serves as template for other short-term strategies.
+    """
+
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
         super().__init__(data, portfolio)
         self.riskmetric = self.compute_metric()
@@ -88,6 +96,10 @@ class ShortTermStrategyIdeal(Strategy):
 
 
 class ShortTermStrategyReal(ShortTermStrategyIdeal):
+    """Class for Short-term strategy simulation. This class uses realistic local extrema for
+    its evaluation.
+    """
+
     def execute_step(self):
         super(ShortTermStrategyIdeal, self).execute_step()
         local_min = self.riskmetric.loc[self.current_step]["min_real"]
@@ -102,11 +114,15 @@ class ShortTermStrategyReal(ShortTermStrategyIdeal):
 
 
 class ShortTermStrategyAdjusted(ShortTermStrategyIdeal):
+    """Class for Short-term strategy simulation. This class uses more custom computation of
+    the local extrema, when the difference from last buy order is too low, we do not put in
+    the sell order.
+    """
+
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
         super().__init__(data, portfolio, *args, **kwargs)
         self.last_action_risk = self.riskmetric.loc[self.current_step]["riskmetric"]
         self.last_action_price = self.data.loc[("BTCUSDT", self.current_step), "close"]
-        self.bitcoin_riskmetric = kwargs.get("riskmetric")
         self.riskmetric = self.compute_metric()
         self.risks = []
         self.is_rising = False
@@ -120,12 +136,6 @@ class ShortTermStrategyAdjusted(ShortTermStrategyIdeal):
             self.is_rising = True
         else:
             self.is_falling = True
-        print(
-            self.riskmetric.loc[self.steps[self.i]]["riskmetric"],
-            self.riskmetric.loc[self.steps[0]]["riskmetric"],
-            self.is_rising,
-            self.is_falling,
-        )
 
     def execute_step(self):
         super(ShortTermStrategyIdeal, self).execute_step()
@@ -158,7 +168,6 @@ class ShortTermStrategyAdjusted(ShortTermStrategyIdeal):
         )
 
     def execute_risk_logic(self):
-        # btc_riskmetric = self.real_riskmetric.loc[self.current_step.normalize()]['riskmetric']
         risk = self.riskmetric.loc[self.current_step]["riskmetric"]
         self.get_close_value("BTCUSDT")
 
@@ -169,9 +178,6 @@ class ShortTermStrategyAdjusted(ShortTermStrategyIdeal):
         if self.is_value_larger_than_last_list(risk, self.risks, n=1) and self.is_risk_lowering(
             n=5
         ):
-            # if abs(self.last_action_risk - risk) < 0.001:
-            # return
-            print(self.current_step, "min")
             self.buy()
             self.last_action_risk = risk
             self.last_action_price = self.data.loc[("BTCUSDT", self.current_step), "close"]
@@ -179,8 +185,6 @@ class ShortTermStrategyAdjusted(ShortTermStrategyIdeal):
         if self.is_value_smaller_than_last_list(risk, self.risks, n=1) and self.is_risk_rising(n=5):
             if abs(self.last_action_risk - risk) < 0.001:
                 return
-
-            print(self.current_step, "max")
             self.sell()
             self.last_action_risk = risk
             self.last_action_price = self.data.loc[("BTCUSDT", self.current_step), "close"]

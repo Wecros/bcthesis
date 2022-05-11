@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File for getting dataframe data from Binance API.
 
 for Binance API see: https://www.binance.com/en/support/faq/c-6
@@ -20,11 +22,9 @@ from .utils import (
     get_dates_from_index,
 )
 
-# HACK: Line for jupyter notebook testing purposes.
-# BINANCE_DATA_PATH = Path("/home/wecros/Repos/School/bcthesis/data/binance")
-
 
 def get_data_from_binance(args: dict) -> pd.DataFrame:
+    """Get dataframe pair data from Binance API."""
     logging.debug(f"path to data: {BINANCE_DATA_PATH}")
 
     # check if csv file does not already exist for previous data

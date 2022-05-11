@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 Module exposing the risk metric calculation functions.
 """
 
@@ -92,6 +94,7 @@ def _calculate_daily_volume_correlation(df: pd.DataFrame):
 def calculate_autots_prediction(
     historical_data: pd.DataFrame, start_date, end_date, forecast_length
 ):
+    """Calculate the AutoTS machine learning prediction of the given data."""
     df = historical_data.copy()
     df = df[start_date:end_date]
     df = df.reset_index()

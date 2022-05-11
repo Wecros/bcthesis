@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+"""
+Author: Marek Filip 2022
+
+Main entry point of the program.
+"""
+
 import logging
 
 from .argparser import get_trading_data_from_args

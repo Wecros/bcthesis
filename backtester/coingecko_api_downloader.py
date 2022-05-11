@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File for getting dataframe data from Coingecko API.
 
 For Coingecko API see: https://www.coingecko.com/en/api/documentation
@@ -12,7 +14,11 @@ from pycoingecko import CoinGeckoAPI
 from .utils import COINGECKO_DATA_PATH, SEP, TIME_FORMAT, convert_csv_to_df
 
 
-def get_historical_btc_from_coingecko(end_date: pd.Timestamp):
+def get_historical_btc_from_coingecko(end_date: pd.Timestamp) -> pd.DataFrame:
+    """Get historical bitcoin price, market capitalizatoin and total dialy volume
+    from the CoinGecko API. Data is got in form of Pandas data frame.
+    """
+
     # check if csv file does not already exist for previous data
     for file in COINGECKO_DATA_PATH.iterdir():
         if does_historical_btc_file_meet_criteria(file, end_date):

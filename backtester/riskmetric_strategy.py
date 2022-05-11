@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File defining the risk metric strategy.
 """
 
@@ -10,6 +12,11 @@ from .utils import Portfolio, TradingData
 
 
 class RiskMetricStrategy(Strategy):
+    """Base risk metric strategy, that other risk strategies inherit from.
+
+    It accepts the riskmetric as its argument.
+    """
+
     def __init__(self, data: TradingData, portfolio: Portfolio = None, *args, **kwargs):
         super().__init__(data, portfolio)
         self.riskmetric = kwargs.get("riskmetric")
@@ -42,6 +49,8 @@ class RiskMetricStrategy(Strategy):
 
 
 class RiskMetricStrategyRiskLogic(RiskMetricStrategy):
+    """Risk metric strategy based on partially buying and selling during different risk."""
+
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
         self.execute_risk_logic()
@@ -92,6 +101,8 @@ class RiskMetricStrategyRiskLogic(RiskMetricStrategy):
 
 
 class RiskMetricStrategyIdealExtrema(RiskMetricStrategy):
+    """Risk metric strategy using the ideal risk function's extrema for its evaluation."""
+
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
         self.execute_extrema_logic()
@@ -109,6 +120,10 @@ class RiskMetricStrategyIdealExtrema(RiskMetricStrategy):
 
 
 class RiskMetricStrategyRealExtrema(RiskMetricStrategy):
+    """Risk metric strategy using the real (adjusted by several days) risk function's
+    extrema for its evaluation.
+    """
+
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
         self.execute_extrema_logic()
@@ -126,6 +141,10 @@ class RiskMetricStrategyRealExtrema(RiskMetricStrategy):
 
 
 class RiskMetricStrategyCombined(RiskMetricStrategy):
+    """One of the combined strategies classes, showcasing findings when trying to combine
+    the classic risk strategy with the extrema logic.
+    """
+
     def execute_step(self):
         super(RiskMetricStrategy, self).execute_step()
 
@@ -189,6 +208,10 @@ class RiskMetricStrategyCombined(RiskMetricStrategy):
 
 
 class RiskMetricStrategyCombined2(RiskMetricStrategyCombined):
+    """Second of the combined strategies classes, showcasing findings when trying to combine
+    the classic risk strategy with the extrema logic.
+    """
+
     def combined_buy(self):
         risk = self.riskmetric.loc[self.current_step]["riskmetric"]
 
@@ -239,6 +262,10 @@ class RiskMetricStrategyCombined2(RiskMetricStrategyCombined):
 
 
 class RiskMetricStrategyCombined3(RiskMetricStrategyCombined):
+    """Third of the combined strategies classes, showcasing findings when trying to combine
+    the classic risk strategy with the extrema logic.
+    """
+
     def combined_buy(self):
         risk = self.riskmetric.loc[self.current_step]["riskmetric"]
 

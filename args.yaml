@@ -1,0 +1,40 @@
+---
+pairs:
+- BTCUSDT
+#- ETHUSDT
+
+#- XRPUSDT
+#- ADAUSDT
+#- DOTUSDT
+#- LTCUSDT
+#- BNBUSDT
+#- BCHUSDT
+#- AVAXUSDT
+#- LUNAUSDT
+#- XMRUSDT
+#- XLMUSDT
+#- TRXUSDT
+#- NEARUSDT
+#- ATOMUSDT
+#- ALGOUSDT
+#- MATICUSDT
+#- SOLUSDT
+
+# Longest BTCUSDT data possible
+start_date: '2017-08-17'
+end_date: '2022-05-01'
+
+#start_date: '2020-01-01'
+#end_date: '2022-01-01'
+
+# Short-term data range
+#start_date: '2022-02-26'
+#end_date: '2022-03-06'
+
+# Long-term interval
+interval: 1d
+
+# Short-term interval
+#interval: 5m
+
+debug_level: INFO

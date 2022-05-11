@@ -7,14 +7,16 @@
 !./.flake8
 !./.gitignore
 !./.pre-commit-config.yaml
-!./docker-compose.yml
 !./pyproject.toml
 !./README.md
-!./requirements-lint.txt
-!./requirements.txt
+!requirements-lint.txt
+!requirements.txt
+!requirements-freeze.txt
 !./xfilip46-ITT-presentation.pdf
 !./xfilip46-thesis-presentation.pdf
 !./xfilip46-thesis.pdf
+!args.yaml
+!docker-compose.yml
 
 # Root folder directories
 !text

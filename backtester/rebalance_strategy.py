@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 File defining the risk metric strategy.
 """
 
@@ -8,6 +10,10 @@ from .utils import Portfolio, TradingData
 
 
 class RebalanceStrategy(Strategy):
+    """Class for simulating the rebalance strategy. It is a periodic rebalance with the "interval'
+    being an adjustable argument.
+    """
+
     def __init__(self, data: TradingData, portfolio: Portfolio = None, **kwargs):
         super().__init__(data, portfolio)
         self.rebalance_interval = kwargs.get("interval", 1)
@@ -25,6 +31,7 @@ class RebalanceStrategy(Strategy):
             self.interval_until_next_rebalance = self.rebalance_interval
 
     def rebalance_coins(self):
+        """Do the rebalance, equal reatio between all coins."""
         usd_to_rebalance = self.get_coins_value_in_usd()
         self.portfolio.coins = {coin: 0 for coin in self.portfolio.coins}
         usd_per_coin = usd_to_rebalance / len(self.portfolio.coins)

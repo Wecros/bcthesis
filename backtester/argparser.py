@@ -1,4 +1,6 @@
 """
+Author: Marek Filip 2022
+
 Module responsible for getting the trading data from supplied program arguments.
 """
 
@@ -14,6 +16,7 @@ from .api_downloader import get_data, get_global_metrics, get_historical_btc
 from .utils import (
     TIME_FORMAT,
     YAML_FILE_SCHEMA,
+    TradingData,
     TradingVariables,
     convert_args_to_trading_variables,
     convert_data_to_trading_data,
@@ -23,7 +26,7 @@ from .utils import (
 )
 
 
-def get_trading_data_from_args():
+def get_trading_data_from_args() -> TradingData:
     """Get trading data ready for simulation."""
     args = get_parsed_args()
     set_logging_level(args)
@@ -69,6 +72,7 @@ def get_parsed_args():
 
 
 def get_argument_parser():
+    """Set up parsing options and return parser object."""
     parser = argparse.ArgumentParser(
         description="Backtest historical data against various strategies."
     )
@@ -127,6 +131,7 @@ def get_data_dataframe(trading_vars: TradingVariables):
 
 
 def get_dataframe_for_trading_pair(trading_vars: TradingVariables, pair: str):
+    """Get DataFrame for given trading pair string."""
     args = {
         "ticker": pair,
         "start_date": trading_vars.start_date,

@@ -1,4 +1,8 @@
-"""Utils file for defining helpful functions and constants."""
+"""
+Author: Marek Filip 2022
+
+Utils file for defining auxiliary structures, functions, and constants.
+"""
 
 import logging
 import sys
@@ -12,6 +16,7 @@ import numpy.typing as npt
 import pandas as pd
 from schema import Optional, Or, Schema
 
+# Constants specifying the path to certain directories
 ROOT_PATH = Path(sys.argv[0]).parents[1]
 DATA_PATH = ROOT_PATH / "data"
 BINANCE_DATA_PATH = DATA_PATH / "binance"
@@ -30,6 +35,7 @@ TIME_FORMAT = "%Y-%m-%d"
 BTC_SYMBOL = "BTCUSDT"
 FIRST_BITCOIN_EXCHANGE = pd.Timestamp("2009-01-12")
 
+# YAML schema defining the args.yaml file
 YAML_FILE_SCHEMA = Schema(
     {
         "pairs": [str],
@@ -42,7 +48,7 @@ YAML_FILE_SCHEMA = Schema(
 
 
 def noop(*args, **kwargs):
-    pass
+    """No operation function. Used for optimization purposes in StrategyMerger."""
 
 
 @dataclass
@@ -108,12 +114,14 @@ def convert_data_to_trading_data(
     btc_historical: pd.DataFrame,
     trading_vars: TradingVariables,
 ):
+    """Convert the data frame together with other variables to TradingData object."""
     symbols = trading_vars.pairs
     dates = get_dates_from_index(data)
     return TradingData(data, global_metrics, btc_historical, symbols, dates, trading_vars)
 
 
 def convert_csv_to_df(csv_file, time_index_str):
+    """Read CSV and convert to correct data frame format."""
     df = pd.read_csv(csv_file)
     df[time_index_str] = pd.to_datetime(df[time_index_str])
     df = df.set_index(time_index_str)
@@ -164,6 +172,7 @@ def map_values_to_specific_dates(all_dates, specific_dates, values):
 
 
 def remove_distinct_dates(data: pd.DataFrame):
+    """Remove dates that do not intersect among every coin from the data frame data."""
     coins = get_symbols_from_index(data)
     for coin in coins:
         logging.info(f"{coin}: {data.loc[coin].reset_index().iloc[0]['open_time']}")
@@ -181,6 +190,7 @@ def remove_distinct_dates(data: pd.DataFrame):
 
 
 def set_index_for_data(data: pd.DataFrame):
+    """Set the default 2-level index for the data frame data."""
     return data.set_index(["pair", "open_time"]).sort_index()
 
 
@@ -210,6 +220,7 @@ def ensure_same_dates_between_dataframes(df1, df2):
 
 
 def transform_historical_btc_to_trading_data(historical_btc: pd.DataFrame, start_date):
+    """Transform price of historical bitcoin to be used as trading data in Binance format."""
     df = historical_btc.drop(columns=["market_cap"]).reset_index()
     df = df.rename(columns={"price": "close", "date": "open_time", "total_volume_24h": "volume"})
     df["pair"] = BTC_SYMBOL
@@ -223,6 +234,9 @@ def transform_historical_btc_to_trading_data(historical_btc: pd.DataFrame, start
 
 
 def get_historical_data_if_btc_is_only_coin_considered(trading_data):
+    """If Bitcoin is the only coin considered and 1 day data us used,
+    use historical data instead.
+    """
     if trading_data.symbols == [BTC_SYMBOL] and trading_data.variables.interval_str == "1d":
         start_date = "2014-01-01"  # First total volume recorded on CoinGecko
         trading_data.data = transform_historical_btc_to_trading_data(
