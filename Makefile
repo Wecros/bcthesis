@@ -68,4 +68,4 @@ lint:
 
 
 zip:
-	zip -r xfilip46.zip $(THESIS_FILE) $(THESIS_DIR) .flake8 docker-compose.yml Dockerfile LICENSE Makefile README.md backtester pyproject.toml requirements-lint.txt requirements.txt requirements-freeze.txt tests backtester
+	zip -r xfilip46.zip $(THESIS_FILE) $(THESIS_DIR) .flake8 docker-compose.yml Dockerfile LICENSE Makefile README.md backtester pyproject.toml requirements-lint.txt requirements.txt requirements-freeze.txt tests backtester data args.yaml

@@ -5,7 +5,6 @@ WORKDIR /backtester
 COPY args.yaml .
 COPY backtester backtester
 COPY data data
-COPY output output
 COPY requirements*.txt .
 COPY Makefile .
 
