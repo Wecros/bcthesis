@@ -20,24 +20,22 @@
 % Resist the temptation to say banalities and common knowledge.
 % "We live in an age of mobile computing where everyone has a mobile phone in their pocket" - is an empty and stupid statement, don't say anything like that, nobody cares.
 
+% Make sure this frame is good!
 \begin{frame}
-  \frametitle{Objective of the Thesis}
-  \begin{columns}
-    \column{0.4\textwidth}
-    \begin{itemize}
-        \item Bear \& bull markets
-        \item Adaptive trading strategy
-        \item Stablecoins
-    \end{itemize}
+  \frametitle{Motivation}
 
-    \column{0.6\textwidth}
-    %\includegraphics[width=\textwidth]{img/template-Teaser.pdf}
+  \centering
 
-    \begin{figure}
-        \includegraphics[width=\textwidth]{img/bitcoin.jpg}
-        %\caption{attribution: Wikimedia}
-    \end{figure}
-  \end{columns}
+  \begin{itemize}
+    \item \emph{Standard approaches} do not react to market fluctuations.
+    \item Existing solutions are often \emph{commercial} and \emph{closed-source}.
+  \end{itemize}
+
+  \smallskip
+
+  \begin{figure}
+      \includegraphics[width=0.7\textwidth]{img/risk.png}
+  \end{figure}
 \end{frame}
 
 
@@ -61,21 +59,24 @@
 % It is useless to make generic and general statements "The solution should be fast, reliable and robust" - these are general requirements for anything, and the informational value of the message is ZERO - it is just a waste of time and intellect.
 % Be specific: What specific features should your solution have, what "robust" means specifically, what "reliable" means precisely?
 
-%\begin{frame}
-  %\frametitle{Objectives of the Thesis}
-  %\begin{columns}
-    %\column{0.4\textwidth}
-    %\begin{itemize}
-        %\item \emph{Input}
-        %\item \emph{Output}
-        %\item Desirable \emph{properties}
-        %\item Uses \& applications
-    %\end{itemize}
+\begin{frame}
+  \frametitle{Objectives of the Thesis}
+  \begin{columns}
+    \column{0.57\textwidth}
+    \begin{itemize}
+        \item Research Existing Solutions
+        \item Extensible Backtesting Program
+        \item Long-Term \& Short-Term Options
+        \item Simulation And Validation
+    \end{itemize}
 
-    %\column{0.6\textwidth}
-        %\includegraphics[width=\textwidth]{img/template-Goal.pdf}
-  %\end{columns}
-%\end{frame}
+    \column{0.43\textwidth}
+
+    \begin{figure}
+      \includegraphics[width=\textwidth]{img/bitcoin.jpg}
+    \end{figure}
+  \end{columns}
+\end{frame}
 
 
 %%%%%%%%                      03 - Information                      %%%%%%%%
@@ -96,25 +97,56 @@
 % - The title of the slide, "Essential Information About the Solution", is very generic. In your actual slides, it would be much better to use a specific title on each of the slides, for example, "Neural Network Scheme for Big Nose Detection", "Design of an Infinite Automata", "Collected Dataset", etc.
 
 \begin{frame}
-  \frametitle{How is it accomplished?}
-  \begin{columns}
-    \column{0.4\textwidth}
-    \begin{itemize}
-        \item Neural network
-        \item Heurestics \& metrics
-        \item Backtesting
-        \item Validation
-    \end{itemize}
+  \frametitle{How it was achieved?}
 
-    \column{0.6\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{img/neuron.jpg}
+  \begin{enumerate}
+    \item Research
+    \item Risk Metric \& Evaluation Strategies Proposals
+    \item Implementation
+    \item Backtesting (validation)
+    \item Evaluation
+  \end{enumerate}
 
-        \bigskip
-        \includegraphics[width=0.8\textwidth]{img/risk.png}
-  \end{columns}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{img/50week-colorcoded.pdf}
+  \end{figure}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Backtester Diagram}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/structure-diagram.pdf}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Plotted Graphs}
+  \centering
+
+  \vspace{-0.77em}
+
+  \begin{figure}
+    \includegraphics[width=0.78\textwidth]{img/evaluation-optimization-shorter.pdf}
+  \end{figure}
+
+  \vspace{-1.1em}
+
+  \begin{figure}
+    \includegraphics[width=0.78\textwidth]{img/short-term-falling.pdf}
+  \end{figure}
+
+  %\makebox[\textwidth]{
+    %\begin{tikzpicture}
+      %\node (screenshot)
+         %{\includegraphics[width=0.50\paperwidth]{img/short-term-falling.pdf}};
+      %\node (schema) at (screenshot.south east) [xshift=2em] [yshift=2.5ex]
+         %{\includegraphics[width=0.60\paperwidth]{img/extrema-portfolio-A.pdf}};
+      %\node (goal) at (screenshot.north east) [xshift=1em] [yshift=2ex]
+         %{\includegraphics[width=0.60\paperwidth]{img/evaluation-optimization-shorter.pdf}};
+    %\end{tikzpicture}
+  %}
+\end{frame}
 
 %%%%%%%%                        04 - Results                        %%%%%%%%
 %---------------------------------------------------------------------------
@@ -125,46 +157,20 @@
 % If the evaluation consisted of two or three parts, splitting the content into two or three slides may be appropriate. When presenting, however, care should be taken to ensure that the time devoted to each slide is adequately short and that there is no time overrun.
 
 \begin{frame}
-  \frametitle{Current State}
-  \begin{columns}
-  \column{0.4\textwidth}
-    Done:
-    \begin{itemize}
-      \item Existing trading strategies
-      \item Existing simulation tools
-    \end{itemize}
-    \bigskip
-    To do:
-    \begin{itemize}
-      \item Adaptive strategy proposals
-      \item Implementation \& evaluation
-    \end{itemize}
+  \frametitle{Results}
+  \centering
 
-  \column{0.6\textwidth}
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/python.png}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/long-term-table.pdf}
+  \end{figure}
 
-    \bigskip
-    \includegraphics[width=\textwidth]{img/overleaf.png}
+  \smallskip
 
-  \end{columns}
+  \begin{figure}
+  \includegraphics[width=\textwidth]{img/dca-table.pdf}
+  \end{figure}
 \end{frame}
 
-
-\begin{frame}
-  \frametitle{Next Work Plan}
-  \begin{itemize}
-    \item 31. 1.: Current State. Data Analyzation.
-    \item 14. 2.: Adaptive strategy inspirations.
-    \item 28. 1.: Proposal of several adaptive strategies.
-    \item 14. 3.: Backtesting implementation.
-    \item 28. 3.: First testing of adaptive strategies results.
-    \item 11. 4.: Further backtesting results.
-    \item 25. 4.: Further Improvements and practical deployment limitations -- discussion.
-    \item 1. 5.: Final State meeting.
-    \item 11. 5.: Thesis Submission.
-  \end{itemize}
-\end{frame}
 
 
 %%%%%%%%                        05 - Thanks                         %%%%%%%%
@@ -182,16 +188,25 @@
 \begin{frame}
   \frametitle{Thank You for Your Attention!}
   \centering
-  \makebox[\textwidth]{
-    \begin{tikzpicture}
-      \node (screenshot)
-         {\includegraphics[width=0.50\paperwidth]{img/bitcoin.jpg}};
-      \node (schema) at (screenshot.south east) [xshift=5em] [yshift=2.5ex]
-         {\includegraphics[width=0.45\paperwidth]{img/neuron.jpg}};
-      \node (goal) at (screenshot.north east) [xshift=4em] [yshift=2ex]
-         {\includegraphics[width=0.45\paperwidth]{img/risk.png}};
-    \end{tikzpicture}
-  }
+
+  %\makebox[\textwidth]{
+    %\begin{tikzpicture}
+      %\node (screenshot)
+         %{\includegraphics[width=0.50\paperwidth]{img/structure-diagram.pdf}};
+      %\node (schema) at (screenshot.south east) [xshift=4em] [yshift=2.5ex]
+         %{\includegraphics[width=0.50\paperwidth]{img/extrema-portfolio-A.pdf}};
+      %\node (goal) at (screenshot.north east) [xshift=3em] [yshift=2ex]
+         %{\includegraphics[width=0.50\paperwidth]{img/long-term-table.pdf}};
+    %\end{tikzpicture}
+  %}
+
+  \begin{figure}
+    \includegraphics[width=0.8\textwidth]{img/structure-diagram.pdf}
+  \end{figure}
+
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/long-term-table.pdf}
+  \end{figure}
 \end{frame}
 
 
@@ -215,14 +230,23 @@
 % If no visual information is needed for the questions, it is helpful to have them as bullets on a single slide.
 % If there is more than one question and there are figures or graphs, it is advisable to have one slide for each question - the text of the question at the top, the visual material below.
 
-%\appendix{}
-%\begin{frame}
-  %\frametitle{Opponent's Questions}
-  %\begin{itemize}
-    %\item If there are multiple questions, more slides can be made.
-    %\item This slide should be an attachment that does not count towards the total number of slides.
-    %\item It is a good idea to transcribe the question here \emph{verbatim}, so that there is no doubt that there is no inaccurate paraphrasing.
-  %\end{itemize}
-  %\bigskip
-  %\includegraphics[width=\textwidth]{img/template-ResultsPlot.pdf}
-%\end{frame}
+\appendix{}
+\begin{frame}
+  \frametitle{Opponent's Question 1: Machine Learning}
+  \begin{itemize}
+      \item Original question: \emph{Aké sú najväčšie prekážky, ktoré vidíte pri používaní strojového učenia na predikciu cien? (je to problém údajov, alebo by si to vyžadovalo lepšie metódy?)}
+      \item Paraphrased question: What are the biggest obstacles when using machine learning for price prediction. Is it a data problem or are better methods needed?
+  \end{itemize}
+  \bigskip
+  %\includegraphics[width=\textwidth]{img/neuron.jpg}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Opponent's Question 2: HFT}
+  \begin{itemize}
+    \item Original question: \emph{Čo by bolo potrebné urobiť, aby si niekto vyskúšal napríklad vysokofrekvenčné obchodovanie (high frequency trading) vo vašom backtestri?}
+      \item Paraphrased question: What is needed to be done in order to, for example, try out the high frequency trading in your backtester?
+  \end{itemize}
+  \bigskip
+  %\includegraphics[width=\textwidth]{img/neuron.jpg}
+\end{frame}
